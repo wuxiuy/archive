@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我的收藏</title>
+<title>在线测试工具</title>
 <style>
   :root {
     --bg: #f5f7fb;
@@ -35,60 +35,76 @@
       radial-gradient(1000px 420px at 90% -5%, rgba(90,141,255,.06), transparent 55%);
     background-attachment: fixed;
   }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 16px 56px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 48px; }
 
-  /* ===== 收藏页（前台伪装） ===== */
-  .front-header { padding: 40px 4px 10px; }
-  .front-header h1 { font-size: 28px; font-weight: 750; letter-spacing: -.6px; }
-  .front-header p { color: var(--muted); font-size: 14px; margin-top: 7px; }
-  .front-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 26px; }
-  .front-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px 20px; transition: transform .18s, box-shadow .18s; }
-  .front-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-  .front-card h2 { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 12px; letter-spacing: 2px; display: flex; align-items: center; gap: 8px; }
-  .front-card h2::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: linear-gradient(180deg, var(--primary-2), var(--primary)); }
-  .front-card ul { list-style: none; }
-  .front-card li { padding: 8px 0; border-bottom: 1px dashed #eef0f3; font-size: 13.5px; }
-  .front-card li:last-child { border-bottom: none; }
-  .front-card li b { font-weight: 600; }
-  .front-card li span { color: var(--muted); font-size: 12.5px; margin-left: 5px; }
-  .front-footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 12px; }
-  .front-footer a { color: var(--muted); cursor: pointer; text-decoration: none; margin-left: 10px; }
-  .front-footer a:hover { color: var(--primary); }
+  /* ===== 每日看点伪装页（未登录） ===== */
+  .tool-header { padding: 30px 4px 4px; display: flex; align-items: center; gap: 12px; }
+  .tool-logo { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #64748b, #334155); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; box-shadow: 0 8px 20px -6px rgba(51,65,85,.45); }
+  .tool-header h1 { font-size: 22px; font-weight: 750; letter-spacing: -.5px; }
+  .tool-header p { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px 20px; margin-top: 16px; }
+  .tool-card h2 { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 12px; letter-spacing: 1.5px; }
+  .quote-text { font-size: 15px; line-height: 1.8; color: #1e293b; font-weight: 550; }
+  .quote-from { font-size: 12px; color: #94a3b8; margin-top: 8px; text-align: right; }
+  .quote-loading { color: var(--muted); font-size: 13px; }
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 9px; }
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-cloud a { font-size: 12.5px; color: #475569; background: #f1f5f9; border: 1px solid #e8edf3; border-radius: 20px; padding: 5px 13px; text-decoration: none; transition: all .15s; }
+  .tag-cloud a:hover { background: #e2e8f0; color: #1e293b; transform: translateY(-1px); }
+  .tag-cloud .hot { background: #fef3e2; border-color: #fde8c8; color: #b45309; }
+  .tag-cloud .hot:hover { background: #fde8c8; }
+  .news-item { display: block; padding: 10px 12px; border: 1px solid #eef1f5; border-radius: 10px; background: #fbfcfe; text-decoration: none; color: inherit; transition: all .15s; }
+  .news-item:hover { border-color: #d5dbe6; background: #fff; box-shadow: var(--shadow-sm); }
+  .news-item:hover .news-name { color: var(--primary); }
+  .news-name { display: block; font-size: 13px; font-weight: 650; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .news-desc { display: block; font-size: 11.5px; color: #64748b; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .news-star { display: inline-block; font-size: 11px; color: #b45309; margin-top: 5px; background: #fef3e2; border-radius: 4px; padding: 1px 6px; }
+  .news-fallback { color: var(--muted); font-size: 13px; padding: 10px 0; }
+  .tool-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tool-row input { flex: 1; min-width: 200px; padding: 10px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: #fcfdff; }
+  .tool-row input:focus { border-color: #94a3b8; box-shadow: 0 0 0 3px rgba(100,116,139,.1); background: #fff; }
+  .tool-btn { border: none; border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 600; background: linear-gradient(135deg, #64748b, #475569); color: #fff; cursor: pointer; }
+  .tool-btn:hover { filter: brightness(1.08); }
+  .tool-result { margin-top: 14px; background: #0f172a; color: #a5f3fc; border-radius: 10px; padding: 12px 14px; font-family: Consolas, Menlo, monospace; font-size: 12px; line-height: 1.8; min-height: 80px; white-space: pre-wrap; }
+  .tool-result.hide { display: none; }
+  .tool-footer { margin-top: 24px; text-align: center; color: #9aa3af; font-size: 11.5px; border-top: 1px solid #eef1f5; padding-top: 18px; }
+  .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-bottom: 12px; }
+  .footer-links a { color: #64748b; text-decoration: none; font-size: 12px; }
+  .footer-links a:hover { color: var(--primary); }
+  .footer-meta { color: #9aa3af; margin-bottom: 6px; }
+  .login-dot { color: inherit; cursor: default; }
+  .footer-tiny { color: #b6bdc8; font-size: 11px; margin-bottom: 10px; }
+  .footer-login { font-size: 11px; }
+  .footer-login a { color: #b6bdc8; cursor: pointer; text-decoration: none; }
+  .footer-login a:hover { color: var(--primary); }
 
   /* ===== 登录 ===== */
-  .login-stage { min-height: 78vh; display: flex; align-items: center; justify-content: center; }
+  .login-stage { min-height: 74vh; display: flex; align-items: center; justify-content: center; }
   .login-card {
-    width: 100%; max-width: 400px; background: var(--card);
+    width: 100%; max-width: 380px; background: var(--card);
     border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-lg);
-    padding: 40px 36px 36px; position: relative; overflow: hidden;
+    padding: 36px 34px 32px; position: relative; overflow: hidden;
   }
-  .login-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary-2), var(--primary), var(--primary-2)); }
+  .login-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #64748b, #94a3b8, #64748b); }
   .login-back { position: absolute; top: 18px; left: 20px; color: var(--muted); font-size: 12px; cursor: pointer; background: none; border: none; padding: 4px; }
   .login-back:hover { color: var(--text); }
-  .login-logo {
-    width: 50px; height: 50px; border-radius: 14px;
-    background: linear-gradient(135deg, var(--primary-2), var(--primary));
-    color: #fff; display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 800; margin-bottom: 22px; letter-spacing: -.5px;
-    box-shadow: 0 8px 20px -6px rgba(47,111,237,.45);
+  .login-logo { width: 44px; height: 44px; border-radius: 13px; background: linear-gradient(135deg, #64748b, #334155); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800; margin-bottom: 18px; }
+  .login-card h1 { font-size: 19px; font-weight: 700; margin-bottom: 20px; letter-spacing: -.3px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: #2e3540; }
+  .field input {
+    width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 11px;
+    font-size: 14px; background: #fcfdff; transition: border-color .15s, box-shadow .15s; outline: none;
   }
-  .login-card h1 { font-size: 21px; font-weight: 700; margin-bottom: 7px; letter-spacing: -.3px; }
-  .login-sub { color: var(--muted); font-size: 13px; margin-bottom: 26px; }
-  .field { margin-bottom: 15px; }
-  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; color: #2e3540; }
-  .field input, .field select {
-    width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 11px;
-    font-size: 14px; background: #fcfdff; transition: border-color .15s, box-shadow .15s, background .15s; outline: none;
-  }
-  .field input:focus, .field select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(47,111,237,.12); }
+  .field input:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(100,116,139,.1); background: #fff; }
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     border: none; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer;
     padding: 10px 16px; transition: all .15s; user-select: none; white-space: nowrap;
   }
   .btn:disabled { opacity: .55; cursor: not-allowed; }
-  .btn-primary { background: linear-gradient(135deg, var(--primary-2), var(--primary)); color: #fff; width: 100%; box-shadow: 0 6px 16px -6px rgba(47,111,237,.5); }
-  .btn-primary:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 8px 20px -6px rgba(47,111,237,.55); }
+  .btn-primary { background: linear-gradient(135deg, #5a8dff, #2f6fed); color: #fff; width: 100%; box-shadow: 0 6px 16px -6px rgba(47,111,237,.5); }
+  .btn-primary:hover:not(:disabled) { filter: brightness(1.06); }
   .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
   .btn-ghost:hover:not(:disabled) { background: #f5f7fb; border-color: #d8dde6; }
   .btn-danger { background: var(--red-weak); color: var(--red); }
@@ -96,97 +112,107 @@
   .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 9px; }
 
   /* ===== 顶栏 ===== */
-  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
-  .topbar .brand { display: flex; align-items: center; gap: 11px; font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
-  .topbar .brand .logo { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-2), var(--primary)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; box-shadow: 0 6px 14px -5px rgba(47,111,237,.4); }
-  .topbar .who { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .topbar .brand { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
+  .topbar .brand .logo { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #64748b, #334155); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+  .topbar .who { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12.5px; }
 
   /* ===== 标签页 ===== */
-  .tabs { display: flex; gap: 4px; background: #e9edf4; padding: 4px; border-radius: 13px; margin-bottom: 20px; }
+  .tabs { display: flex; gap: 4px; background: #e9edf4; padding: 4px; border-radius: 13px; margin-bottom: 18px; }
   .tabs button {
     flex: 1; border: none; background: transparent; padding: 10px 0; border-radius: 10px;
     font-size: 14px; font-weight: 550; color: var(--muted); cursor: pointer; transition: all .18s;
   }
   .tabs button.active { background: #fff; color: var(--text); box-shadow: var(--shadow-sm); font-weight: 650; }
 
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 22px; margin-bottom: 18px; }
-  .card h2 { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 9px; letter-spacing: -.2px; }
-  .card h2::before { content: ""; width: 4px; height: 15px; border-radius: 2px; background: linear-gradient(180deg, var(--primary-2), var(--primary)); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 14px; font-weight: 700; margin-bottom: 13px; display: flex; align-items: center; gap: 8px; letter-spacing: -.2px; }
+  .card h2::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: linear-gradient(180deg, var(--primary-2), var(--primary)); }
+  .card.compact { padding: 14px 16px; }
+  .card.compact h2 { font-size: 13px; margin-bottom: 10px; }
 
-  /* ===== 统计（可点击直达） ===== */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
-  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 13px; padding: 15px 12px 13px; text-align: center; position: relative; overflow: hidden; cursor: pointer; transition: transform .18s, box-shadow .18s, border-color .18s; user-select: none; }
-  .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: #d5dbe6; }
-  .stat:active { transform: translateY(0); }
+  /* ===== 统计（紧凑，一屏可操作） ===== */
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 10px 6px 8px; text-align: center; position: relative; overflow: hidden; cursor: pointer; transition: transform .15s, box-shadow .15s; user-select: none; }
+  .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .stat::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; opacity: .85; }
   .stat.total::after { background: linear-gradient(90deg, #94a3b8, #cbd5e1); }
   .stat.unused::after { background: linear-gradient(90deg, var(--blue), #60a5fa); }
   .stat.used::after { background: linear-gradient(90deg, var(--green), #34d399); }
   .stat.disabled::after { background: linear-gradient(90deg, var(--red), #f87171); }
   .stat.online::after { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
-  .stat b { display: block; font-size: 26px; font-weight: 750; letter-spacing: -1px; line-height: 1.15; }
-  .stat span { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .stat b { display: block; font-size: 20px; font-weight: 750; letter-spacing: -.8px; line-height: 1.2; }
+  .stat span { font-size: 11px; color: var(--muted); font-weight: 500; }
   .stat.online b { color: var(--green); }
   .stat.used b { color: var(--blue); }
   .stat.disabled b { color: var(--red); }
 
   /* ===== 表单 ===== */
-  .form-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-  .form-row .field { flex: 1; min-width: 130px; margin-bottom: 0; }
+  .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .form-row .field { flex: 1; min-width: 120px; margin-bottom: 0; }
+  .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #2e3540; }
+  .field input, .field select {
+    width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 13.5px; background: #fcfdff; transition: border-color .15s, box-shadow .15s, background .15s; outline: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(47,111,237,.1); }
   textarea.codes {
-    width: 100%; min-height: 96px; border: 1px solid var(--border); border-radius: 11px;
-    padding: 11px 13px; font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 13px;
-    resize: vertical; outline: none; background: #fafbfd; color: var(--text); line-height: 1.7;
-    transition: border-color .15s, box-shadow .15s, background .15s;
+    width: 100%; min-height: 84px; border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 12.5px;
+    resize: vertical; outline: none; background: #fafbfd; line-height: 1.7;
+    transition: border-color .15s, box-shadow .15s;
   }
   textarea.codes:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: #fff; }
 
   /* ===== 列表 ===== */
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
-  .toolbar input { flex: 1; min-width: 150px; padding: 9px 13px; border: 1px solid var(--border); border-radius: 11px; font-size: 13px; outline: none; background: #fcfdff; transition: border-color .15s, box-shadow .15s; }
+  .toolbar input { flex: 1; min-width: 140px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: #fcfdff; transition: border-color .15s, box-shadow .15s; }
   .toolbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: #fff; }
-  .toolbar select { padding: 9px 11px; border: 1px solid var(--border); border-radius: 11px; font-size: 13px; background: #fff; outline: none; cursor: pointer; }
-  .toolbar .pg-label { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .toolbar select { padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; background: #fff; outline: none; cursor: pointer; }
+  .toolbar .pg-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
   .batch-bar {
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
     background: var(--primary-weak); border: 1px solid #d7e3fd; border-radius: 11px;
     padding: 8px 12px; margin-bottom: 12px; font-size: 13px; color: #274e9e;
   }
-  .batch-bar b { font-size: 14px; }
+  .batch-bar b { font-size: 13.5px; }
   .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; font-size: 12px; font-weight: 650; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--border); background: #f7f8fb; white-space: nowrap; }
-  th:first-child { border-radius: 12px 0 0 0; }
-  th:last-child { border-radius: 0 12px 0 0; }
-  td { padding: 11px 12px; border-bottom: 1px solid #f1f3f6; vertical-align: middle; }
+  th { text-align: left; font-size: 11.5px; font-weight: 650; color: var(--muted); padding: 9px 11px; border-bottom: 1px solid var(--border); background: #f7f8fb; white-space: nowrap; }
+  td { padding: 10px 11px; border-bottom: 1px solid #f1f3f6; vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: #f8fafd; }
-  .code-cell { font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 12.5px; letter-spacing: .3px; white-space: nowrap; font-weight: 500; }
-  .chk { width: 34px; text-align: center; }
-  .chk input { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; vertical-align: middle; }
-  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .code-cell { font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 12px; letter-spacing: .3px; white-space: nowrap; font-weight: 500; }
+  .chk { width: 32px; text-align: center; }
+  .chk input { width: 15px; height: 15px; accent-color: var(--primary); cursor: pointer; vertical-align: middle; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
   .badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .8; }
   .badge-unused { background: var(--blue-weak); color: var(--blue); }
   .badge-used { background: var(--green-weak); color: var(--green); }
   .badge-disabled { background: var(--red-weak); color: var(--red); }
   .muted { color: var(--muted); }
   .expired { color: var(--red); font-weight: 600; }
-  .remark-cell { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .dev { font-size: 11.5px; color: var(--muted); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .remark-cell { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dev { font-size: 11px; color: var(--muted); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dev-line { display: flex; align-items: center; gap: 6px; }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: #d1d5db; display: inline-block; flex: none; }
   .dot.on { background: var(--green); box-shadow: 0 0 0 3px rgba(18,161,80,.16); }
   .ops { display: flex; gap: 6px; white-space: nowrap; }
-  .pager { display: flex; align-items: center; justify-content: space-between; margin-top: 15px; font-size: 13px; color: var(--muted); }
-  .empty { text-align: center; color: var(--muted); padding: 32px 0; font-size: 13px; }
+  .pager { display: flex; align-items: center; justify-content: space-between; margin-top: 13px; font-size: 13px; color: var(--muted); }
+  .empty { text-align: center; color: var(--muted); padding: 28px 0; font-size: 13px; }
+
+  /* ===== 续费面板 ===== */
+  .renew-search { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .renew-search input { flex: 1; min-width: 160px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: #fcfdff; }
+  .renew-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: #fff; }
 
   /* ===== 数据维护 ===== */
-  .maint-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .maint-hint { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+  .maint-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .maint-hint { font-size: 11.5px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
 
   /* ===== 消息 ===== */
   .toast {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-14px);
+    position: fixed; top: 18px; left: 50%; transform: translateX(-50%) translateY(-14px);
     background: #1f2937; color: #fff; padding: 10px 18px; border-radius: 12px; font-size: 13px;
     opacity: 0; pointer-events: none; transition: all .22s; z-index: 99;
     box-shadow: 0 8px 24px rgba(0,0,0,.18); max-width: 86vw;
@@ -196,45 +222,125 @@
   .toast.err { background: linear-gradient(135deg, #e02e2e, #d92c2c); }
 
   .hide { display: none !important; }
-  .loading { color: var(--muted); padding: 22px 0; text-align: center; font-size: 13px; }
+  .loading { color: var(--muted); padding: 18px 0; text-align: center; font-size: 13px; }
+
+  /* ===== 手机适配：快速操作一屏 ===== */
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .stat b { font-size: 16px; }
+    .stat span { font-size: 10px; }
+    .card.compact { padding: 12px; }
+    .form-row .field { min-width: 45%; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- 前台：我的收藏（伪装页） -->
+  <!-- 前台：每日看点（伪装页） -->
   <div id="view-front">
-    <div class="front-header">
-      <h1>我的收藏</h1>
-      <p>随手记下喜欢的东西</p>
-    </div>
-    <div class="front-sections">
-      <div class="front-card">
-        <h2>电影</h2>
-        <ul>
-          <li><b>星际穿越</b><span>2023 重看依然震撼</span></li>
-          <li><b>千与千寻</b><span>宫崎骏最爱的一部</span></li>
-          <li><b>让子弹飞</b><span>台词都快背下来了</span></li>
-        </ul>
-      </div>
-      <div class="front-card">
-        <h2>书籍</h2>
-        <ul>
-          <li><b>三体</b><span>今年读完的第二遍</span></li>
-          <li><b>活着</b><span>后劲很大</span></li>
-          <li><b>置身事内</b><span>了解经济的入门好书</span></li>
-        </ul>
-      </div>
-      <div class="front-card">
-        <h2>美食</h2>
-        <ul>
-          <li><b>老张牛肉面</b><span>公司楼下</span></li>
-          <li><b>海底捞</b><span>朋友聚会首选</span></li>
-          <li><b>沙县小吃</b><span>深夜食堂</span></li>
-        </ul>
+    <div class="tool-header">
+      <div class="tool-logo">D</div>
+      <div>
+        <h1>每日看点</h1>
+        <p>每天一点新鲜事</p>
       </div>
     </div>
-    <div class="front-footer">© 2026 我的收藏<a onclick="showLoginCard()">登录</a></div>
+
+    <div class="tool-card">
+      <h2>每日一句</h2>
+      <div id="daily-quote" class="quote-loading">加载中…</div>
+    </div>
+
+    <div class="tool-card">
+      <h2>近期热点</h2>
+      <div id="gh-trend"><div class="loading">加载中…</div></div>
+    </div>
+
+    <div class="tool-card">
+      <h2>今日速览</h2>
+      <div class="news-grid">
+        <a class="news-item" href="https://news.qq.com/" target="_blank" rel="noopener"><span class="news-name">国内要闻</span><span class="news-desc">每天 3 分钟看懂重要新闻</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://www.zhihu.com/hot" target="_blank" rel="noopener"><span class="news-name">知乎热榜</span><span class="news-desc">大家都在讨论的问题</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://www.douban.com/explore/" target="_blank" rel="noopener"><span class="news-name">豆瓣精选</span><span class="news-desc">电影 · 书籍 · 音乐推荐</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://daily.zhihu.com/" target="_blank" rel="noopener"><span class="news-name">知乎日报</span><span class="news-desc">每天一篇好文章</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://www.ithome.com/" target="_blank" rel="noopener"><span class="news-name">IT之家</span><span class="news-desc">科技数码新鲜资讯</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://www.36kr.com/" target="_blank" rel="noopener"><span class="news-name">36氪</span><span class="news-desc">商业与科技前沿</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://s.weibo.com/top/summary" target="_blank" rel="noopener"><span class="news-name">微博热搜</span><span class="news-desc">此刻最热的话题</span><span class="news-star">→</span></a>
+        <a class="news-item" href="https://top.baidu.com/board?tab=realtime" target="_blank" rel="noopener"><span class="news-name">百度热点</span><span class="news-desc">实时热点事件</span><span class="news-star">→</span></a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <h2>生活小贴士</h2>
+      <div class="news-grid">
+        <a class="news-item" href="https://www.zhihu.com/question/26276444" target="_blank" rel="noopener"><span class="news-name">热水器省电技巧</span><span class="news-desc">一年能省下不少电费</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/21570038" target="_blank" rel="noopener"><span class="news-name">手机充电习惯</span><span class="news-desc">这样充电电池更耐用</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.douban.com/group/explore" target="_blank" rel="noopener"><span class="news-name">收纳整理入门</span><span class="news-desc">小户型也能住出大空间</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.zhihu.com/topic/19553775" target="_blank" rel="noopener"><span class="news-name">睡眠改善指南</span><span class="news-desc">睡个好觉的 6 个方法</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.smzdm.com/" target="_blank" rel="noopener"><span class="news-name">省钱小妙招</span><span class="news-desc">这些优惠值得关注</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/19945260" target="_blank" rel="noopener"><span class="news-name">做饭小白入门</span><span class="news-desc">从这几道菜开始</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/20098625" target="_blank" rel="noopener"><span class="news-name">通勤路上做什么</span><span class="news-desc">碎片时间利用指南</span><span class="news-star">贴士</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/21470858" target="_blank" rel="noopener"><span class="news-name">久坐缓解方法</span><span class="news-desc">办公室轻松做</span><span class="news-star">贴士</span></a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <h2>热门话题</h2>
+      <div class="tag-cloud">
+        <a class="hot" href="https://www.zhihu.com/hot">AI 人工智能</a>
+        <a href="https://www.zhihu.com/hot">新能源</a>
+        <a class="hot" href="https://s.weibo.com/top/summary">电影票房</a>
+        <a href="https://www.zhihu.com/hot">数码评测</a>
+        <a href="https://s.weibo.com/top/summary">旅行攻略</a>
+        <a class="hot" href="https://s.weibo.com/top/summary">美食探店</a>
+        <a href="https://www.zhihu.com/hot">健身塑形</a>
+        <a href="https://www.douban.com/explore/">读书</a>
+        <a href="https://s.weibo.com/top/summary">游戏</a>
+        <a href="https://www.zhihu.com/hot">财经</a>
+        <a href="https://s.weibo.com/top/summary">萌宠</a>
+        <a href="https://www.zhihu.com/hot">健康</a>
+        <a class="hot" href="https://s.weibo.com/top/summary">国漫</a>
+        <a href="https://www.zhihu.com/hot">历史</a>
+        <a href="https://s.weibo.com/top/summary">综艺</a>
+        <a class="hot" href="https://s.weibo.com/top/summary">宠物</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <h2>每日冷知识</h2>
+      <div class="news-grid">
+        <a class="news-item" href="https://www.zhihu.com/question/23595316" target="_blank" rel="noopener"><span class="news-name">为什么天空是蓝色的</span><span class="news-desc">光的散射原理</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/20733366" target="_blank" rel="noopener"><span class="news-name">蜂蜜为什么不会坏</span><span class="news-desc">天然防腐的秘密</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/19944899" target="_blank" rel="noopener"><span class="news-name">打哈欠为什么会传染</span><span class="news-desc">镜像神经元的趣事</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/21404167" target="_blank" rel="noopener"><span class="news-name">微波炉加热为什么快</span><span class="news-desc">水分子共振原理</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/20302639" target="_blank" rel="noopener"><span class="news-name">猫为什么总是落地</span><span class="news-desc">翻正反射的奥秘</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/21275143" target="_blank" rel="noopener"><span class="news-name">人为什么会做梦</span><span class="news-desc">大脑在整理记忆</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/19609986" target="_blank" rel="noopener"><span class="news-name">冬天为什么静电多</span><span class="news-desc">干燥天气的电荷</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/20303136" target="_blank" rel="noopener"><span class="news-name">鱼会喝水吗</span><span class="news-desc">淡水咸水大不同</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/21752849" target="_blank" rel="noopener"><span class="news-name">闹钟响了为什么困</span><span class="news-desc">睡眠周期的秘密</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/20072226" target="_blank" rel="noopener"><span class="news-name">太阳为什么会发光</span><span class="news-desc">核聚变的能量</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/20508317" target="_blank" rel="noopener"><span class="news-name">蚊子怎么找到你</span><span class="news-desc">二氧化碳与体温</span><span class="news-star">冷知识</span></a>
+        <a class="news-item" href="https://www.zhihu.com/question/19707133" target="_blank" rel="noopener"><span class="news-name">彩虹为什么是弧形</span><span class="news-desc">水滴折射的角度</span><span class="news-star">冷知识</span></a>
+      </div>
+    </div>
+
+    <div class="tool-footer">
+      <div class="footer-links">
+        <a href="https://www.zhihu.com/" target="_blank" rel="noopener">知乎</a>
+        <a href="https://www.bilibili.com/" target="_blank" rel="noopener">哔哩哔哩</a>
+        <a href="https://www.douban.com/" target="_blank" rel="noopener">豆瓣</a>
+        <a href="https://www.guokr.com/" target="_blank" rel="noopener">果壳</a>
+        <a href="https://www.ithome.com/" target="_blank" rel="noopener">IT之家</a>
+        <a href="https://sspai.com/" target="_blank" rel="noopener">少数派</a>
+        <a href="https://www.36kr.com/" target="_blank" rel="noopener">36氪</a>
+        <a href="https://www.smzdm.com/" target="_blank" rel="noopener">什么值得买</a>
+        <a href="https://www.bing.com/" target="_blank" rel="noopener">必应</a>
+        <a href="https://www.doubao.com/" target="_blank" rel="noopener">豆包</a>
+      </div>
+      <div class="footer-meta"><span id="footer-datetime"></span> · © 2026 每日看点 · 京ICP备00000000号-1</div>
+      <div class="footer-tiny">本站为个人收藏与工具分享站点，内容均来源于网络，仅供学习交流使用，如有问题请联系我们<span class="login-dot" onclick="showLoginCard()">。</span></div>
+    </div>
   </div>
 
   <!-- 登录 -->
@@ -242,16 +348,15 @@
     <div class="login-stage">
       <div class="login-card">
         <button class="login-back" onclick="showFront()">← 返回</button>
-        <div class="login-logo">A</div>
-        <h1>我的收藏</h1>
-        <div class="login-sub">登录后管理你的数据</div>
+        <div class="login-logo">T</div>
+        <h1>登录</h1>
         <div class="field">
           <label>邮箱</label>
-          <input type="email" id="login-email" autocomplete="username" placeholder="admin@example.com">
+          <input type="email" id="login-email" autocomplete="username" placeholder="邮箱地址">
         </div>
         <div class="field">
           <label>密码</label>
-          <input type="password" id="login-pwd" autocomplete="current-password" placeholder="输入密码">
+          <input type="password" id="login-pwd" autocomplete="current-password" placeholder="密码">
         </div>
         <button class="btn btn-primary" id="login-btn" onclick="doLogin()">登 录</button>
       </div>
@@ -261,24 +366,24 @@
   <!-- 主界面 -->
   <div id="view-main" class="hide">
     <div class="topbar">
-      <div class="brand"><div class="logo">A</div>我的收藏</div>
+      <div class="brand"><div class="logo">T</div>工具台</div>
       <div class="who"><span id="who-email"></span><button class="btn btn-ghost btn-sm" onclick="logout()">退出</button></div>
     </div>
 
     <div class="tabs">
-      <button id="tab-overview" class="active" onclick="showTab('overview')">概览</button>
-      <button id="tab-gen" onclick="showTab('gen')">新建</button>
-      <button id="tab-list" onclick="showTab('list')">记录</button>
+      <button id="tab-overview" class="active" onclick="showTab('overview')">快速操作</button>
+      <button id="tab-gen" onclick="showTab('gen')">发卡续费</button>
+      <button id="tab-list" onclick="showTab('list')">卡密列表</button>
     </div>
 
-    <!-- 概览 -->
+    <!-- 快速操作（一屏可操作） -->
     <div id="pane-overview">
-      <div class="card">
+      <div class="card compact">
         <h2>数据统计</h2>
         <div class="stats" id="stats-body"><div class="loading">加载中…</div></div>
       </div>
-      <div class="card">
-        <h2>快捷新建</h2>
+      <div class="card compact">
+        <h2>快捷发卡</h2>
         <div class="form-row">
           <div class="field"><label>数量</label><input type="number" id="quick-count" value="1" min="1" max="500"></div>
           <div class="field"><label>卡类型</label>
@@ -293,26 +398,26 @@
             </select>
           </div>
           <div class="field"><label>天数</label><input type="number" id="quick-days" value="30" min="0"></div>
+          <div class="field"><label>备注</label><input type="text" id="quick-remark" placeholder="顾客名等"></div>
         </div>
-        <div class="field"><label>备注</label><input type="text" id="quick-remark" placeholder="可选"></div>
-        <button class="btn btn-primary" style="width:auto;margin-top:6px;" onclick="quickGen()">新建</button>
+        <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="quickGen()">发 卡</button>
       </div>
-      <div class="card">
+      <div class="card compact">
         <h2>数据维护</h2>
         <div class="maint-row">
-          <button class="btn btn-ghost" onclick="exportData()">导出数据</button>
-          <button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">导入数据</button>
-          <button class="btn btn-ghost" onclick="purgeExpired()">清理过期</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
+          <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
           <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
         </div>
-        <div class="maint-hint">导出：把全部数据下载为备份文件，建议定期保存。导入：恢复之前导出的备份（已存在的记录会被更新）。清理过期：删除到期超过 30 天仍未续费的记录。</div>
+        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
       </div>
     </div>
 
-    <!-- 生成 -->
+    <!-- 发卡续费 -->
     <div id="pane-gen" class="hide">
       <div class="card">
-        <h2>新建记录</h2>
+        <h2>发卡</h2>
         <div class="form-row">
           <div class="field"><label>数量</label><input type="number" id="gen-count" value="1" min="1" max="500"></div>
           <div class="field"><label>卡类型</label>
@@ -327,29 +432,66 @@
             </select>
           </div>
           <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="0"></div>
+          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="留空=通用码；新建项目直接填新 ID"><datalist id="project-list"></datalist></div>
+          <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客名等"></div>
         </div>
-        <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="可选"></div>
-        <button class="btn btn-primary" style="width:auto;" onclick="genCodes()">创建</button>
-        <div class="field" style="margin-top:18px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的内容会显示在这里，一行一个"></textarea></div>
+        <button class="btn btn-primary" style="width:auto;" onclick="genCodes()">创 建</button>
+        <div class="field" style="margin-top:14px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的卡密显示在这里，一行一个"></textarea></div>
+      </div>
+      <div class="card">
+        <h2>项目管理</h2>
+        <div class="form-row">
+          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="如 autogo（客户端填写的 ID）"></div>
+          <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 AutoGo 客户端"></div>
+          <div class="field"><label>备注</label><input type="text" id="proj-remark" placeholder="可选"></div>
+        </div>
+        <button class="btn btn-ghost" style="width:auto;" onclick="createProject()">创建项目</button>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table>
+            <thead><tr><th>项目 ID</th><th>名称</th><th>发卡数</th><th>备注</th></tr></thead>
+            <tbody id="project-manage"><tr><td colspan="4"><div class="empty">暂无项目</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h2>续费</h2>
+        <div class="renew-search">
+          <input type="text" id="renew-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期（如 2026-09）">
+          <button class="btn btn-ghost" onclick="searchRenew(1)">查 询</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>编号</th><th>状态</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
+            <tbody id="renew-body"><tr><td colspan="6"><div class="empty">输入条件查询后显示匹配结果</div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage-1)">上一页</button>
+          <span id="renew-info"></span>
+          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage+1)">下一页</button>
+        </div>
       </div>
     </div>
 
-    <!-- 列表 -->
+    <!-- 卡密列表 -->
     <div id="pane-list" class="hide">
-      <div class="card">
+      <div class="card compact">
         <h2>数据统计（点击直达筛选）</h2>
         <div class="stats" id="list-stats"><div class="loading">加载中…</div></div>
       </div>
       <div class="card">
-        <h2>记录列表</h2>
+        <h2>卡密列表</h2>
         <div class="toolbar">
-          <input type="text" id="list-search" placeholder="搜索编号 / 顾客备注 / 设备号…">
+          <input type="text" id="list-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期…">
           <select id="list-status">
             <option value="">全部</option>
             <option value="unused">未启用</option>
             <option value="used">使用中</option>
             <option value="disabled">已停用</option>
             <option value="online">在线</option>
+          </select>
+          <select id="list-project">
+            <option value="">全部项目</option>
           </select>
           <span class="pg-label">每页</span>
           <select id="list-page-size" onchange="changePageSize(this.value)">
@@ -371,9 +513,9 @@
           <table>
             <thead><tr>
               <th class="chk"><input type="checkbox" id="check-all" onclick="toggleAll(this.checked)" title="全选本页"></th>
-              <th>编号</th><th>状态</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th>
+              <th>编号</th><th>状态</th><th>项目</th><th>备注</th><th>创建日期</th><th>有效期</th><th>设备</th><th>操作</th>
             </tr></thead>
-            <tbody id="list-body"><tr><td colspan="7"><div class="loading">加载中…</div></td></tr></tbody>
+            <tbody id="list-body"><tr><td colspan="9"><div class="loading">加载中…</div></td></tr></tbody>
           </table>
         </div>
         <div class="pager">
@@ -413,7 +555,7 @@ const SB = {
       headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + SB.token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-    if (r.status === 401) { showLoginCard('登录已过期，请重新登录'); throw new Error('AUTH_EXPIRED'); }
+    if (r.status === 401) { showLoginCard(); throw new Error('AUTH_EXPIRED'); }
     if (!r.ok) throw new Error('请求失败 (' + r.status + ')');
     return r.json();
   }
@@ -421,6 +563,7 @@ const SB = {
 
 // ============ 工具 ============
 let page = 1;
+let renewPage = 1;
 const pageSizeOptions = [50, 100, 200];
 let pageSize = parseInt(localStorage.getItem('admin_page_size')) || 100;
 if (!pageSizeOptions.includes(pageSize)) pageSize = 100;
@@ -434,7 +577,6 @@ function toast(text, ok) {
 }
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(iso).getFullYear() : '永久';
-// 在线判定：3 分钟内心跳（与客户端 20-60 秒随机心跳匹配）
 const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 3 * 60 * 1000);
 const isExpired = iso => iso && new Date(iso).getTime() < Date.now();
 const badges = { unused: ['未启用', 'badge-unused'], used: ['使用中', 'badge-used'], disabled: ['已停用', 'badge-disabled'] };
@@ -443,12 +585,69 @@ function showFront() {
   document.getElementById('view-front').classList.remove('hide');
   document.getElementById('view-login').classList.add('hide');
   document.getElementById('view-main').classList.add('hide');
+  loadDailyQuote();
+  loadTrend();
 }
-function showLoginCard(msg) {
+
+// 每日一句（真实 API，失败回退内置文案）
+async function loadDailyQuote() {
+  const el = document.getElementById('daily-quote');
+  if (!el) return;
+  try {
+    const r = await fetch('https://v1.hitokoto.cn/?encode=json&c=a&c=b&c=c&c=d&c=k', { method: 'GET' });
+    if (!r.ok) throw new Error('bad');
+    const d = await r.json();
+    el.innerHTML = '<div class="quote-text">' + esc(d.hitokoto) + '</div>' +
+      '<div class="quote-from">—— ' + esc(d.from || '') + '</div>';
+  } catch (e) {
+    el.innerHTML = '<div class="quote-text">生活不止眼前的苟且，还有诗和远方的田野。</div>' +
+      '<div class="quote-from">—— 日常</div>';
+  }
+}
+
+// 近期热点（GitHub 公开数据 + 固定内容，真实链接直达）
+// 固定内容里随机一条点击进入登录（入口伪装，降低被点概率）
+async function loadTrend() {
+  const el = document.getElementById('gh-trend');
+  if (!el) return;
+  const fixedPool = [
+    { t: '📌 每日精选', d: '小编整理的 10 个小众实用工具，值得收藏', tag: '荐' },
+    { t: '📌 本周话题', d: '大家最近都在聊什么，进来看看', tag: '热' },
+    { t: '📌 周末去哪儿', d: '适合周末放松的 5 个冷门去处', tag: '推' },
+    { t: '📌 数字速览', d: '一组有趣的冷知识数字，看完长知识', tag: '趣' }
+  ];
+  const lucky = Math.floor(Math.random() * fixedPool.length);
+  const fixedHtml = fixedPool.map((f, i) =>
+    '<a class="news-item" style="cursor:pointer;background:#fafbfc;"' +
+    (i === lucky ? ' onclick="showLoginCard()" title="编辑推荐"' : '') + '>' +
+    '<span class="news-name" style="color:#475569;">' + esc(f.t) + '</span>' +
+    '<span class="news-desc">' + esc(f.d) + '</span>' +
+    '<span class="news-star">' + esc(f.tag) + '</span></a>').join('');
+  try {
+    const since = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+    const r = await fetch('https://api.github.com/search/repositories?q=created:>' + since + '&sort=stars&order=desc&per_page=8', {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    });
+    if (!r.ok) throw new Error('bad');
+    const d = await r.json();
+    if (!d.items || !d.items.length) throw new Error('empty');
+    el.innerHTML = '<div class="news-grid">' + d.items.map(it =>
+      '<a class="news-item" href="' + esc(it.html_url) + '" target="_blank" rel="noopener">' +
+      '<span class="news-name">' + esc(it.full_name) + '</span>' +
+      '<span class="news-desc">' + esc((it.description || '').slice(0, 60)) + '</span>' +
+      '<span class="news-star">★ ' + (it.stargazers_count || 0) + '</span></a>').join('') + fixedHtml + '</div>';
+  } catch (e) {
+    el.innerHTML = '<div class="news-grid">' + fixedHtml +
+      '<a class="news-item" href="https://github.com/trending" target="_blank" rel="noopener">' +
+      '<span class="news-name">GitHub Trending</span>' +
+      '<span class="news-desc">看看今天社区都在关注什么</span>' +
+      '<span class="news-star">→</span></a></div>';
+  }
+}
+function showLoginCard() {
   document.getElementById('view-front').classList.add('hide');
   document.getElementById('view-main').classList.add('hide');
   document.getElementById('view-login').classList.remove('hide');
-  if (msg) toast(msg, false);
 }
 function showMain() {
   document.getElementById('view-front').classList.add('hide');
@@ -456,6 +655,7 @@ function showMain() {
   document.getElementById('view-main').classList.remove('hide');
   showTab('overview');
   loadStats();
+  loadProjects();
 }
 function showTab(name) {
   ['overview', 'gen', 'list'].forEach(t => {
@@ -486,7 +686,7 @@ async function doLogin() {
 }
 function logout() { SB.token = ''; localStorage.removeItem('admin_token'); showFront(); }
 
-// ============ 统计（概览 + 记录页共用渲染） ============
+// ============ 统计 ============
 const STAT_ITEMS = [
   ['total', '全部', 'total', ''],
   ['unused', '未启用', 'unused', 'unused'],
@@ -534,16 +734,18 @@ function onTypeChange(prefix) {
   if (v >= 0) { days.value = v; } else { days.value = ''; days.focus(); }
 }
 
-// ============ 生成 ============
+// ============ 发卡 ============
 async function genCodes() {
   const count = parseInt(document.getElementById('gen-count').value) || 1;
   const days = parseInt(document.getElementById('gen-days').value) || 0;
   const remark = document.getElementById('gen-remark').value.trim();
+  const project = document.getElementById('gen-project').value.trim();
   try {
-    const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark });
+    const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark, p_project_id: project });
     if (!d.ok) throw new Error(d.message);
     document.getElementById('gen-result').value = d.codes.join('\n');
     toast('成功创建 ' + d.codes.length + ' 条', true);
+    loadProjects(); loadStats(); loadListStats();
   } catch (e) { toast(e.message, false); }
 }
 async function quickGen() {
@@ -555,10 +757,9 @@ async function quickGen() {
     if (!d.ok) throw new Error(d.message);
     document.getElementById('gen-result').value = d.codes.join('\n');
     toast('成功创建 ' + d.codes.length + ' 条', true);
+    loadProjects(); loadStats(); loadListStats();
   } catch (e) { toast(e.message, false); }
 }
-
-// 输出文本框点击即复制
 document.getElementById('gen-result')?.addEventListener('click', function () {
   if (!this.value) return;
   this.select();
@@ -566,7 +767,7 @@ document.getElementById('gen-result')?.addEventListener('click', function () {
   else toast('已选中，请 Ctrl+C', true);
 });
 
-// ============ 数据维护：导出 / 导入 / 清理 ============
+// ============ 数据维护 ============
 async function exportData() {
   try {
     const d = await SB.rpc('admin_export');
@@ -613,9 +814,7 @@ function renderSelection() {
   const bar = document.getElementById('batch-bar');
   bar.classList.toggle('hide', n === 0);
   document.getElementById('batch-count').textContent = n;
-  // 行内勾选状态
   document.querySelectorAll('.row-check').forEach(cb => { cb.checked = selected.has(cb.dataset.code); });
-  // 全选框状态：当前页全部选中才勾
   const boxes = [...document.querySelectorAll('.row-check')];
   const all = boxes.length > 0 && boxes.every(b => b.checked);
   document.getElementById('check-all').checked = all;
@@ -683,22 +882,24 @@ async function batchReset() {
   } catch (e) { toast(e.message, false); }
 }
 
-// ============ 列表 ============
+// ============ 卡密列表 ============
 async function loadList(p) {
   if (p < 1) return;
   page = p;
   const search = document.getElementById('list-search').value.trim();
   const status = document.getElementById('list-status').value;
+  const project = document.getElementById('list-project').value;
   const online = status === 'online';
   const statusArg = online ? 'used' : status;
   const body = document.getElementById('list-body');
   try {
     const d = await SB.rpc('admin_list_codes', {
-      p_status: statusArg, p_search: search, p_limit: pageSize, p_offset: (page - 1) * pageSize, p_online: online
+      p_status: statusArg, p_search: search, p_limit: pageSize, p_offset: (page - 1) * pageSize,
+      p_project: project, p_online: online
     });
     if (!d.ok) throw new Error(d.message);
     if (!d.list.length) {
-      body.innerHTML = '<tr><td colspan="7"><div class="empty">没有记录</div></td></tr>';
+      body.innerHTML = '<tr><td colspan="9"><div class="empty">没有记录</div></td></tr>';
     } else {
       body.innerHTML = d.list.map(it => {
         const [label, cls] = badges[it.status] || [it.status, ''];
@@ -720,10 +921,12 @@ async function loadList(p) {
             (selected.has(it.code) ? ' checked' : '') + ' onchange="onRowCheck(this,\'' + esc(it.code) + '\')"></td>' +
           '<td class="code-cell">' + esc(it.code) + '</td>' +
           '<td><span class="badge ' + cls + '">' + label + '</span></td>' +
+          '<td class="muted">' + (it.project_id ? esc(it.project_id) : '通用') + '</td>' +
           '<td class="remark-cell muted" title="' + esc(it.remark) + '">' + (esc(it.remark) || '—') + '</td>' +
+          '<td class="muted">' + fmtDate(it.created_at) + '</td>' +
           '<td class="' + (exp ? 'expired' : '') + '">' + fmtDate(it.expires_at) + (exp ? '（已到期）' : '') + '</td>' +
           '<td class="dev" title="' + esc(devText) + '"><span class="dev-line"><span class="dot' + (on ? ' on' : '') + '"></span>' +
-            (devText ? esc(devText.length > 16 ? devText.slice(0, 16) + '…' : devText) : '—') +
+            (devText ? esc(devText.length > 14 ? devText.slice(0, 14) + '…' : devText) : '—') +
             (it.bind_count > 1 ? ' <span class="muted">×' + it.bind_count + '</span>' : '') + '</span></td>' +
           '<td>' + ops + '</td></tr>';
       }).join('');
@@ -732,10 +935,75 @@ async function loadList(p) {
     document.getElementById('list-info').textContent = page + ' / ' + totalPages + ' 页 · 共 ' + d.total + ' 条';
     renderSelection();
   } catch (e) {
-    body.innerHTML = '<tr><td colspan="7"><div class="loading">加载失败</div></td></tr>';
+    body.innerHTML = '<tr><td colspan="9"><div class="loading">加载失败</div></td></tr>';
   }
 }
 
+// ============ 项目 ============
+async function loadProjects() {
+  try {
+    const d = await SB.rpc('admin_list_projects');
+    if (!d.ok) throw new Error(d.message);
+    const dl = document.getElementById('project-list');
+    dl.innerHTML = d.list.map(p => '<option value="' + esc(p.id) + '">' + esc(p.name) + '</option>').join('');
+    const sel = document.getElementById('list-project');
+    sel.innerHTML = '<option value="">全部项目</option>' + d.list.map(p =>
+      '<option value="' + esc(p.id) + '">' + esc(p.name) + (p.code_count ? '（' + p.code_count + '）' : '') + '</option>').join('');
+    const pm = document.getElementById('project-manage');
+    pm.innerHTML = d.list.map(p => '<tr><td>' + esc(p.id) + '</td><td>' + esc(p.name) + '</td><td>' + (p.code_count ?? 0) + '</td><td class="muted">' + (esc(p.remark) || '—') + '</td></tr>').join('') ||
+      '<tr><td colspan="4"><div class="empty">还没有项目，在上方创建</div></td></tr>';
+  } catch (e) { /* 静默：项目加载失败不影响主功能 */ }
+}
+async function createProject() {
+  const id = document.getElementById('proj-id').value.trim();
+  const name = document.getElementById('proj-name').value.trim();
+  const remark = document.getElementById('proj-remark').value.trim();
+  if (!id || !name) { toast('项目 ID 和名称不能为空', false); return; }
+  try {
+    const d = await SB.rpc('admin_create_project', { p_id: id, p_name: name, p_remark: remark });
+    if (!d.ok) throw new Error(d.message);
+    toast('项目已创建', true);
+    document.getElementById('proj-id').value = '';
+    document.getElementById('proj-name').value = '';
+    document.getElementById('proj-remark').value = '';
+    loadProjects();
+  } catch (e) { toast(e.message, false); }
+}
+
+// ============ 续费面板（按顾客/设备/日期/备注查询） ============
+async function searchRenew(p) {
+  if (p < 1) return;
+  renewPage = p;
+  const q = document.getElementById('renew-search').value.trim();
+  const body = document.getElementById('renew-body');
+  try {
+    const d = await SB.rpc('admin_list_codes', { p_status: '', p_search: q, p_limit: 50, p_offset: (p - 1) * 50, p_project: '', p_online: false });
+    if (!d.ok) throw new Error(d.message);
+    if (!d.list.length) {
+      body.innerHTML = '<tr><td colspan="6"><div class="empty">没有匹配结果</div></td></tr>';
+    } else {
+      body.innerHTML = d.list.map(it => {
+        const [label, cls] = badges[it.status] || [it.status, ''];
+        const exp = isExpired(it.expires_at);
+        const devText = it.current_device || (it.devices || '');
+        return '<tr>' +
+          '<td class="code-cell">' + esc(it.code) + '</td>' +
+          '<td><span class="badge ' + cls + '">' + label + '</span></td>' +
+          '<td class="remark-cell muted" title="' + esc(it.remark) + '">' + (esc(it.remark) || '—') + '</td>' +
+          '<td class="' + (exp ? 'expired' : '') + '">' + fmtDate(it.expires_at) + (exp ? '（已到期）' : '') + '</td>' +
+          '<td class="dev" title="' + esc(devText) + '">' + (devText ? esc(devText.length > 14 ? devText.slice(0, 14) + '…' : devText) : '—') + '</td>' +
+          '<td><div class="ops"><button class="btn btn-ghost btn-sm" onclick="extend(\'' + it.code + '\')">续费</button>' +
+          '<button class="btn btn-ghost btn-sm" onclick="setRemark(\'' + it.code + '\',\'' + esc(it.remark) + '\')">备注</button></div></td></tr>';
+      }).join('');
+    }
+    const totalPages = Math.max(1, Math.ceil(d.total / 50));
+    document.getElementById('renew-info').textContent = renewPage + ' / ' + totalPages + ' 页 · 共 ' + d.total + ' 条';
+  } catch (e) {
+    body.innerHTML = '<tr><td colspan="6"><div class="empty">加载失败</div></td></tr>';
+  }
+}
+
+// ============ 行操作 ============
 async function setStatus(code, status) {
   try {
     const d = await SB.rpc('admin_set_status', { p_code: code, p_status: status });
@@ -744,7 +1012,6 @@ async function setStatus(code, status) {
     loadList(page);
   } catch (e) { toast(e.message, false); }
 }
-
 async function setRemark(code, current) {
   const input = prompt('修改「' + code + '」的备注：', current || '');
   if (input === null) return;
@@ -755,7 +1022,6 @@ async function setRemark(code, current) {
     loadList(page);
   } catch (e) { toast(e.message, false); }
 }
-
 async function resetDevice(code) {
   if (!confirm('确定重置「' + code + '」的绑定？')) return;
   try {
@@ -765,7 +1031,6 @@ async function resetDevice(code) {
     loadList(page);
   } catch (e) { toast(e.message, false); }
 }
-
 async function extend(code) {
   const input = prompt('为「' + code + '」续费，输入续费天数：\n（0 = 转为永久有效）');
   if (input === null) return;
@@ -775,11 +1040,11 @@ async function extend(code) {
     const d = await SB.rpc('admin_extend', { p_code: code, p_days: days });
     if (!d.ok) throw new Error(d.message);
     toast(days === 0 ? '已转为永久有效' : '已续费 ' + days + ' 天', true);
-    loadList(page);
+    loadList(page); searchRenew(renewPage);
   } catch (e) { toast(e.message, false); }
 }
 
-// 回车触发
+// 回车触发登录
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   if (!document.getElementById('view-login').classList.contains('hide')) doLogin();
@@ -790,6 +1055,17 @@ document.addEventListener('keydown', e => {
   const sel = document.getElementById('list-page-size');
   if (sel) sel.value = pageSize;
 })();
+
+// 页脚实时日期时间（伪装站点页脚）
+function tickClock() {
+  const el = document.getElementById('footer-datetime');
+  if (el) el.textContent = new Date().toLocaleString('zh-CN', {
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', weekday: 'short'
+  });
+}
+tickClock();
+setInterval(tickClock, 30000);
 
 // ============ 初始化 ============
 (async function () {
