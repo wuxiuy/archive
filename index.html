@@ -347,8 +347,6 @@
   <div id="view-login" class="hide">
     <div class="login-stage">
       <div class="login-card">
-        <button class="login-back" onclick="showFront()">← 返回</button>
-        <div class="login-logo">T</div>
         <h1>登录</h1>
         <div class="field">
           <label>邮箱</label>
@@ -366,14 +364,14 @@
   <!-- 主界面 -->
   <div id="view-main" class="hide">
     <div class="topbar">
-      <div class="brand"><div class="logo">T</div>工具台</div>
+      <div class="brand">卡密管理系统</div>
       <div class="who"><span id="who-email"></span><button class="btn btn-ghost btn-sm" onclick="logout()">退出</button></div>
     </div>
 
     <div class="tabs">
       <button id="tab-overview" class="active" onclick="showTab('overview')">快速操作</button>
-      <button id="tab-gen" onclick="showTab('gen')">发卡续费</button>
       <button id="tab-list" onclick="showTab('list')">卡密列表</button>
+      <button id="tab-manage" onclick="showTab('manage')">系统管理</button>
     </div>
 
     <!-- 快速操作（一屏可操作） -->
@@ -383,40 +381,6 @@
         <div class="stats" id="stats-body"><div class="loading">加载中…</div></div>
       </div>
       <div class="card compact">
-        <h2>快捷发卡</h2>
-        <div class="form-row">
-          <div class="field"><label>数量</label><input type="number" id="quick-count" value="1" min="1" max="500"></div>
-          <div class="field"><label>卡类型</label>
-            <select id="quick-type" onchange="onTypeChange('quick')">
-              <option value="1">天卡（1 天）</option>
-              <option value="7">周卡（7 天）</option>
-              <option value="30" selected>月卡（30 天）</option>
-              <option value="90">季卡（90 天）</option>
-              <option value="365">年卡（365 天）</option>
-              <option value="0">永久</option>
-              <option value="-1">自定义天数</option>
-            </select>
-          </div>
-          <div class="field"><label>天数</label><input type="number" id="quick-days" value="30" min="0"></div>
-          <div class="field"><label>备注</label><input type="text" id="quick-remark" placeholder="顾客名等"></div>
-        </div>
-        <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="quickGen()">发 卡</button>
-      </div>
-      <div class="card compact">
-        <h2>数据维护</h2>
-        <div class="maint-row">
-          <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
-          <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
-          <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
-        </div>
-        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
-      </div>
-    </div>
-
-    <!-- 发卡续费 -->
-    <div id="pane-gen" class="hide">
-      <div class="card">
         <h2>发卡</h2>
         <div class="form-row">
           <div class="field"><label>数量</label><input type="number" id="gen-count" value="1" min="1" max="500"></div>
@@ -432,28 +396,13 @@
             </select>
           </div>
           <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="0"></div>
-          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="留空=通用码；新建项目直接填新 ID"><datalist id="project-list"></datalist></div>
-          <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客名等"></div>
+          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填，可新建"><datalist id="project-list"></datalist></div>
+          <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客信息或联系方式"></div>
         </div>
-        <button class="btn btn-primary" style="width:auto;" onclick="genCodes()">创 建</button>
-        <div class="field" style="margin-top:14px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的卡密显示在这里，一行一个"></textarea></div>
+        <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="genCodes()">创 建</button>
+        <div class="field" style="margin-top:12px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的卡密显示在这里，一行一个"></textarea></div>
       </div>
-      <div class="card">
-        <h2>项目管理</h2>
-        <div class="form-row">
-          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="如 autogo（客户端填写的 ID）"></div>
-          <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 AutoGo 客户端"></div>
-          <div class="field"><label>备注</label><input type="text" id="proj-remark" placeholder="可选"></div>
-        </div>
-        <button class="btn btn-ghost" style="width:auto;" onclick="createProject()">创建项目</button>
-        <div class="table-wrap" style="margin-top:12px;">
-          <table>
-            <thead><tr><th>项目 ID</th><th>名称</th><th>发卡数</th><th>备注</th></tr></thead>
-            <tbody id="project-manage"><tr><td colspan="4"><div class="empty">暂无项目</div></td></tr></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
+      <div class="card compact">
         <h2>续费</h2>
         <div class="renew-search">
           <input type="text" id="renew-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期（如 2026-09）">
@@ -522,6 +471,43 @@
           <button class="btn btn-ghost btn-sm" onclick="loadList(page-1)">上一页</button>
           <span id="list-info"></span>
           <button class="btn btn-ghost btn-sm" onclick="loadList(page+1)">下一页</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 系统管理（项目管理 + 数据维护） -->
+    <div id="pane-manage" class="hide">
+      <div class="card">
+        <h2>系统管理</h2>
+        <div class="form-row">
+          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="如 main"></div>
+          <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 主客户端"></div>
+          <div class="field"><label>备注</label><input type="text" id="proj-remark" placeholder="可选"></div>
+        </div>
+        <button class="btn btn-ghost" style="width:auto;" onclick="createProject()">创建项目</button>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table>
+            <thead><tr><th>项目 ID</th><th>名称</th><th>发卡数</th><th>备注</th><th>操作</th></tr></thead>
+            <tbody id="project-manage"><tr><td colspan="5"><div class="empty">暂无项目</div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="maint-row" style="margin-top:14px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
+          <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
+          <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
+        </div>
+        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <div class="field"><label>修改管理员密码</label>
+            <div class="renew-search" style="margin-top:8px;">
+              <input type="text" id="pw-new" placeholder="输入新密码，或点随机生成" autocomplete="off">
+              <input type="password" id="pw-confirm" placeholder="再次输入确认" autocomplete="off">
+              <button class="btn btn-ghost" onclick="genPassword()">随机生成</button>
+              <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
+            </div>
+            <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -658,7 +644,7 @@ function showMain() {
   loadProjects();
 }
 function showTab(name) {
-  ['overview', 'gen', 'list'].forEach(t => {
+  ['overview', 'list', 'manage'].forEach(t => {
     document.getElementById('tab-' + t).classList.toggle('active', t === name);
     document.getElementById('pane-' + t).classList.toggle('hide', t !== name);
   });
@@ -740,20 +726,9 @@ async function genCodes() {
   const days = parseInt(document.getElementById('gen-days').value) || 0;
   const remark = document.getElementById('gen-remark').value.trim();
   const project = document.getElementById('gen-project').value.trim();
+  if (!project) { toast('发卡必须关联项目，请填写项目 ID', false); return; }
   try {
     const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark, p_project_id: project });
-    if (!d.ok) throw new Error(d.message);
-    document.getElementById('gen-result').value = d.codes.join('\n');
-    toast('成功创建 ' + d.codes.length + ' 条', true);
-    loadProjects(); loadStats(); loadListStats();
-  } catch (e) { toast(e.message, false); }
-}
-async function quickGen() {
-  const count = parseInt(document.getElementById('quick-count').value) || 1;
-  const days = parseInt(document.getElementById('quick-days').value) || 0;
-  const remark = document.getElementById('quick-remark').value.trim();
-  try {
-    const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark });
     if (!d.ok) throw new Error(d.message);
     document.getElementById('gen-result').value = d.codes.join('\n');
     toast('成功创建 ' + d.codes.length + ' 条', true);
@@ -797,8 +772,45 @@ async function importData(input) {
     toast('导入失败：' + e.message, false);
   } finally { input.value = ''; }
 }
-async function purgeExpired() {
-  if (!confirm('确定清理到期超过 30 天未续费的记录？此操作不可恢复。')) return;
+// ============ 修改管理员密码 ============
+function genPassword(len = 16) {
+  const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const lower = 'abcdefghijkmnopqrstuvwxyz';
+  const digit = '23456789';
+  const sym = '!@#$%^&*_-+=?';
+  const all = upper + lower + digit + sym;
+  const rand = n => Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 4294967296 * n);
+  const arr = [upper[rand(upper.length)], lower[rand(lower.length)], digit[rand(digit.length)], sym[rand(sym.length)]];
+  while (arr.length < len) arr.push(all[rand(all.length)]);
+  for (let i = arr.length - 1; i > 0; i--) { const j = rand(i + 1); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+  const pwd = arr.join('');
+  document.getElementById('pw-new').value = pwd;
+  document.getElementById('pw-confirm').value = pwd;
+  const out = document.getElementById('pw-out');
+  out.textContent = '已生成复杂密码：' + pwd + '　请立即复制保存，修改后只显示这一次';
+  out.style.color = '#b45309';
+}
+async function changePassword() {
+  const p1 = document.getElementById('pw-new').value;
+  const p2 = document.getElementById('pw-confirm').value;
+  if (!p1 || p1.length < 8) { toast('密码至少 8 位', false); return; }
+  if (p1 !== p2) { toast('两次输入不一致', false); return; }
+  try {
+    const r = await fetch(SB.url + '/auth/v1/user', {
+      method: 'PUT',
+      headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + SB.token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: p1 })
+    });
+    if (!r.ok) throw new Error('修改失败 (' + r.status + ')，请确认登录状态');
+    document.getElementById('pw-new').value = '';
+    document.getElementById('pw-confirm').value = '';
+    const out = document.getElementById('pw-out');
+    out.textContent = '';
+    toast('密码已修改，下次登录请使用新密码', true);
+  } catch (e) { toast(e.message, false); }
+}
+
+async function purgeExpired() {  if (!confirm('确定清理到期超过 30 天未续费的记录？此操作不可恢复。')) return;
   try {
     const d = await SB.rpc('admin_purge_expired');
     if (!d.ok) throw new Error(d.message);
@@ -910,6 +922,7 @@ async function loadList(p) {
             ? '<button class="btn btn-ghost btn-sm" onclick="setStatus(\'' + it.code + '\',\'used\')">启用</button>'
             : '<button class="btn btn-danger btn-sm" onclick="setStatus(\'' + it.code + '\',\'disabled\')">停用</button>') +
           '<button class="btn btn-ghost btn-sm" onclick="setRemark(\'' + it.code + '\',\'' + esc(it.remark) + '\')">备注</button>' +
+          '<button class="btn btn-ghost btn-sm" onclick="setCodeProject(\'' + it.code + '\')">项目</button>' +
           '<button class="btn btn-ghost btn-sm" onclick="extend(\'' + it.code + '\')">续费</button>' +
           (it.status === 'used' && it.current_device
             ? '<button class="btn btn-ghost btn-sm" onclick="resetDevice(\'' + it.code + '\')">重置</button>'
@@ -921,7 +934,7 @@ async function loadList(p) {
             (selected.has(it.code) ? ' checked' : '') + ' onchange="onRowCheck(this,\'' + esc(it.code) + '\')"></td>' +
           '<td class="code-cell">' + esc(it.code) + '</td>' +
           '<td><span class="badge ' + cls + '">' + label + '</span></td>' +
-          '<td class="muted">' + (it.project_id ? esc(it.project_id) : '通用') + '</td>' +
+          '<td class="muted">' + (it.project_name || it.project_id || '通用') + '</td>' +
           '<td class="remark-cell muted" title="' + esc(it.remark) + '">' + (esc(it.remark) || '—') + '</td>' +
           '<td class="muted">' + fmtDate(it.created_at) + '</td>' +
           '<td class="' + (exp ? 'expired' : '') + '">' + fmtDate(it.expires_at) + (exp ? '（已到期）' : '') + '</td>' +
@@ -950,8 +963,12 @@ async function loadProjects() {
     sel.innerHTML = '<option value="">全部项目</option>' + d.list.map(p =>
       '<option value="' + esc(p.id) + '">' + esc(p.name) + (p.code_count ? '（' + p.code_count + '）' : '') + '</option>').join('');
     const pm = document.getElementById('project-manage');
-    pm.innerHTML = d.list.map(p => '<tr><td>' + esc(p.id) + '</td><td>' + esc(p.name) + '</td><td>' + (p.code_count ?? 0) + '</td><td class="muted">' + (esc(p.remark) || '—') + '</td></tr>').join('') ||
-      '<tr><td colspan="4"><div class="empty">还没有项目，在上方创建</div></td></tr>';
+    pm.innerHTML = d.list.map(p => '<tr><td>' + esc(p.id) + '</td><td>' + esc(p.name) + '</td><td>' + (p.code_count ?? 0) + '</td><td class="muted">' + (esc(p.remark) || '—') + '</td>' +
+      '<td><div class="ops">' +
+      '<button class="btn btn-ghost btn-sm" onclick="editProject(\'' + esc(p.id) + '\',\'' + esc(p.name) + '\',\'' + esc(p.remark || '') + '\')">编辑</button>' +
+      '<button class="btn btn-danger btn-sm" onclick="deleteProject(\'' + esc(p.id) + '\')">删除</button>' +
+      '</div></td></tr>').join('') ||
+      '<tr><td colspan="5"><div class="empty">还没有项目，在上方创建</div></td></tr>';
   } catch (e) { /* 静默：项目加载失败不影响主功能 */ }
 }
 async function createProject() {
@@ -966,6 +983,28 @@ async function createProject() {
     document.getElementById('proj-id').value = '';
     document.getElementById('proj-name').value = '';
     document.getElementById('proj-remark').value = '';
+    loadProjects();
+  } catch (e) { toast(e.message, false); }
+}
+async function editProject(id, name, remark) {
+  const newName = prompt('修改项目「' + id + '」的名称：', name || '');
+  if (newName === null) return;
+  if (!newName.trim()) { toast('名称不能为空', false); return; }
+  const newRemark = prompt('修改备注：', remark || '');
+  if (newRemark === null) return;
+  try {
+    const d = await SB.rpc('admin_create_project', { p_id: id, p_name: newName.trim(), p_remark: newRemark.trim() });
+    if (!d.ok) throw new Error(d.message);
+    toast('项目已更新', true);
+    loadProjects();
+  } catch (e) { toast(e.message, false); }
+}
+async function deleteProject(id) {
+  if (!confirm('确定删除项目「' + id + '」？该项目下还有激活码时无法删除。')) return;
+  try {
+    const d = await SB.rpc('admin_delete_project', { p_id: id });
+    if (!d.ok) throw new Error(d.message);
+    toast('项目已删除', true);
     loadProjects();
   } catch (e) { toast(e.message, false); }
 }
@@ -1020,6 +1059,17 @@ async function setRemark(code, current) {
     if (!d.ok) throw new Error(d.message);
     toast('备注已更新', true);
     loadList(page);
+  } catch (e) { toast(e.message, false); }
+}
+async function setCodeProject(code) {
+  const input = prompt('修改「' + code + '」所属项目（项目不存在将自动创建）：');
+  if (input === null) return;
+  if (!input.trim()) { toast('项目不能为空', false); return; }
+  try {
+    const d = await SB.rpc('admin_set_code_project', { p_code: code, p_project_id: input.trim() });
+    if (!d.ok) throw new Error(d.message);
+    toast('项目已更新', true);
+    loadList(page); loadProjects();
   } catch (e) { toast(e.message, false); }
 }
 async function resetDevice(code) {
