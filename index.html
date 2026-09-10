@@ -393,7 +393,7 @@
             </select>
           </div>
           <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="0"></div>
-          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填，可新建"><datalist id="project-list"></datalist></div>
+          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填，纯数字项目 ID"><datalist id="project-list"></datalist></div>
           <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客信息或联系方式"></div>
         </div>
         <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="genCodes()">创 建</button>
@@ -477,7 +477,7 @@
       <div class="card">
         <h2>系统管理</h2>
         <div class="form-row">
-          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="如 main"></div>
+          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="纯数字，如 1001"></div>
           <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 主客户端"></div>
           <div class="field"><label>备注</label><input type="text" id="proj-remark" placeholder="可选"></div>
         </div>
@@ -504,6 +504,47 @@
               <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
             </div>
             <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
+          </div>
+        </div>
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <div class="field"><label>操作日志</label>
+            <div class="renew-search" style="margin-top:8px;">
+              <select id="log-type">
+                <option value="">全部类型</option>
+                <option value="gen">发卡</option>
+                <option value="renew">续费</option>
+                <option value="ban">停用</option>
+                <option value="unban">启用</option>
+                <option value="reset">重置</option>
+                <option value="remark">备注</option>
+                <option value="proj">改项目</option>
+                <option value="batch_remark">批量备注</option>
+                <option value="batch_expire">批量到期</option>
+                <option value="batch_ban">批量封禁</option>
+                <option value="batch_unban">批量启用</option>
+                <option value="batch_reset">批量重置</option>
+                <option value="export">导出</option>
+                <option value="import">导入</option>
+                <option value="purge">清理过期</option>
+                <option value="proj_create">创建项目</option>
+                <option value="proj_edit">编辑项目</option>
+                <option value="proj_del">删除项目</option>
+              </select>
+              <input type="text" id="log-search" placeholder="搜索卡密或详情…">
+              <button class="btn btn-ghost" onclick="loadLogs(1)">查 询</button>
+              <button class="btn btn-danger btn-sm" onclick="clearLogs()">清空</button>
+            </div>
+            <div class="table-wrap" style="margin-top:10px;">
+              <table>
+                <thead><tr><th>时间</th><th>类型</th><th>卡密</th><th>详情</th></tr></thead>
+                <tbody id="log-body"><tr><td colspan="4"><div class="empty">暂无日志</div></td></tr></tbody>
+              </table>
+            </div>
+            <div class="pager">
+              <button class="btn btn-ghost btn-sm" onclick="loadLogs(logPage-1)">上一页</button>
+              <span id="log-info"></span>
+              <button class="btn btn-ghost btn-sm" onclick="loadLogs(logPage+1)">下一页</button>
+            </div>
           </div>
         </div>
       </div>
@@ -559,6 +600,7 @@ function toast(text, ok) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDateTime = iso => iso ? new Date(iso).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
 const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(iso).getFullYear() : '永久';
 const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 3 * 60 * 1000);
 const isExpired = iso => iso && new Date(iso).getTime() < Date.now();
@@ -647,6 +689,7 @@ function showTab(name) {
   });
   if (name === 'list') { loadListStats(); loadList(1); }
   if (name === 'overview') loadStats();
+  if (name === 'manage') { loadProjects(); loadLogs(1); }
 }
 
 // ============ 登录 ============
@@ -804,6 +847,33 @@ async function changePassword() {
     const out = document.getElementById('pw-out');
     out.textContent = '';
     toast('密码已修改，下次登录请使用新密码', true);
+  } catch (e) { toast(e.message, false); }
+}
+
+// ============ 操作日志 ============
+let logPage = 1;
+const LOG_TYPES = { gen:'发卡', renew:'续费', ban:'停用', unban:'启用', reset:'重置', remark:'备注', proj:'改项目', batch_remark:'批量备注', batch_expire:'批量到期', batch_ban:'批量封禁', batch_unban:'批量启用', batch_reset:'批量重置', export:'导出', import:'导入', purge:'清理过期', proj_create:'创建项目', proj_edit:'编辑项目', proj_del:'删除项目' };
+async function loadLogs(page) {
+  const type = document.getElementById('log-type').value;
+  const search = document.getElementById('log-search').value.trim();
+  try {
+    const d = await SB.rpc('admin_list_logs', { p_type: type, p_search: search, p_limit: 50, p_offset: (page - 1) * 50 });
+    if (!d.ok) throw new Error(d.message);
+    const tb = document.getElementById('log-body');
+    tb.innerHTML = d.list.map(l => '<tr><td class="muted">' + fmtDateTime(l.created_at) + '</td><td>' + (LOG_TYPES[l.op_type] || esc(l.op_type)) + '</td><td class="code-cell">' + esc(l.code) + '</td><td class="muted">' + esc(l.detail) + '</td></tr>').join('') ||
+      '<tr><td colspan="4"><div class="empty">暂无日志</div></td></tr>';
+    document.getElementById('log-info').textContent = d.total ? ('第 ' + page + ' 页 · 共 ' + d.total + ' 条') : '';
+    logPage = page;
+  } catch (e) { toast(e.message, false); }
+}
+async function clearLogs() {
+  const type = document.getElementById('log-type').value;
+  if (!confirm(type ? '确定清空当前类型的日志？' : '确定清空全部日志？')) return;
+  try {
+    const d = await SB.rpc('admin_clear_logs', { p_type: type });
+    if (!d.ok) throw new Error(d.message);
+    toast('已清空 ' + d.deleted + ' 条日志', true);
+    loadLogs(1);
   } catch (e) { toast(e.message, false); }
 }
 
