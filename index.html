@@ -496,17 +496,6 @@
         </div>
         <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
-          <div class="field"><label>修改管理员密码</label>
-            <div class="renew-search" style="margin-top:8px;">
-              <input type="text" id="pw-new" placeholder="输入新密码，或点随机生成" autocomplete="off">
-              <input type="password" id="pw-confirm" placeholder="再次输入确认" autocomplete="off">
-              <button class="btn btn-ghost" onclick="genPassword()">随机生成</button>
-              <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
-            </div>
-            <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
-          </div>
-        </div>
-        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
           <div class="field"><label>操作日志</label>
             <div class="renew-search" style="margin-top:8px;">
               <select id="log-type">
@@ -545,6 +534,17 @@
               <span id="log-info"></span>
               <button class="btn btn-ghost btn-sm" onclick="loadLogs(logPage+1)">下一页</button>
             </div>
+          </div>
+        </div>
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <div class="field"><label>修改管理员密码</label>
+            <div class="renew-search" style="margin-top:8px;">
+              <input type="text" id="pw-new" placeholder="输入新密码，或点随机生成" autocomplete="off">
+              <input type="password" id="pw-confirm" placeholder="再次输入确认" autocomplete="off">
+              <button class="btn btn-ghost" onclick="genPassword()">随机生成</button>
+              <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
+            </div>
+            <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
           </div>
         </div>
       </div>
