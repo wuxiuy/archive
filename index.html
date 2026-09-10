@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>激活码管理</title>
+<title>我的收藏</title>
 <style>
   :root {
     --bg: #f6f7f9;
@@ -32,12 +32,30 @@
   }
   .wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; }
 
+  /* ===== 收藏页（前台伪装） ===== */
+  .front-header { padding: 36px 4px 8px; }
+  .front-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -.5px; }
+  .front-header p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .front-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 22px; }
+  .front-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
+  .front-card h2 { font-size: 14px; font-weight: 650; color: var(--muted); margin-bottom: 10px; letter-spacing: 1px; }
+  .front-card ul { list-style: none; }
+  .front-card li { padding: 7px 0; border-bottom: 1px dashed #eef0f2; font-size: 13.5px; }
+  .front-card li:last-child { border-bottom: none; }
+  .front-card li b { font-weight: 600; }
+  .front-card li span { color: var(--muted); font-size: 12.5px; margin-left: 4px; }
+  .front-footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 12px; }
+  .front-footer a { color: var(--muted); cursor: pointer; text-decoration: none; margin-left: 8px; }
+  .front-footer a:hover { color: var(--text); }
+
   /* ===== 登录 ===== */
   .login-card {
     max-width: 380px; margin: 9vh auto 0; background: var(--card);
     border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow);
-    padding: 36px 32px;
+    padding: 36px 32px; position: relative;
   }
+  .login-back { position: absolute; top: 16px; left: 18px; color: var(--muted); font-size: 12px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .login-back:hover { color: var(--text); }
   .login-logo {
     width: 44px; height: 44px; border-radius: 12px; background: var(--primary);
     color: #fff; display: flex; align-items: center; justify-content: center;
@@ -144,18 +162,54 @@
 <body>
 <div class="wrap">
 
+  <!-- 前台：我的收藏（伪装页） -->
+  <div id="view-front">
+    <div class="front-header">
+      <h1>我的收藏</h1>
+      <p>随手记下喜欢的东西</p>
+    </div>
+    <div class="front-sections">
+      <div class="front-card">
+        <h2>电影</h2>
+        <ul>
+          <li><b>星际穿越</b><span>2023 重看依然震撼</span></li>
+          <li><b>千与千寻</b><span>宫崎骏最爱的一部</span></li>
+          <li><b>让子弹飞</b><span>台词都快背下来了</span></li>
+        </ul>
+      </div>
+      <div class="front-card">
+        <h2>书籍</h2>
+        <ul>
+          <li><b>三体</b><span>今年读完的第二遍</span></li>
+          <li><b>活着</b><span>后劲很大</span></li>
+          <li><b>置身事内</b><span>了解经济的入门好书</span></li>
+        </ul>
+      </div>
+      <div class="front-card">
+        <h2>美食</h2>
+        <ul>
+          <li><b>老张牛肉面</b><span>公司楼下</span></li>
+          <li><b>海底捞</b><span>朋友聚会首选</span></li>
+          <li><b>沙县小吃</b><span>深夜食堂</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="front-footer">© 2026 我的收藏<a onclick="showLoginCard()">登录</a></div>
+  </div>
+
   <!-- 登录 -->
-  <div id="view-login" class="login-card">
+  <div id="view-login" class="login-card hide">
+    <button class="login-back" onclick="showFront()">← 返回</button>
     <div class="login-logo">A</div>
-    <h1>激活码管理</h1>
-    <div class="login-sub">登录后管理激活码、设备与统计</div>
+    <h1>我的收藏</h1>
+    <div class="login-sub">登录后管理你的数据</div>
     <div class="field">
       <label>邮箱</label>
       <input type="email" id="login-email" autocomplete="username" placeholder="admin@example.com">
     </div>
     <div class="field">
       <label>密码</label>
-      <input type="password" id="login-pwd" autocomplete="current-password" placeholder="输入管理密码">
+      <input type="password" id="login-pwd" autocomplete="current-password" placeholder="输入密码">
     </div>
     <button class="btn btn-primary" id="login-btn" onclick="doLogin()">登 录</button>
   </div>
@@ -163,64 +217,64 @@
   <!-- 主界面 -->
   <div id="view-main" class="hide">
     <div class="topbar">
-      <div class="brand"><div class="logo">A</div>激活码管理</div>
+      <div class="brand"><div class="logo">A</div>我的收藏</div>
       <div class="who"><span id="who-email"></span><button class="btn btn-ghost btn-sm" onclick="logout()">退出</button></div>
     </div>
 
     <div class="tabs">
       <button id="tab-overview" class="active" onclick="showTab('overview')">概览</button>
-      <button id="tab-gen" onclick="showTab('gen')">生成</button>
-      <button id="tab-list" onclick="showTab('list')">列表</button>
+      <button id="tab-gen" onclick="showTab('gen')">新建</button>
+      <button id="tab-list" onclick="showTab('list')">记录</button>
     </div>
 
     <!-- 概览 -->
     <div id="pane-overview">
       <div class="card">
-        <h2>数据概览</h2>
+        <h2>数据统计</h2>
         <div class="stats" id="stats-body"><div class="loading">加载中…</div></div>
       </div>
       <div class="card">
-        <h2>快速生成</h2>
+        <h2>快捷新建</h2>
         <div class="form-row">
           <div class="field"><label>数量</label><input type="number" id="quick-count" value="10" min="1" max="500"></div>
-          <div class="field"><label>有效天数（0 = 永久）</label><input type="number" id="quick-days" value="0" min="0"></div>
+          <div class="field"><label>有效时长（0 = 永久）</label><input type="number" id="quick-days" value="0" min="0"></div>
         </div>
-        <div class="field"><label>备注（如卖给谁）</label><input type="text" id="quick-remark" placeholder="可选"></div>
-        <button class="btn btn-primary" style="width:auto;margin-top:6px;" onclick="quickGen()">生成</button>
+        <div class="field"><label>备注</label><input type="text" id="quick-remark" placeholder="可选"></div>
+        <button class="btn btn-primary" style="width:auto;margin-top:6px;" onclick="quickGen()">新建</button>
       </div>
     </div>
 
     <!-- 生成 -->
     <div id="pane-gen" class="hide">
       <div class="card">
-        <h2>批量生成激活码</h2>
+        <h2>新建记录</h2>
         <div class="form-row">
-          <div class="field"><label>生成数量</label><input type="number" id="gen-count" value="10" min="1" max="500"></div>
-          <div class="field"><label>有效天数（0 = 永久）</label><input type="number" id="gen-days" value="0" min="0"></div>
+          <div class="field"><label>数量</label><input type="number" id="gen-count" value="10" min="1" max="500"></div>
+          <div class="field"><label>有效时长（0 = 永久）</label><input type="number" id="gen-days" value="0" min="0"></div>
         </div>
-        <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="例如：张三 / 30 天"></div>
-        <button class="btn btn-primary" style="width:auto;" onclick="genCodes()">生成激活码</button>
-        <div class="field" style="margin-top:16px;"><label>结果（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的激活码会显示在这里，一行一个"></textarea></div>
+        <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="可选"></div>
+        <button class="btn btn-primary" style="width:auto;" onclick="genCodes()">创建</button>
+        <div class="field" style="margin-top:16px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的内容会显示在这里，一行一个"></textarea></div>
       </div>
     </div>
 
     <!-- 列表 -->
     <div id="pane-list" class="hide">
       <div class="card">
-        <h2>激活码列表</h2>
+        <h2>记录列表</h2>
         <div class="toolbar">
-          <input type="text" id="list-search" placeholder="搜索激活码…">
+          <input type="text" id="list-search" placeholder="搜索…">
           <select id="list-status">
-            <option value="">全部状态</option>
-            <option value="unused">未使用</option>
-            <option value="used">已激活</option>
-            <option value="disabled">已封禁</option>
+            <option value="">全部</option>
+            <option value="unused">未启用</option>
+            <option value="used">使用中</option>
+            <option value="disabled">已停用</option>
           </select>
           <button class="btn btn-ghost" onclick="loadList(1)">查询</button>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>激活码</th><th>状态</th><th>备注</th><th>到期</th><th>设备</th><th>操作</th></tr></thead>
+            <thead><tr><th>编号</th><th>状态</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
             <tbody id="list-body"><tr><td colspan="6"><div class="loading">加载中…</div></td></tr></tbody>
           </table>
         </div>
@@ -261,7 +315,7 @@ const SB = {
       headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + SB.token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-    if (r.status === 401) { showLogin('登录已过期，请重新登录'); throw new Error('AUTH_EXPIRED'); }
+    if (r.status === 401) { showLoginCard('登录已过期，请重新登录'); throw new Error('AUTH_EXPIRED'); }
     if (!r.ok) throw new Error('请求失败 (' + r.status + ')');
     return r.json();
   }
@@ -281,16 +335,21 @@ function toast(text, ok) {
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(iso).getFullYear() : '永久';
 const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 30 * 60 * 1000);
-const badges = { unused: ['未使用', 'badge-unused'], used: ['已激活', 'badge-used'], disabled: ['已封禁', 'badge-disabled'] };
+const badges = { unused: ['未启用', 'badge-unused'], used: ['使用中', 'badge-used'], disabled: ['已停用', 'badge-disabled'] };
 
-function showLogin(msg) {
-  SB.token = '';
-  localStorage.removeItem('admin_token');
+function showFront() {
+  document.getElementById('view-front').classList.remove('hide');
+  document.getElementById('view-login').classList.add('hide');
+  document.getElementById('view-main').classList.add('hide');
+}
+function showLoginCard(msg) {
+  document.getElementById('view-front').classList.add('hide');
   document.getElementById('view-main').classList.add('hide');
   document.getElementById('view-login').classList.remove('hide');
   if (msg) toast(msg, false);
 }
 function showMain() {
+  document.getElementById('view-front').classList.add('hide');
   document.getElementById('view-login').classList.add('hide');
   document.getElementById('view-main').classList.remove('hide');
   showTab('overview');
@@ -323,7 +382,7 @@ async function doLogin() {
     btn.disabled = false; btn.textContent = '登 录';
   }
 }
-function logout() { showLogin('已退出登录'); }
+function logout() { SB.token = ''; localStorage.removeItem('admin_token'); showFront(); }
 
 // ============ 统计 ============
 async function loadStats() {
@@ -333,11 +392,11 @@ async function loadStats() {
     if (!d.ok) throw new Error(d.message);
     const s = d.stats;
     const items = [
-      ['total', '总数', ''],
-      ['unused', '未使用', ''],
-      ['used', '已激活', 'used'],
-      ['disabled', '已封禁', 'disabled'],
-      ['online', '当前在线', 'online']
+      ['total', '全部', ''],
+      ['unused', '未启用', ''],
+      ['used', '使用中', 'used'],
+      ['disabled', '已停用', 'disabled'],
+      ['online', '在线', 'online']
     ];
     el.innerHTML = items.map(([k, label, cls]) =>
       '<div class="stat ' + cls + '"><b>' + (s[k] ?? 0) + '</b><span>' + label + '</span></div>').join('');
@@ -355,7 +414,7 @@ async function genCodes() {
     const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark });
     if (!d.ok) throw new Error(d.message);
     document.getElementById('gen-result').value = d.codes.join('\n');
-    toast('成功生成 ' + d.codes.length + ' 个', true);
+    toast('成功创建 ' + d.codes.length + ' 条', true);
   } catch (e) { toast(e.message, false); }
 }
 async function quickGen() {
@@ -366,11 +425,11 @@ async function quickGen() {
     const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark });
     if (!d.ok) throw new Error(d.message);
     document.getElementById('gen-result').value = d.codes.join('\n');
-    toast('成功生成 ' + d.codes.length + ' 个', true);
+    toast('成功创建 ' + d.codes.length + ' 条', true);
   } catch (e) { toast(e.message, false); }
 }
 
-// 结果文本框点击即复制
+// 输出文本框点击即复制
 document.getElementById('gen-result')?.addEventListener('click', function () {
   if (!this.value) return;
   this.select();
@@ -397,8 +456,8 @@ async function loadList(p) {
         const [label, cls] = badges[it.status] || [it.status, ''];
         const on = isOnline(it.last_seen_at);
         const ops = it.status === 'disabled'
-          ? '<button class="btn btn-ghost btn-sm" onclick="setStatus(\'' + it.code + '\',\'used\')">解封</button>'
-          : '<button class="btn btn-danger btn-sm" onclick="setStatus(\'' + it.code + '\',\'disabled\')">封禁</button>';
+          ? '<button class="btn btn-ghost btn-sm" onclick="setStatus(\'' + it.code + '\',\'used\')">启用</button>'
+          : '<button class="btn btn-danger btn-sm" onclick="setStatus(\'' + it.code + '\',\'disabled\')">停用</button>';
         return '<tr>' +
           '<td class="code-cell">' + esc(it.code) + '</td>' +
           '<td><span class="badge ' + cls + '">' + label + '</span></td>' +
@@ -425,17 +484,17 @@ async function setStatus(code, status) {
   try {
     const d = await SB.rpc('admin_set_status', { p_code: code, p_status: status });
     if (!d.ok) throw new Error(d.message);
-    toast(status === 'disabled' ? '已封禁 ' + code : '已解封 ' + code, true);
+    toast(status === 'disabled' ? '已停用 ' + code : '已启用 ' + code, true);
     loadList(page);
   } catch (e) { toast(e.message, false); }
 }
 
 async function resetDevice(code) {
-  if (!confirm('确定重置「' + code + '」的绑定设备？\n客户可在新设备上重新激活，旧设备将被踢下线。')) return;
+  if (!confirm('确定重置「' + code + '」的绑定？')) return;
   try {
     const d = await SB.rpc('admin_reset', { p_code: code });
     if (!d.ok) throw new Error(d.message);
-    toast('已重置设备绑定', true);
+    toast('已重置绑定', true);
     loadList(page);
   } catch (e) { toast(e.message, false); }
 }
@@ -449,7 +508,7 @@ document.addEventListener('keydown', e => {
 // ============ 初始化 ============
 (async function () {
   if (SB.token) { showMain(); return; }
-  showLogin();
+  showFront();
 })();
 </script>
 </body>
