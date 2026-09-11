@@ -493,11 +493,11 @@
               <option value="30" selected>月卡（30 天）</option>
               <option value="90">季卡（90 天）</option>
               <option value="365">年卡（365 天）</option>
-              <option value="0">永久</option>
+              <option value="3650">永久（十年）</option>
               <option value="-1">自定义天数</option>
             </select>
           </div>
-          <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="0"></div>
+          <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="1"></div>
           <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填，纯数字项目 ID"><datalist id="project-list"></datalist></div>
           <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客信息或联系方式"></div>
         </div>
@@ -546,9 +546,10 @@
           </select>
           <span class="pg-label">每页</span>
           <select id="list-page-size" onchange="changePageSize(this.value)">
-            <option value="50">50</option>
             <option value="100" selected>100</option>
             <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="500">500</option>
           </select>
           <button class="btn btn-ghost" onclick="loadList(1)">查询</button>
         </div>
@@ -1052,14 +1053,14 @@ async function batchRemark() {
 async function batchExpire() {
   const codes = selectedCodes();
   if (!codes.length) return;
-  const input = prompt('为选中的 ' + codes.length + ' 条设置到期：\n输入天数（从今天起 N 天后到期，0 = 永久）');
+  const input = prompt('为选中的 ' + codes.length + ' 条设置到期：\n输入天数（正数 = N 天后到期；0 = 今天到期；负数 = 已到期；永久请填 3650）');
   if (input === null) return;
   const days = parseInt(input);
-  if (isNaN(days) || days < 0) { toast('请输入有效的天数', false); return; }
+  if (isNaN(days)) { toast('请输入有效的天数', false); return; }
   try {
     const d = await SB.rpc('admin_batch_expire', { p_codes: codes, p_days: days });
     if (!d.ok) throw new Error(d.message);
-    toast(days === 0 ? '已转为永久' : '已设置 ' + (d.updated ?? 0) + ' 条到期（' + days + ' 天）', true);
+    toast(days > 0 ? '已设置 ' + (d.updated ?? 0) + ' 条到期（' + days + ' 天后）' : (days === 0 ? '已设置为今天到期' : '已设置为已到期（' + (-days) + ' 天）'), true);
     clearSelection(); loadList(page); loadListStats();
   } catch (e) { toast(e.message, false); }
 }
@@ -1274,14 +1275,14 @@ async function resetDevice(code) {
   } catch (e) { toast(e.message, false); }
 }
 async function extend(code) {
-  const input = prompt('为「' + code + '」续费，输入续费天数：\n（0 = 转为永久有效）');
+  const input = prompt('为「' + code + '」续费，输入天数：\n正数 = 顺延 N 天；0 = 今天到期；负数 = 已到期；永久请填 3650');
   if (input === null) return;
   const days = parseInt(input);
-  if (isNaN(days) || days < 0) { toast('请输入有效的天数', false); return; }
+  if (isNaN(days)) { toast('请输入有效的天数', false); return; }
   try {
     const d = await SB.rpc('admin_extend', { p_code: code, p_days: days });
     if (!d.ok) throw new Error(d.message);
-    toast(days === 0 ? '已转为永久有效' : '已续费 ' + days + ' 天', true);
+    toast(days > 0 ? '已续费 ' + days + ' 天' : (days === 0 ? '已设置为今天到期' : '已设置为已到期（' + (-days) + ' 天）'), true);
     loadList(page); searchRenew(renewPage);
   } catch (e) { toast(e.message, false); }
 }
