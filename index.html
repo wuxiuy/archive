@@ -601,14 +601,6 @@
             <tbody id="project-manage"><tr><td colspan="5"><div class="empty">暂无项目</div></td></tr></tbody>
           </table>
         </div>
-        <h2 style="margin-top:16px;">数据维护</h2>
-        <div class="maint-row">
-          <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
-          <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
-          <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
-        </div>
-        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
           <h2>操作日志</h2>
             <div class="renew-search" style="margin-top:8px;">
@@ -649,6 +641,14 @@
               <button class="btn btn-ghost btn-sm" onclick="loadLogs(logPage+1)">下一页</button>
             </div>
         </div>
+        <h2 style="margin-top:16px;">数据维护</h2>
+        <div class="maint-row">
+          <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
+          <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
+          <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
+        </div>
+        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
           <h2>密码管理</h2>
             <div class="renew-search" style="margin-top:8px;">
