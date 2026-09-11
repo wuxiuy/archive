@@ -605,6 +605,7 @@
           <h2>操作日志</h2>
             <div class="renew-search" style="margin-top:8px;">
               <select id="log-type">
+                <option value="login">登录</option>
                 <option value="">全部类型</option>
                 <option value="gen">发卡</option>
                 <option value="renew">续费</option>
@@ -817,11 +818,20 @@ async function doLogin() {
     document.getElementById('who-email').textContent = email;
     showMain();
     toast('登录成功', true);
+    logLogin();
   } catch (e) {
     toast(e.message, false);
   } finally {
     btn.disabled = false; btn.textContent = '登 录';
   }
+}
+// 登录成功记录操作日志（含来源 IP；IP 获取失败则只记登录事件）
+function logLogin() {
+  try {
+    fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
+      SB.rpc('admin_log_login', { p_ip: (d && d.ip) || '' }).catch(() => {});
+    }).catch(() => { SB.rpc('admin_log_login', { p_ip: '' }).catch(() => {}); });
+  } catch (e) { SB.rpc('admin_log_login', { p_ip: '' }).catch(() => {}); }
 }
 function logout() { SB.token = ''; localStorage.removeItem('admin_token'); showFront(); }
 
@@ -974,7 +984,7 @@ function applyTheme(t) {
 
 // ============ 操作日志 ============
 let logPage = 1;
-const LOG_TYPES = { gen:'发卡', renew:'续费', ban:'停用', unban:'启用', reset:'重置', remark:'备注', proj:'改项目', batch_remark:'批量备注', batch_expire:'批量到期', batch_ban:'批量封禁', batch_unban:'批量启用', batch_reset:'批量重置', export:'导出', import:'导入', purge:'清理过期', proj_create:'创建项目', proj_edit:'编辑项目', proj_del:'删除项目' };
+const LOG_TYPES = { login:'登录', gen:'发卡', renew:'续费', ban:'停用', unban:'启用', reset:'重置', remark:'备注', proj:'改项目', batch_remark:'批量备注', batch_expire:'批量到期', batch_ban:'批量封禁', batch_unban:'批量启用', batch_reset:'批量重置', export:'导出', import:'导入', purge:'清理过期', proj_create:'创建项目', proj_edit:'编辑项目', proj_del:'删除项目' };
 async function loadLogs(page) {
   const type = document.getElementById('log-type').value;
   const search = document.getElementById('log-search').value.trim();
