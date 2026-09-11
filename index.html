@@ -626,14 +626,14 @@
                 <option value="proj_edit">编辑项目</option>
                 <option value="proj_del">删除项目</option>
               </select>
-              <input type="text" id="log-search" placeholder="搜索卡密或详情…">
+              <input type="text" id="log-search" placeholder="搜索卡密 / 顾客备注 / 详情…">
               <button class="btn btn-ghost" onclick="loadLogs(1)">查 询</button>
               <button class="btn btn-danger btn-sm" onclick="clearLogs()">清空</button>
             </div>
             <div class="table-wrap" style="margin-top:10px;">
               <table>
-                <thead><tr><th>时间</th><th>类型</th><th>卡密</th><th>详情</th></tr></thead>
-                <tbody id="log-body"><tr><td colspan="4"><div class="empty">暂无日志</div></td></tr></tbody>
+                <thead><tr><th>时间</th><th>类型</th><th>卡密</th><th>备注</th><th>详情</th></tr></thead>
+                <tbody id="log-body"><tr><td colspan="5"><div class="empty">暂无日志</div></td></tr></tbody>
               </table>
             </div>
             <div class="pager">
@@ -995,8 +995,8 @@ async function loadLogs(page) {
     const d = await SB.rpc('admin_list_logs', { p_type: type, p_search: search, p_limit: 50, p_offset: (page - 1) * 50 });
     if (!d.ok) throw new Error(d.message);
     const tb = document.getElementById('log-body');
-    tb.innerHTML = d.list.map(l => '<tr><td class="muted">' + fmtDateTime(l.created_at) + '</td><td>' + (LOG_TYPES[l.op_type] || esc(l.op_type)) + '</td><td class="code-cell">' + esc(l.code) + '</td><td class="muted">' + esc(l.detail) + '</td></tr>').join('') ||
-      '<tr><td colspan="4"><div class="empty">暂无日志</div></td></tr>';
+    tb.innerHTML = d.list.map(l => '<tr><td class="muted">' + fmtDateTime(l.created_at) + '</td><td>' + (LOG_TYPES[l.op_type] || esc(l.op_type)) + '</td><td class="code-cell">' + esc(l.code) + '</td><td class="remark-cell muted" title="' + esc(l.remark) + '">' + (esc(l.remark) || '—') + '</td><td class="muted">' + esc(l.detail) + '</td></tr>').join('') ||
+      '<tr><td colspan="5"><div class="empty">暂无日志</div></td></tr>';
     document.getElementById('log-info').textContent = d.total ? ('第 ' + page + ' 页 · 共 ' + d.total + ' 条') : '';
     logPage = page;
   } catch (e) { toast(e.message, false); }
