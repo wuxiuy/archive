@@ -1259,7 +1259,7 @@ async function manualActivate(code) {
     const d = await SB.rpc('admin_activate', { p_code: code, p_device_id: (dev || '').trim() });
     if (!d.ok) throw new Error(d.message);
     toast('激活成功，有效期至 ' + fmtDate(d.expires_at), true);
-    loadList(page); loadRenew(1);
+    loadList(page); searchRenew(1);
   } catch (e) { toast(e.message, false); }
 }
 async function setStatus(code, status) {
