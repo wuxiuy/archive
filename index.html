@@ -717,7 +717,7 @@ const fmtDateTime = iso => iso ? new Date(iso).toLocaleString('zh-CN', { month: 
 const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(iso).getFullYear() : '';
 const TYPE_LABELS = { 3650: '永久', 365: '年卡', 90: '季卡', 30: '月卡', 7: '周卡', 1: '天卡' };
 const typeLabel = days => TYPE_LABELS[days] || (days ? days + ' 天' : '—');
-const fmtExpiry = (iso, st) => !iso ? (st === 'new' ? '未激活' : '—') : fmtDate(iso);
+const fmtExpiry = (iso, st) => (st === 'unused' || st === 'new') ? '未激活' : (!iso ? '—' : fmtDate(iso));
 const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 3 * 60 * 1000);
 const isExpired = iso => iso && new Date(iso).getTime() < Date.now();
 const badges = { unused: ['未启用', 'badge-unused'], used: ['使用中', 'badge-used'], disabled: ['已停用', 'badge-disabled'] };
@@ -1118,7 +1118,7 @@ async function loadList(p) {
       body.innerHTML = d.list.map(it => {
         const [label, cls] = badges[it.status] || [it.status, ''];
         const on = isOnline(it.last_seen_at);
-        const exp = isExpired(it.expires_at);
+        const exp = it.status !== 'unused' && isExpired(it.expires_at);
         const ops = '<div class="ops">' +
           (it.status === 'disabled'
             ? '<button class="btn btn-ghost btn-sm" onclick="setStatus(\'' + it.code + '\',\'used\')">启用</button>'
@@ -1226,7 +1226,7 @@ async function searchRenew(p) {
     } else {
       body.innerHTML = d.list.map(it => {
         const [label, cls] = badges[it.status] || [it.status, ''];
-        const exp = isExpired(it.expires_at);
+        const exp = it.status !== 'unused' && isExpired(it.expires_at);
         const devText = it.current_device || (it.devices || '');
         return '<tr>' +
           '<td class="code-cell">' + esc(it.code) + '</td>' +
