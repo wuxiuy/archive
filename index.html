@@ -1120,6 +1120,9 @@ async function loadList(p) {
         const on = isOnline(it.last_seen_at);
         const exp = it.status !== 'unused' && isExpired(it.expires_at);
         const ops = '<div class="ops">' +
+          (it.status === 'unused'
+            ? '<button class="btn btn-ghost btn-sm" onclick="manualActivate(\'' + it.code + '\')">激活</button>'
+            : '') +
           (it.status === 'disabled'
             ? '<button class="btn btn-ghost btn-sm" onclick="setStatus(\'' + it.code + '\',\'used\')">启用</button>'
             : '<button class="btn btn-danger btn-sm" onclick="setStatus(\'' + it.code + '\',\'disabled\')">停用</button>') +
@@ -1235,7 +1238,9 @@ async function searchRenew(p) {
           '<td class="remark-cell muted" title="' + esc(it.remark) + '">' + (esc(it.remark) || '—') + '</td>' +
           '<td class="' + (exp ? 'expired' : '') + '">' + fmtExpiry(it.expires_at, it.status) + (exp ? '（已到期）' : '') + '</td>' +
           '<td class="dev" title="' + esc(devText) + '">' + (devText ? esc(devText.length > 14 ? devText.slice(0, 14) + '…' : devText) : '—') + '</td>' +
-          '<td><div class="ops"><button class="btn btn-ghost btn-sm" onclick="extend(\'' + it.code + '\')">续费</button>' +
+          '<td><div class="ops">' +
+          (it.status === 'unused' ? '<button class="btn btn-ghost btn-sm" onclick="manualActivate(\'' + it.code + '\')">激活</button>' : '') +
+          '<button class="btn btn-ghost btn-sm" onclick="extend(\'' + it.code + '\')">续费</button>' +
           '<button class="btn btn-ghost btn-sm" onclick="setRemark(\'' + it.code + '\',\'' + esc(it.remark) + '\')">备注</button></div></td></tr>';
       }).join('');
     }
@@ -1247,6 +1252,16 @@ async function searchRenew(p) {
 }
 
 // ============ 行操作 ============
+async function manualActivate(code) {
+  const dev = prompt('后台手动激活「' + code + '」\n到期时间将从此刻开始计算。\n\n可输入顾客设备号（留空 = 不绑定，顾客首次激活时自动接管）：', '');
+  if (dev === null) return;
+  try {
+    const d = await SB.rpc('admin_activate', { p_code: code, p_device_id: (dev || '').trim() });
+    if (!d.ok) throw new Error(d.message);
+    toast('激活成功，有效期至 ' + fmtDate(d.expires_at), true);
+    loadList(page); loadRenew(1);
+  } catch (e) { toast(e.message, false); }
+}
 async function setStatus(code, status) {
   try {
     const d = await SB.rpc('admin_set_status', { p_code: code, p_status: status });
