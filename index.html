@@ -581,18 +581,15 @@
     <!-- 系统管理（项目管理 + 数据维护） -->
     <div id="pane-manage" class="hide">
       <div class="card">
-        <h2>界面主题 · 创建项目 · 操作日志</h2>
-        <div style="margin-top:4px;">
-          <div class="field"><label>界面主题</label>
-            <div class="theme-row">
-              <button class="theme-swatch" data-theme="light" onclick="applyTheme('light')"><span class="sw light"></span>极简浅色</button>
-              <button class="theme-swatch" data-theme="dark" onclick="applyTheme('dark')"><span class="sw dark"></span>深邃夜色</button>
-              <button class="theme-swatch" data-theme="green" onclick="applyTheme('green')"><span class="sw green"></span>青竹绿</button>
-              <button class="theme-swatch" data-theme="warm" onclick="applyTheme('warm')"><span class="sw warm"></span>暖阳橙</button>
-            </div>
-          </div>
+        <h2>界面主题</h2>
+        <div class="theme-row">
+          <button class="theme-swatch" data-theme="light" onclick="applyTheme('light')"><span class="sw light"></span>极简浅色</button>
+          <button class="theme-swatch" data-theme="dark" onclick="applyTheme('dark')"><span class="sw dark"></span>深邃夜色</button>
+          <button class="theme-swatch" data-theme="green" onclick="applyTheme('green')"><span class="sw green"></span>青竹绿</button>
+          <button class="theme-swatch" data-theme="warm" onclick="applyTheme('warm')"><span class="sw warm"></span>暖阳橙</button>
         </div>
-        <div class="form-row" style="margin-top:14px;border-top:1px dashed #eef0f3;padding-top:14px;">
+        <h2 style="margin-top:16px;">项目信息</h2>
+        <div class="form-row">
           <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="纯数字，如 1001"></div>
           <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 主客户端"></div>
           <div class="field"><label>备注</label><input type="text" id="proj-remark" placeholder="可选"></div>
@@ -604,7 +601,8 @@
             <tbody id="project-manage"><tr><td colspan="5"><div class="empty">暂无项目</div></td></tr></tbody>
           </table>
         </div>
-        <div class="maint-row" style="margin-top:14px;border-top:1px dashed #eef0f3;padding-top:14px;">
+        <h2 style="margin-top:16px;">数据维护</h2>
+        <div class="maint-row">
           <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
           <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
           <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
@@ -612,7 +610,7 @@
         </div>
         <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
-          <div class="field"><label>操作日志</label>
+          <h2>操作日志</h2>
             <div class="renew-search" style="margin-top:8px;">
               <select id="log-type">
                 <option value="">全部类型</option>
@@ -653,7 +651,7 @@
           </div>
         </div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
-          <div class="field"><label>修改管理员密码</label>
+          <h2>密码管理</h2>
             <div class="renew-search" style="margin-top:8px;">
               <input type="text" id="pw-new" placeholder="输入新密码，或点随机生成" autocomplete="off">
               <input type="password" id="pw-confirm" placeholder="再次输入确认" autocomplete="off">
@@ -661,7 +659,6 @@
               <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
             </div>
             <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
-          </div>
         </div>
       </div>
     </div>
