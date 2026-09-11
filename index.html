@@ -704,7 +704,7 @@ const SB = {
 // ============ 工具 ============
 let page = 1;
 let renewPage = 1;
-const pageSizeOptions = [50, 100, 200];
+const pageSizeOptions = [100, 200, 300, 500];
 let pageSize = parseInt(localStorage.getItem('admin_page_size')) || 100;
 if (!pageSizeOptions.includes(pageSize)) pageSize = 100;
 let toastTimer = null;
