@@ -512,8 +512,8 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>编号</th><th>状态</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
-            <tbody id="renew-body"><tr><td colspan="6"><div class="empty">输入条件查询后显示匹配结果</div></td></tr></tbody>
+            <thead><tr><th>编号</th><th>状态</th><th>类型</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
+            <tbody id="renew-body"><tr><td colspan="7"><div class="empty">输入条件查询后显示匹配结果</div></td></tr></tbody>
           </table>
         </div>
         <div class="pager">
@@ -565,7 +565,7 @@
           <table>
             <thead><tr>
               <th class="chk"><input type="checkbox" id="check-all" onclick="toggleAll(this.checked)" title="全选本页"></th>
-              <th>编号</th><th>状态</th><th>项目</th><th>备注</th><th>创建日期</th><th>有效期</th><th>设备</th><th>操作</th>
+              <th>编号</th><th>状态</th><th>类型</th><th>项目</th><th>备注</th><th>创建日期</th><th>有效期</th><th>设备</th><th>操作</th>
             </tr></thead>
             <tbody id="list-body"><tr><td colspan="9"><div class="loading">加载中…</div></td></tr></tbody>
           </table>
@@ -714,7 +714,10 @@ function toast(text, ok) {
 }
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDateTime = iso => iso ? new Date(iso).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(iso).getFullYear() : '永久';
+const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(iso).getFullYear() : '';
+const TYPE_LABELS = { 3650: '永久', 365: '年卡', 90: '季卡', 30: '月卡', 7: '周卡', 1: '天卡' };
+const typeLabel = days => TYPE_LABELS[days] || (days ? days + ' 天' : '—');
+const fmtExpiry = (iso, st) => !iso ? (st === 'new' ? '未激活' : '—') : fmtDate(iso);
 const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 3 * 60 * 1000);
 const isExpired = iso => iso && new Date(iso).getTime() < Date.now();
 const badges = { unused: ['未启用', 'badge-unused'], used: ['使用中', 'badge-used'], disabled: ['已停用', 'badge-disabled'] };
@@ -1133,10 +1136,11 @@ async function loadList(p) {
             (selected.has(it.code) ? ' checked' : '') + ' onchange="onRowCheck(this,\'' + esc(it.code) + '\')"></td>' +
           '<td class="code-cell">' + esc(it.code) + '</td>' +
           '<td><span class="badge ' + cls + '">' + label + '</span></td>' +
+          '<td class="muted">' + typeLabel(it.expire_days) + '</td>' +
           '<td class="muted">' + (it.project_name || it.project_id || '通用') + '</td>' +
           '<td class="remark-cell muted" title="' + esc(it.remark) + '">' + (esc(it.remark) || '—') + '</td>' +
           '<td class="muted">' + fmtDate(it.created_at) + '</td>' +
-          '<td class="' + (exp ? 'expired' : '') + '">' + fmtDate(it.expires_at) + (exp ? '（已到期）' : '') + '</td>' +
+          '<td class="' + (exp ? 'expired' : '') + '">' + fmtExpiry(it.expires_at, it.status) + (exp ? '（已到期）' : '') + '</td>' +
           '<td class="dev" title="' + esc(devText) + '"><span class="dev-line"><span class="dot' + (on ? ' on' : '') + '"></span>' +
             (devText ? esc(devText.length > 14 ? devText.slice(0, 14) + '…' : devText) : '—') +
             (it.bind_count > 1 ? ' <span class="muted">×' + it.bind_count + '</span>' : '') + '</span></td>' +
@@ -1227,8 +1231,9 @@ async function searchRenew(p) {
         return '<tr>' +
           '<td class="code-cell">' + esc(it.code) + '</td>' +
           '<td><span class="badge ' + cls + '">' + label + '</span></td>' +
+          '<td class="muted">' + typeLabel(it.expire_days) + '</td>' +
           '<td class="remark-cell muted" title="' + esc(it.remark) + '">' + (esc(it.remark) || '—') + '</td>' +
-          '<td class="' + (exp ? 'expired' : '') + '">' + fmtDate(it.expires_at) + (exp ? '（已到期）' : '') + '</td>' +
+          '<td class="' + (exp ? 'expired' : '') + '">' + fmtExpiry(it.expires_at, it.status) + (exp ? '（已到期）' : '') + '</td>' +
           '<td class="dev" title="' + esc(devText) + '">' + (devText ? esc(devText.length > 14 ? devText.slice(0, 14) + '…' : devText) : '—') + '</td>' +
           '<td><div class="ops"><button class="btn btn-ghost btn-sm" onclick="extend(\'' + it.code + '\')">续费</button>' +
           '<button class="btn btn-ghost btn-sm" onclick="setRemark(\'' + it.code + '\',\'' + esc(it.remark) + '\')">备注</button></div></td></tr>';
