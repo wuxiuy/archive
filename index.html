@@ -24,6 +24,99 @@
     --shadow-sm: 0 1px 2px rgba(23,26,33,.04), 0 1px 3px rgba(23,26,33,.05);
     --shadow-md: 0 1px 2px rgba(23,26,33,.04), 0 12px 32px -14px rgba(23,26,33,.16);
     --shadow-lg: 0 2px 4px rgba(23,26,33,.05), 0 24px 48px -24px rgba(23,26,33,.22);
+    --label: #2e3540;
+    --input-bg: #fcfdff;
+    --th-bg: #f7f8fb;
+    --row-border: #f1f3f6;
+    --hover-bg: #f8fafd;
+    --tabs-active: #ffffff;
+  }
+  /* ===== 主题：深邃夜色（深色） ===== */
+  html[data-theme="dark"] {
+    --bg: #0e1420;
+    --card: #171f30;
+    --border: #263148;
+    --text: #e7ecf5;
+    --muted: #8a96ad;
+    --primary: #5a8dff;
+    --primary-2: #7aa5ff;
+    --primary-weak: #1b2740;
+    --green: #34c67a;
+    --green-weak: #122c22;
+    --red: #f05959;
+    --red-weak: #331c1c;
+    --blue: #6d9cff;
+    --blue-weak: #1a2540;
+    --label: #c3ccdb;
+    --input-bg: #111827;
+    --th-bg: #1b2436;
+    --row-border: #232e43;
+    --hover-bg: #1d2840;
+    --tabs-active: #1d2740;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.4);
+    --shadow-md: 0 1px 2px rgba(0,0,0,.35), 0 12px 32px -14px rgba(0,0,0,.55);
+    --shadow-lg: 0 2px 4px rgba(0,0,0,.4), 0 24px 48px -24px rgba(0,0,0,.65);
+  }
+  html[data-theme="dark"] body {
+    background-image:
+      radial-gradient(1200px 500px at 15% -10%, rgba(90,141,255,.14), transparent 60%),
+      radial-gradient(1000px 420px at 90% -5%, rgba(122,165,255,.08), transparent 55%);
+  }
+  /* ===== 主题：青竹绿 ===== */
+  html[data-theme="green"] {
+    --bg: #f1f7f3;
+    --card: #ffffff;
+    --border: #e0ebe3;
+    --text: #16211b;
+    --muted: #6e8074;
+    --primary: #0f9d6e;
+    --primary-2: #2fbf8b;
+    --primary-weak: #e5f6ee;
+    --green: #0f9d6e;
+    --green-weak: #e0f4e9;
+    --red: #d94f4f;
+    --red-weak: #fdeaea;
+    --blue: #0f9d6e;
+    --blue-weak: #e0f4e9;
+    --label: #2c3a32;
+    --input-bg: #fcfefc;
+    --th-bg: #f3f8f4;
+    --row-border: #eef3ef;
+    --hover-bg: #f4faf6;
+    --tabs-active: #ffffff;
+  }
+  html[data-theme="green"] body {
+    background-image:
+      radial-gradient(1200px 500px at 15% -10%, rgba(15,157,110,.08), transparent 60%),
+      radial-gradient(1000px 420px at 90% -5%, rgba(47,191,139,.05), transparent 55%);
+  }
+  /* ===== 主题：暖阳橙 ===== */
+  html[data-theme="warm"] {
+    --bg: #faf6f0;
+    --card: #ffffff;
+    --border: #efe5d8;
+    --text: #251d13;
+    --muted: #8b7a66;
+    --primary: #e8733a;
+    --primary-2: #f0915f;
+    --primary-weak: #fdeee3;
+    --green: #3aa76d;
+    --green-weak: #e7f5ed;
+    --red: #d94f4f;
+    --red-weak: #fdeaea;
+    --blue: #e8733a;
+    --blue-weak: #fdeee3;
+    --label: #3d2f1f;
+    --input-bg: #fefcf9;
+    --th-bg: #f8f3ec;
+    --row-border: #f3ece1;
+    --hover-bg: #faf5ee;
+    --tabs-active: #ffffff;
+  }
+  html[data-theme="warm"] body {
+    background-image:
+      radial-gradient(1200px 500px at 15% -10%, rgba(232,115,58,.08), transparent 60%),
+      radial-gradient(1000px 420px at 90% -5%, rgba(240,145,95,.05), transparent 55%);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -120,7 +213,7 @@
     flex: 1; border: none; background: transparent; padding: 10px 0; border-radius: 10px;
     font-size: 14px; font-weight: 550; color: var(--muted); cursor: pointer; transition: all .18s;
   }
-  .tabs button.active { background: #fff; color: var(--text); box-shadow: var(--shadow-sm); font-weight: 650; }
+  .tabs button.active { background: var(--tabs-active); color: var(--text); box-shadow: var(--shadow-sm); font-weight: 650; }
 
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px 20px; margin-bottom: 16px; }
   .card h2 { font-size: 14px; font-weight: 700; margin-bottom: 13px; display: flex; align-items: center; gap: 8px; letter-spacing: -.2px; }
@@ -147,38 +240,49 @@
   /* ===== 表单 ===== */
   .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
   .form-row .field { flex: 1; min-width: 120px; margin-bottom: 0; }
-  .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #2e3540; }
+  .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: var(--label); }
   .field input, .field select {
     width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 10px;
-    font-size: 13.5px; background: #fcfdff; transition: border-color .15s, box-shadow .15s, background .15s; outline: none;
+    font-size: 13.5px; background: var(--input-bg); transition: border-color .15s, box-shadow .15s, background .15s; outline: none;
   }
-  .field input:focus, .field select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(47,111,237,.1); }
+  .field input:focus, .field select:focus { border-color: var(--primary); background: var(--card); box-shadow: 0 0 0 4px rgba(47,111,237,.1); }
   textarea.codes {
     width: 100%; min-height: 84px; border: 1px solid var(--border); border-radius: 10px;
     padding: 10px 12px; font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 12.5px;
-    resize: vertical; outline: none; background: #fafbfd; line-height: 1.7;
+    resize: vertical; outline: none; background: var(--input-bg); line-height: 1.7;
     transition: border-color .15s, box-shadow .15s;
   }
-  textarea.codes:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: #fff; }
+  textarea.codes:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: var(--card); }
+
+  /* ===== 主题切换 ===== */
+  .theme-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .theme-swatch { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 11px; padding: 8px 14px; font-size: 13px; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .theme-swatch:hover { box-shadow: var(--shadow-md); }
+  .theme-swatch.active { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-weak); font-weight: 650; }
+  .sw { width: 20px; height: 20px; border-radius: 6px; display: inline-block; border: 1px solid rgba(0,0,0,.1); flex: none; }
+  .sw.light { background: linear-gradient(135deg, #ffffff, #e8edf5); }
+  .sw.dark { background: linear-gradient(135deg, #0e1420, #263148); }
+  .sw.green { background: linear-gradient(135deg, #ffffff, #d5ede1); }
+  .sw.warm { background: linear-gradient(135deg, #ffffff, #fae3d0); }
 
   /* ===== 列表 ===== */
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
-  .toolbar input { flex: 1; min-width: 140px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: #fcfdff; transition: border-color .15s, box-shadow .15s; }
-  .toolbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: #fff; }
-  .toolbar select { padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; background: #fff; outline: none; cursor: pointer; }
+  .toolbar input { flex: 1; min-width: 140px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: var(--input-bg); transition: border-color .15s, box-shadow .15s; }
+  .toolbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: var(--card); }
+  .toolbar select { padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; background: var(--card); outline: none; cursor: pointer; }
   .toolbar .pg-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
   .batch-bar {
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    background: var(--primary-weak); border: 1px solid #d7e3fd; border-radius: 11px;
-    padding: 8px 12px; margin-bottom: 12px; font-size: 13px; color: #274e9e;
+    background: var(--primary-weak); border: 1px solid var(--border); border-radius: 11px;
+    padding: 8px 12px; margin-bottom: 12px; font-size: 13px; color: var(--primary);
   }
   .batch-bar b { font-size: 13.5px; }
   .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; font-size: 11.5px; font-weight: 650; color: var(--muted); padding: 9px 11px; border-bottom: 1px solid var(--border); background: #f7f8fb; white-space: nowrap; }
-  td { padding: 10px 11px; border-bottom: 1px solid #f1f3f6; vertical-align: middle; }
+  th { text-align: left; font-size: 11.5px; font-weight: 650; color: var(--muted); padding: 9px 11px; border-bottom: 1px solid var(--border); background: var(--th-bg); white-space: nowrap; }
+  td { padding: 10px 11px; border-bottom: 1px solid var(--row-border); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f8fafd; }
+  tr:hover td { background: var(--hover-bg); }
   .code-cell { font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 12px; letter-spacing: .3px; white-space: nowrap; font-weight: 500; }
   .chk { width: 32px; text-align: center; }
   .chk input { width: 15px; height: 15px; accent-color: var(--primary); cursor: pointer; vertical-align: middle; }
@@ -200,8 +304,8 @@
 
   /* ===== 续费面板 ===== */
   .renew-search { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .renew-search input { flex: 1; min-width: 160px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: #fcfdff; }
-  .renew-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: #fff; }
+  .renew-search input { flex: 1; min-width: 160px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: var(--input-bg); }
+  .renew-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: var(--card); }
 
   /* ===== 数据维护 ===== */
   .maint-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -496,6 +600,16 @@
         </div>
         <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <div class="field"><label>界面主题</label>
+            <div class="theme-row">
+              <button class="theme-swatch" data-theme="light" onclick="applyTheme('light')"><span class="sw light"></span>极简浅色</button>
+              <button class="theme-swatch" data-theme="dark" onclick="applyTheme('dark')"><span class="sw dark"></span>深邃夜色</button>
+              <button class="theme-swatch" data-theme="green" onclick="applyTheme('green')"><span class="sw green"></span>青竹绿</button>
+              <button class="theme-swatch" data-theme="warm" onclick="applyTheme('warm')"><span class="sw warm"></span>暖阳橙</button>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
           <div class="field"><label>操作日志</label>
             <div class="renew-search" style="margin-top:8px;">
               <select id="log-type">
@@ -675,6 +789,7 @@ function showLoginCard() {
   document.getElementById('view-login').classList.remove('hide');
 }
 function showMain() {
+  applyTheme(localStorage.getItem('admin_theme') || 'light');
   document.getElementById('view-front').classList.add('hide');
   document.getElementById('view-login').classList.add('hide');
   document.getElementById('view-main').classList.remove('hide');
@@ -848,6 +963,15 @@ async function changePassword() {
     out.textContent = '';
     toast('密码已修改，下次登录请使用新密码', true);
   } catch (e) { toast(e.message, false); }
+}
+
+// ============ 界面主题 ============
+const THEMES = { light: '极简浅色', dark: '深邃夜色', green: '青竹绿', warm: '暖阳橙' };
+function applyTheme(t) {
+  if (!THEMES[t]) t = 'light';
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem('admin_theme', t); } catch (e) {}
+  document.querySelectorAll('.theme-swatch').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
 }
 
 // ============ 操作日志 ============
