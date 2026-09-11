@@ -491,6 +491,24 @@
         <div class="stats" id="stats-body"><div class="loading">加载中…</div></div>
       </div>
       <div class="card compact">
+        <h2>续费</h2>
+        <div class="renew-search">
+          <input type="text" id="renew-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期（如 2026-09）">
+          <button class="btn btn-ghost" onclick="searchRenew(1)">查 询</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>编号</th><th>状态</th><th>类型</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
+            <tbody id="renew-body"><tr><td colspan="7"><div class="empty">输入条件查询后显示匹配结果</div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage-1)">上一页</button>
+          <span id="renew-info"></span>
+          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage+1)">下一页</button>
+        </div>
+      </div>
+      <div class="card compact">
         <h2>发卡</h2>
         <div class="form-row">
           <div class="field"><label>数量</label><input type="number" id="gen-count" value="1" min="1" max="500"></div>
@@ -511,24 +529,6 @@
         </div>
         <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="genCodes()">创 建</button>
         <div class="field" style="margin-top:12px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的卡密显示在这里，一行一个"></textarea></div>
-      </div>
-      <div class="card compact">
-        <h2>续费</h2>
-        <div class="renew-search">
-          <input type="text" id="renew-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期（如 2026-09）">
-          <button class="btn btn-ghost" onclick="searchRenew(1)">查 询</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>编号</th><th>状态</th><th>类型</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
-            <tbody id="renew-body"><tr><td colspan="7"><div class="empty">输入条件查询后显示匹配结果</div></td></tr></tbody>
-          </table>
-        </div>
-        <div class="pager">
-          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage-1)">上一页</button>
-          <span id="renew-info"></span>
-          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage+1)">下一页</button>
-        </div>
       </div>
     </div>
 
