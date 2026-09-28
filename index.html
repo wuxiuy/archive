@@ -564,6 +564,7 @@
         <div class="batch-bar hide" id="batch-bar">
           <span>已选 <b id="batch-count">0</b> 条</span>
           <button class="btn btn-ghost btn-sm" onclick="batchRemark()">批量备注</button>
+          <button class="btn btn-ghost btn-sm" onclick="batchRemarkSeq()">编号备注</button>
           <button class="btn btn-ghost btn-sm" onclick="batchExpire()">设置到期</button>
           <button class="btn btn-danger btn-sm" onclick="batchBan()">封禁</button>
           <button class="btn btn-ghost btn-sm" onclick="batchReset()">重置</button>
@@ -1064,6 +1065,24 @@ async function batchRemark() {
     const d = await SB.rpc('admin_batch_remark', { p_codes: codes, p_remark: input });
     if (!d.ok) throw new Error(d.message);
     toast('已更新 ' + (d.updated ?? 0) + ' 条备注', true);
+    clearSelection(); loadList(page); loadListStats();
+  } catch (e) { toast(e.message, false); }
+}
+async function batchRemarkSeq() {
+  const codes = selectedCodes();
+  if (!codes.length) return;
+  const prefix = prompt('编号备注：输入前缀（如"机器"），选中的码将按卡号升序自动编号', '机器');
+  if (prefix === null) return;
+  const start = prompt('起始编号（默认 1 → 001 起）', '1');
+  if (start === null) return;
+  const digits = prompt('编号位数（默认 3 → 001；2 → 01）', '3');
+  if (digits === null) return;
+  const st = parseInt(start), dg = parseInt(digits);
+  if (isNaN(st) || isNaN(dg) || dg < 1 || dg > 10) { toast('起始编号或位数无效', false); return; }
+  try {
+    const d = await SB.rpc('admin_batch_remark_seq', { p_codes: codes, p_prefix: prefix, p_start: st, p_digits: dg });
+    if (!d.ok) throw new Error(d.message);
+    toast('已编号 ' + (d.updated ?? 0) + ' 条：' + (d.first_remark ?? '') + ' ~ ' + (d.last_remark ?? ''), true);
     clearSelection(); loadList(page); loadListStats();
   } catch (e) { toast(e.message, false); }
 }
