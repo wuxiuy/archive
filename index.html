@@ -563,10 +563,13 @@
         </div>
         <div class="batch-bar hide" id="batch-bar">
           <span>已选 <b id="batch-count">0</b> 条</span>
+          <button class="btn btn-ghost btn-sm" onclick="batchActivate()">批量激活</button>
+          <button class="btn btn-ghost btn-sm" onclick="batchEnable()">启用</button>
+          <button class="btn btn-danger btn-sm" onclick="batchBan()">停用</button>
+          <button class="btn btn-ghost btn-sm" onclick="batchExpire()">设置到期</button>
           <button class="btn btn-ghost btn-sm" onclick="batchRemark()">批量备注</button>
           <button class="btn btn-ghost btn-sm" onclick="batchRemarkSeq()">编号备注</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchExpire()">设置到期</button>
-          <button class="btn btn-danger btn-sm" onclick="batchBan()">封禁</button>
+          <button class="btn btn-ghost btn-sm" onclick="batchSetProject()">改项目</button>
           <button class="btn btn-ghost btn-sm" onclick="batchReset()">重置</button>
           <button class="btn btn-ghost btn-sm" onclick="clearSelection()">取消选择</button>
         </div>
@@ -1021,12 +1024,17 @@ async function clearLogs() {
   } catch (e) { toast(e.message, false); }
 }
 
-async function purgeExpired() {  if (!confirm('确定清理到期超过 30 天未续费的记录？此操作不可恢复。')) return;
+async function purgeExpired() {
+  const daysInput = prompt('清理到期超过多少天未续费的记录？（默认 30 天，0 = 只清理今天已到期的）', '30');
+  if (daysInput === null) return;
+  const days = parseInt(daysInput);
+  if (isNaN(days) || days < 0) { toast('请输入有效的天数（>= 0）', false); return; }
+  if (!confirm('确定清理到期超过 ' + days + ' 天未续费的记录？此操作不可恢复。')) return;
   try {
-    const d = await SB.rpc('admin_purge_expired');
+    const d = await SB.rpc('admin_purge_expired', { p_days: days });
     if (!d.ok) throw new Error(d.message);
     toast(d.deleted > 0 ? '已清理 ' + d.deleted + ' 条过期记录' : '没有需要清理的记录', d.deleted > 0);
-    loadStats();
+    loadStats(); loadList(page);
   } catch (e) { toast(e.message, false); }
 }
 
@@ -1097,6 +1105,43 @@ async function batchExpire() {
     const d = await SB.rpc('admin_batch_expire', { p_codes: codes, p_days: days });
     if (!d.ok) throw new Error(d.message);
     toast(days > 0 ? '已设置 ' + (d.updated ?? 0) + ' 条到期（' + days + ' 天后）' : (days === 0 ? '已设置为今天到期' : '已设置为已到期（' + (-days) + ' 天）'), true);
+    clearSelection(); loadList(page); loadListStats();
+  } catch (e) { toast(e.message, false); }
+}
+async function batchActivate() {
+  const codes = selectedCodes();
+  if (!codes.length) return;
+  const dev = prompt('批量激活（仅未启用的卡生效，已激活/停用自动跳过）：' + codes.length + ' 条\n输入要绑定的设备号（留空 = 不绑定，顾客激活时自动接管）', '');
+  if (dev === null) return;
+  try {
+    const d = await SB.rpc('admin_batch_activate', { p_codes: codes, p_device_id: dev.trim() });
+    if (!d.ok) throw new Error(d.message);
+    toast('已激活 ' + (d.updated ?? 0) + ' 条，跳过 ' + (d.skipped ?? 0) + ' 条', (d.updated ?? 0) > 0);
+    clearSelection(); loadList(page); loadListStats();
+  } catch (e) { toast(e.message, false); }
+}
+async function batchEnable() {
+  const codes = selectedCodes();
+  if (!codes.length) return;
+  if (!confirm('确定解封选中的停用卡？（未停用的卡不受影响）')) return;
+  try {
+    const d = await SB.rpc('admin_batch_enable', { p_codes: codes });
+    if (!d.ok) throw new Error(d.message);
+    toast('已启用 ' + (d.updated ?? 0) + ' 条停用卡', (d.updated ?? 0) > 0);
+    clearSelection(); loadList(page); loadListStats();
+  } catch (e) { toast(e.message, false); }
+}
+async function batchSetProject() {
+  const codes = selectedCodes();
+  if (!codes.length) return;
+  const pid = prompt('为选中的 ' + codes.length + ' 条设置项目 ID（项目不存在会自动创建）：');
+  if (pid === null) return;
+  const v = pid.trim();
+  if (!v) { toast('项目 ID 不能为空', false); return; }
+  try {
+    const d = await SB.rpc('admin_batch_code_project', { p_codes: codes, p_project_id: v });
+    if (!d.ok) throw new Error(d.message);
+    toast('已改项目 ' + (d.updated ?? 0) + ' 条，跳过 ' + (d.skipped ?? 0) + ' 条', true);
     clearSelection(); loadList(page); loadListStats();
   } catch (e) { toast(e.message, false); }
 }
