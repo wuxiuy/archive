@@ -65,6 +65,71 @@
       radial-gradient(1000px 420px at 90% -5%, rgba(122,165,255,.08), transparent 55%);
   }
   /* ===== 主题：青竹绿 ===== */
+  /* ===== 主题：柔和深灰（暗系，比深邃夜色柔和） ===== */
+  html[data-theme="slate"] {
+    --bg: #1b212c;
+    --card: #242b38;
+    --border: #333c4c;
+    --text: #e8ecf4;
+    --muted: #9aa5b8;
+    --primary: #79a6ff;
+    --primary-2: #96bcff;
+    --primary-weak: #25304a;
+    --green: #42c98c;
+    --green-weak: #173024;
+    --red: #f06560;
+    --red-weak: #3a2225;
+    --blue: #79a6ff;
+    --blue-weak: #25304a;
+    --label: #c6d0e0;
+    --input-bg: #1d2430;
+    --th-bg: #29313f;
+    --row-border: #303949;
+    --hover-bg: #2a3348;
+    --tabs-bg: #171c26;
+    --tabs-active: #2e3748;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.35);
+    --shadow-md: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -14px rgba(0,0,0,.45);
+    --shadow-lg: 0 2px 4px rgba(0,0,0,.35), 0 24px 48px -24px rgba(0,0,0,.55);
+  }
+  html[data-theme="slate"] body {
+    background-image:
+      radial-gradient(1200px 500px at 15% -10%, rgba(121,166,255,.12), transparent 60%),
+      radial-gradient(1000px 420px at 90% -5%, rgba(150,188,255,.06), transparent 55%);
+  }
+  /* ===== 主题：午夜蓝（暗系，蓝紫调） ===== */
+  html[data-theme="midnight"] {
+    --bg: #151b2f;
+    --card: #1e2544;
+    --border: #2b3455;
+    --text: #e3e9f7;
+    --muted: #939ebc;
+    --primary: #8cb3ff;
+    --primary-2: #a8c6ff;
+    --primary-weak: #242e52;
+    --green: #47cc92;
+    --green-weak: #15302a;
+    --red: #f2665f;
+    --red-weak: #3b2429;
+    --blue: #8cb3ff;
+    --blue-weak: #242e52;
+    --label: #c5cee2;
+    --input-bg: #191f39;
+    --th-bg: #212a4b;
+    --row-border: #293252;
+    --hover-bg: #242e52;
+    --tabs-bg: #10152a;
+    --tabs-active: #293357;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.35);
+    --shadow-md: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -14px rgba(0,0,0,.45);
+    --shadow-lg: 0 2px 4px rgba(0,0,0,.35), 0 24px 48px -24px rgba(0,0,0,.55);
+  }
+  html[data-theme="midnight"] body {
+    background-image:
+      radial-gradient(1200px 500px at 15% -10%, rgba(140,179,255,.13), transparent 60%),
+      radial-gradient(1000px 420px at 90% -5%, rgba(168,198,255,.07), transparent 55%);
+  }
+  /* ===== 主题：青竹绿 ===== */
   html[data-theme="green"] {
     --bg: #f1f7f3;
     --card: #ffffff;
@@ -123,6 +188,8 @@
       radial-gradient(1000px 420px at 90% -5%, rgba(240,145,95,.05), transparent 55%);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  input, textarea, select { color: var(--text); }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.55;
@@ -159,7 +226,8 @@
   .news-star { display: inline-block; font-size: 11px; color: #b45309; margin-top: 5px; background: #fef3e2; border-radius: 4px; padding: 1px 6px; }
   .news-fallback { color: #7b8494; font-size: 13px; padding: 10px 0; }
   .tool-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .tool-row input { flex: 1; min-width: 200px; padding: 10px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: #fcfdff; }
+  .tool-row input { flex: 1; min-width: 200px; padding: 10px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: var(--text); outline: none; background: var(--input-bg); }
+  .tool-row input::placeholder { color: var(--muted); }
   .tool-row input:focus { border-color: #94a3b8; box-shadow: 0 0 0 3px rgba(100,116,139,.1); background: #fff; }
   .tool-btn { border: none; border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 600; background: linear-gradient(135deg, #64748b, #475569); color: #fff; cursor: pointer; }
   .tool-btn:hover { filter: brightness(1.08); }
@@ -186,12 +254,13 @@
   .login-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #64748b, #94a3b8, #64748b); }
   .login-card h1 { font-size: 19px; font-weight: 700; margin-bottom: 20px; letter-spacing: -.3px; }
   .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: #2e3540; }
+  .field label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: var(--label); }
   .field input {
     width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 11px;
-    font-size: 14px; background: #fcfdff; transition: border-color .15s, box-shadow .15s; outline: none;
+    font-size: 14px; color: var(--text); background: var(--input-bg); transition: border-color .15s, box-shadow .15s; outline: none;
   }
-  .field input:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(100,116,139,.1); background: #fff; }
+  .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-weak); background: var(--card); }
+  .field input::placeholder { color: var(--muted); }
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     border: none; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer;
@@ -208,6 +277,7 @@
 
   /* ===== 顶栏 ===== */
   .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .topbar .clock { position: absolute; left: 50%; transform: translateX(-50%); font-size: 12.5px; color: var(--muted); font-weight: 600; letter-spacing: .2px; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .topbar .brand { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
   .topbar .brand .logo { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #64748b, #334155); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
   .topbar .who { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12.5px; }
@@ -271,12 +341,16 @@
   .sw { width: 20px; height: 20px; border-radius: 6px; display: inline-block; border: 1px solid rgba(0,0,0,.1); flex: none; }
   .sw.light { background: linear-gradient(135deg, #ffffff, #e8edf5); }
   .sw.dark { background: linear-gradient(135deg, #0e1420, #263148); }
+  .sw.slate { background: linear-gradient(135deg, #1b212c, #5b667a); }
+  .sw.midnight { background: linear-gradient(135deg, #151b2f, #4a5f9e); }
+  .sw.auto { background: conic-gradient(from 180deg, #ffffff 0 50%, #1b212c 50% 100%); }
   .sw.green { background: linear-gradient(135deg, #ffffff, #d5ede1); }
   .sw.warm { background: linear-gradient(135deg, #ffffff, #fae3d0); }
 
   /* ===== 列表 ===== */
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
-  .toolbar input { flex: 1; min-width: 140px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: var(--input-bg); transition: border-color .15s, box-shadow .15s; }
+  .toolbar input { flex: 1; min-width: 140px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: var(--text); outline: none; background: var(--input-bg); transition: border-color .15s, box-shadow .15s; }
+  .toolbar input::placeholder { color: var(--muted); }
   .toolbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: var(--card); }
   .toolbar select { padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; background: var(--card); outline: none; cursor: pointer; }
   .toolbar .pg-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
@@ -313,7 +387,8 @@
 
   /* ===== 续费面板 ===== */
   .renew-search { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .renew-search input { flex: 1; min-width: 160px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; outline: none; background: var(--input-bg); }
+  .renew-search input { flex: 1; min-width: 160px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: var(--text); outline: none; background: var(--input-bg); }
+  .renew-search input::placeholder { color: var(--muted); }
   .renew-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,111,237,.1); background: var(--card); }
 
   /* ===== 数据维护 ===== */
@@ -475,6 +550,7 @@
   <div id="view-main" class="hide">
     <div class="topbar">
       <div class="brand">卡密管理系统</div>
+      <div class="clock" id="top-clock"></div>
       <div class="who"><span id="who-email"></span><button class="btn btn-ghost btn-sm" onclick="logout()">退出</button></div>
     </div>
 
@@ -595,8 +671,11 @@
       <div class="card">
         <h2>界面主题</h2>
         <div class="theme-row">
+          <button class="theme-swatch" data-theme="auto" onclick="applyTheme('auto')"><span class="sw auto"></span>自动（白天/晚上）</button>
           <button class="theme-swatch" data-theme="light" onclick="applyTheme('light')"><span class="sw light"></span>极简浅色</button>
           <button class="theme-swatch" data-theme="dark" onclick="applyTheme('dark')"><span class="sw dark"></span>深邃夜色</button>
+          <button class="theme-swatch" data-theme="slate" onclick="applyTheme('slate')"><span class="sw slate"></span>柔和深灰</button>
+          <button class="theme-swatch" data-theme="midnight" onclick="applyTheme('midnight')"><span class="sw midnight"></span>午夜蓝</button>
           <button class="theme-swatch" data-theme="green" onclick="applyTheme('green')"><span class="sw green"></span>青竹绿</button>
           <button class="theme-swatch" data-theme="warm" onclick="applyTheme('warm')"><span class="sw warm"></span>暖阳橙</button>
         </div>
@@ -803,7 +882,7 @@ function showLoginCard() {
   document.getElementById('view-login').classList.remove('hide');
 }
 function showMain() {
-  applyTheme(localStorage.getItem('admin_theme') || 'light');
+  applyTheme(localStorage.getItem('admin_theme') || 'auto');
   document.getElementById('view-front').classList.add('hide');
   document.getElementById('view-login').classList.add('hide');
   document.getElementById('view-main').classList.remove('hide');
@@ -989,13 +1068,33 @@ async function changePassword() {
 }
 
 // ============ 界面主题 ============
-const THEMES = { light: '极简浅色', dark: '深邃夜色', green: '青竹绿', warm: '暖阳橙' };
+const THEMES = { auto: '自动（白天/晚上）', light: '极简浅色', dark: '深邃夜色', slate: '柔和深灰', midnight: '午夜蓝', green: '青竹绿', warm: '暖阳橙' };
+// 自动主题：白天(6:00-18:00)浅色，晚上柔和深灰；仅进入页面/切回页面时判断，无定时轮询
+function currentAutoTheme() {
+  const h = new Date().getHours();
+  return (h >= 6 && h < 18) ? 'light' : 'slate';
+}
 function applyTheme(t) {
   if (!THEMES[t]) t = 'light';
-  document.documentElement.dataset.theme = t;
+  const effective = (t === 'auto') ? currentAutoTheme() : t;
+  document.documentElement.dataset.theme = effective;
   try { localStorage.setItem('admin_theme', t); } catch (e) {}
   document.querySelectorAll('.theme-swatch').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
 }
+// 页面切回前台时（挂了一整夜/一整天的页面）重新按时间判断一次，零常驻开销
+document.addEventListener('visibilitychange', () => {
+  try { if ((localStorage.getItem('admin_theme') || 'light') === 'auto') applyTheme('auto'); } catch (e) {}
+});
+// 顶部时钟：日期 + 星期 + 时间（秒级，改名避免与伪装页页脚 tickClock 冲突）
+function tickTopClock() {
+  const d = new Date();
+  const w = ['日','一','二','三','四','五','六'][d.getDay()];
+  const p = n => String(n).padStart(2, '0');
+  const el = document.getElementById('top-clock');
+  if (el) el.textContent = d.getFullYear() + '年' + p(d.getMonth() + 1) + '月' + p(d.getDate()) + '日 星期' + w + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+}
+tickTopClock();
+setInterval(tickTopClock, 1000);
 
 // ============ 操作日志 ============
 let logPage = 1;
