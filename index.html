@@ -201,6 +201,91 @@
   }
   .wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 48px; }
 
+  /* ===== 销售页（未登录首页，固定大气深色，不随后台主题变化） ===== */
+  #view-front { --sp-bg: #0d1b36; --sp-card: rgba(255,255,255,.055); --sp-line: rgba(255,255,255,.13); --sp-text: #f2f6ff; --sp-muted: #a9b8d8; --sp-gold: #ffd66b; --sp-cyan: #7ee0ff; }
+  .shop-nav { position: sticky; top: 0; z-index: 20; background: rgba(10,18,38,.82); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.08); }
+  .shop-nav-inner { max-width: 1080px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .shop-brand { display: flex; align-items: center; gap: 12px; }
+  .shop-logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #ffd66b, #f59e0b); color: #33230a; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; box-shadow: 0 8px 22px -6px rgba(245,158,11,.5); }
+  .shop-brand-name { font-size: 17px; font-weight: 800; color: #fff; letter-spacing: .5px; }
+  .shop-brand-sub { font-size: 11.5px; color: var(--sp-muted); margin-top: 1px; }
+  .shop-nav-links { display: flex; gap: 6px; }
+  .shop-nav-links a { color: #c6d2ec; text-decoration: none; font-size: 13.5px; padding: 6px 12px; border-radius: 8px; transition: all .18s; }
+  .shop-nav-links a:hover { background: rgba(255,255,255,.08); color: #fff; }
+  .shop-hero { background:
+      radial-gradient(900px 420px at 20% -10%, rgba(126,224,255,.16), transparent 60%),
+      radial-gradient(800px 400px at 85% 0%, rgba(255,214,107,.10), transparent 55%),
+      linear-gradient(160deg, #0e1d3d 0%, #12264f 55%, #142c5e 100%); padding: 64px 20px 56px; text-align: center; }
+  .shop-hero-inner { max-width: 1080px; margin: 0 auto; }
+  .shop-hero h1 { font-size: 40px; line-height: 1.25; font-weight: 850; letter-spacing: 1px; color: #fff; margin-bottom: 14px; }
+  .shop-hero-accent { color: var(--sp-gold); }
+  .shop-hero p { color: var(--sp-muted); font-size: 15.5px; line-height: 1.8; margin-bottom: 22px; }
+  .shop-badges { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .shop-badges span { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: #e8f0ff; font-size: 13px; padding: 6px 16px; border-radius: 999px; }
+  .shop-section { max-width: 1080px; margin: 0 auto; padding: 40px 20px 8px; }
+  .shop-section-title { font-size: 24px; font-weight: 800; color: #fff; text-align: center; letter-spacing: .5px; }
+  .shop-section-sub { text-align: center; color: var(--sp-muted); font-size: 13.5px; margin-top: 6px; }
+  .shop-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; margin-top: 22px; }
+  .shop-card { background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045)); border: 1px solid var(--sp-line); border-radius: 16px; padding: 22px 20px; text-align: center; transition: all .2s; }
+  .shop-card:hover { transform: translateY(-4px); border-color: rgba(255,214,107,.45); box-shadow: 0 16px 40px -12px rgba(0,0,0,.5); }
+  .shop-card-name { font-size: 16px; font-weight: 750; color: #fff; display: block; }
+  .shop-card-proj { font-size: 12px; color: var(--sp-muted); margin-top: 3px; display: block; }
+  .shop-card-price { margin: 14px 0 4px; color: var(--sp-gold); }
+  .shop-card-cny { font-size: 17px; font-weight: 700; }
+  .shop-card-num { font-size: 34px; font-weight: 850; letter-spacing: -1px; }
+  .shop-card-days { color: #c6d2ec; font-size: 13.5px; margin-bottom: 16px; }
+  .shop-card-btn { width: 100%; background: linear-gradient(135deg, #ffd66b, #f5a623); border: none; color: #33230a; font-weight: 800; font-size: 14.5px; padding: 11px 0; border-radius: 10px; cursor: pointer; transition: all .18s; }
+  .shop-card-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .shop-empty { color: var(--sp-muted); text-align: center; padding: 30px 0; grid-column: 1 / -1; }
+  .shop-buy-card { max-width: 560px; margin: 22px auto 0; background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045)); border: 1px solid var(--sp-line); border-radius: 16px; padding: 24px 26px; }
+  .shop-buy-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+  .shop-buy-row > span { color: var(--sp-muted); font-size: 14px; flex: 0 0 92px; }
+  .shop-buy-row b { color: #fff; font-size: 15px; }
+  .shop-buy-price { color: var(--sp-gold) !important; font-size: 22px !important; }
+  .shop-input { flex: 1; background: rgba(10,18,38,.6); border: 1px solid var(--sp-line); border-radius: 10px; color: #fff; font-size: 14px; padding: 10px 13px; outline: none; }
+  .shop-input:focus { border-color: var(--sp-cyan); }
+  .shop-input::placeholder { color: var(--sp-muted); }
+  .shop-buy-actions { display: flex; gap: 12px; margin-top: 6px; }
+  .shop-btn { flex: 1; border: none; border-radius: 10px; padding: 12px 0; font-size: 15px; font-weight: 800; cursor: pointer; transition: all .18s; }
+  .shop-btn-main { background: linear-gradient(135deg, #ffd66b, #f5a623); color: #33230a; }
+  .shop-btn-main:hover { filter: brightness(1.07); }
+  .shop-btn-ghost { background: transparent; color: #c6d2ec; border: 1px solid var(--sp-line); }
+  .shop-btn-ghost:hover { background: rgba(255,255,255,.07); }
+  .shop-order-area { margin-top: 18px; border-top: 1px dashed var(--sp-line); padding-top: 16px; }
+  .shop-order-info { background: rgba(10,18,38,.5); border: 1px solid var(--sp-line); border-radius: 12px; padding: 16px 18px; }
+  .shop-order-line { color: var(--sp-muted); font-size: 14px; margin-bottom: 6px; }
+  .shop-order-line b { color: #fff; }
+  #shop-qr-wrap { text-align: center; margin: 14px 0 4px; }
+  .shop-qr { width: 190px; height: 190px; border-radius: 12px; border: 1px solid var(--sp-line); }
+  .shop-qr-empty { color: var(--sp-muted); font-size: 13px; padding: 24px 0 6px; }
+  .shop-pay-note { color: #d7e2fb; font-size: 13px; text-align: center; }
+  .shop-trade-area { margin-top: 16px; }
+  .shop-trade-label { color: var(--sp-muted); font-size: 13px; margin-bottom: 8px; }
+  .shop-trade-bar { display: flex; gap: 12px; }
+  .shop-trade-tip { color: var(--sp-muted); font-size: 12.5px; margin-top: 10px; }
+  .shop-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 22px; }
+  .shop-step { text-align: center; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)); border: 1px solid var(--sp-line); border-radius: 14px; padding: 20px 12px; }
+  .shop-step b { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #ffd66b, #f5a623); color: #33230a; font-size: 16px; font-weight: 900; margin-bottom: 10px; }
+  .shop-step span { display: block; color: #fff; font-weight: 750; font-size: 14.5px; }
+  .shop-step em { display: block; color: var(--sp-muted); font-style: normal; font-size: 12.5px; margin-top: 4px; }
+  .shop-query-card { max-width: 620px; margin: 22px auto 0; background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045)); border: 1px solid var(--sp-line); border-radius: 16px; padding: 22px 26px; text-align: center; }
+  .shop-query-tip { color: var(--sp-muted); font-size: 13.5px; margin-bottom: 14px; }
+  .shop-query-bar { display: flex; gap: 12px; }
+  .shop-query-result { margin-top: 16px; }
+  .shop-q-status { color: var(--sp-cyan); font-size: 14px; }
+  .shop-q-ok { color: #7ce8a6; font-size: 15px; font-weight: 750; margin-bottom: 8px; }
+  .shop-q-code { font-family: "Consolas", "Courier New", monospace; font-size: 26px; font-weight: 800; letter-spacing: 2px; color: var(--sp-gold); background: rgba(255,214,107,.08); border: 1px dashed rgba(255,214,107,.4); border-radius: 10px; padding: 12px 10px; margin-bottom: 10px; user-select: all; }
+  .shop-q-meta { color: var(--sp-muted); font-size: 12.5px; margin-bottom: 12px; }
+  .shop-q-meta button { margin-top: 4px; }
+  .shop-faq { max-width: 700px; margin: 20px auto 0; }
+  .shop-faq details { background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)); border: 1px solid var(--sp-line); border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; }
+  .shop-faq summary { color: #e8f0ff; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .shop-faq p { color: var(--sp-muted); font-size: 13px; margin-top: 8px; }
+  .shop-footer { margin-top: 48px; padding: 26px 20px 34px; border-top: 1px solid rgba(255,255,255,.08); text-align: center; background: rgba(10,18,38,.6); }
+  .shop-footer-meta { color: #a9b8d8; font-size: 13px; }
+  .shop-footer-tiny { color: #6f82a8; font-size: 12px; margin-top: 6px; }
+  .shop-footer-tiny .login-dot { cursor: default; }
+
   /* ===== 每日看点伪装页（未登录） ===== */
   .tool-header { padding: 30px 4px 4px; display: flex; align-items: center; gap: 12px; }
   .tool-logo { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #64748b, #334155); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; box-shadow: 0 8px 20px -6px rgba(51,65,85,.45); }
@@ -285,6 +370,16 @@
   html[data-theme="slate"] .btn-danger:hover:not(:disabled),
   html[data-theme="midnight"] .btn-danger:hover:not(:disabled) { filter: brightness(1.15); }
   .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 9px; }
+  /* 销售统计（2026-09-29） */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 12px 0; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+  .stat-card .v { font-size: 21px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .stat-card .l { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 150px; margin-top: 8px; padding: 6px 2px 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .bar-item { flex: 1 0 auto; min-width: 18px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; }
+  .bar { width: 68%; max-width: 26px; border-radius: 5px 5px 0 0; background: linear-gradient(180deg, var(--primary), var(--primary-2)); min-height: 2px; }
+  .bar-item .bv { font-size: 10px; color: var(--text); white-space: nowrap; }
+  .bar-item .bl { font-size: 10px; color: var(--muted); white-space: nowrap; }
 
   /* ===== 顶栏 ===== */
   .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -385,6 +480,7 @@
   .badge-unused { background: var(--blue-weak); color: var(--blue); }
   .badge-used { background: var(--green-weak); color: var(--green); }
   .badge-disabled { background: var(--red-weak); color: var(--red); }
+  .badge-warn { background: rgba(232,163,61,.16); color: #d97706; }
   .muted { color: var(--muted); }
   .expired { color: var(--red); font-weight: 600; }
   .remark-cell { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -443,109 +539,110 @@
 <body>
 <div class="wrap">
 
-  <!-- 前台：每日看点（伪装页） -->
+  <!-- 前台：销售页（未登录首页，登录入口隐藏） -->
   <div id="view-front">
-    <div class="tool-header">
-      <div class="tool-logo">D</div>
-      <div>
-        <h1>每日看点</h1>
-        <p>每天一点新鲜事</p>
+    <div class="shop-nav">
+      <div class="shop-nav-inner">
+        <div class="shop-brand">
+          <div class="shop-logo">✔</div>
+          <div>
+            <div class="shop-brand-name">正版软件授权</div>
+            <div class="shop-brand-sub">软件授权 · 卡密服务</div>
+          </div>
+        </div>
+        <div class="shop-nav-links">
+          <a href="#shop-plans">在售套餐</a>
+          <a href="#shop-flow">购买流程</a>
+          <a href="#shop-query">查卡密</a>
+          <a href="#shop-faq">常见问题</a>
+        </div>
       </div>
     </div>
 
-    <div class="tool-card">
-      <h2>每日一句</h2>
-      <div id="daily-quote" class="quote-loading">加载中…</div>
-    </div>
-
-    <div class="tool-card">
-      <h2>近期热点</h2>
-      <div id="gh-trend"><div class="loading">加载中…</div></div>
-    </div>
-
-    <div class="tool-card">
-      <h2>今日速览</h2>
-      <div class="news-grid">
-        <a class="news-item" href="https://news.qq.com/" target="_blank" rel="noopener"><span class="news-name">国内要闻</span><span class="news-desc">每天 3 分钟看懂重要新闻</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://www.zhihu.com/hot" target="_blank" rel="noopener"><span class="news-name">知乎热榜</span><span class="news-desc">大家都在讨论的问题</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://www.douban.com/explore/" target="_blank" rel="noopener"><span class="news-name">豆瓣精选</span><span class="news-desc">电影 · 书籍 · 音乐推荐</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://daily.zhihu.com/" target="_blank" rel="noopener"><span class="news-name">知乎日报</span><span class="news-desc">每天一篇好文章</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://www.ithome.com/" target="_blank" rel="noopener"><span class="news-name">IT之家</span><span class="news-desc">科技数码新鲜资讯</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://www.36kr.com/" target="_blank" rel="noopener"><span class="news-name">36氪</span><span class="news-desc">商业与科技前沿</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://s.weibo.com/top/summary" target="_blank" rel="noopener"><span class="news-name">微博热搜</span><span class="news-desc">此刻最热的话题</span><span class="news-star">→</span></a>
-        <a class="news-item" href="https://top.baidu.com/board?tab=realtime" target="_blank" rel="noopener"><span class="news-name">百度热点</span><span class="news-desc">实时热点事件</span><span class="news-star">→</span></a>
+    <div class="shop-hero">
+      <div class="shop-hero-inner">
+        <h1>官方正版授权<br><span class="shop-hero-accent">秒级发卡 · 售后无忧</span></h1>
+        <p>在线选购授权套餐，付款后凭付款单号即可查询卡密；<br>订单记录永久可查，全程售后保障。</p>
+        <div class="shop-badges">
+          <span>✔ 自动发卡</span>
+          <span>✔ 售后无忧</span>
+          <span>✔ 订单可查</span>
+        </div>
       </div>
     </div>
 
-    <div class="tool-card">
-      <h2>生活小贴士</h2>
-      <div class="news-grid">
-        <a class="news-item" href="https://www.zhihu.com/question/26276444" target="_blank" rel="noopener"><span class="news-name">热水器省电技巧</span><span class="news-desc">一年能省下不少电费</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/21570038" target="_blank" rel="noopener"><span class="news-name">手机充电习惯</span><span class="news-desc">这样充电电池更耐用</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.douban.com/group/explore" target="_blank" rel="noopener"><span class="news-name">收纳整理入门</span><span class="news-desc">小户型也能住出大空间</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.zhihu.com/topic/19553775" target="_blank" rel="noopener"><span class="news-name">睡眠改善指南</span><span class="news-desc">睡个好觉的 6 个方法</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.smzdm.com/" target="_blank" rel="noopener"><span class="news-name">省钱小妙招</span><span class="news-desc">这些优惠值得关注</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/19945260" target="_blank" rel="noopener"><span class="news-name">做饭小白入门</span><span class="news-desc">从这几道菜开始</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/20098625" target="_blank" rel="noopener"><span class="news-name">通勤路上做什么</span><span class="news-desc">碎片时间利用指南</span><span class="news-star">贴士</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/21470858" target="_blank" rel="noopener"><span class="news-name">久坐缓解方法</span><span class="news-desc">办公室轻松做</span><span class="news-star">贴士</span></a>
+    <div class="shop-section" id="shop-plans">
+      <h2 class="shop-section-title">在售套餐</h2>
+      <p class="shop-section-sub">选择适合您的授权时长，下单后付款即可</p>
+      <div class="shop-cards" id="shop-cards"><div class="shop-empty">加载中…</div></div>
+    </div>
+
+    <div class="shop-section hide" id="shop-buy-panel">
+      <h2 class="shop-section-title">确认订单</h2>
+      <div class="shop-buy-card">
+        <div class="shop-buy-row"><span>套餐</span><b id="shop-buy-product">-</b></div>
+        <div class="shop-buy-row"><span>应付金额</span><b class="shop-buy-price" id="shop-buy-price">-</b></div>
+        <div class="shop-buy-row"><span>联系方式</span>
+          <input class="shop-input" id="shop-contact" placeholder="手机号或邮箱（用于订单核验与售后联系）">
+        </div>
+        <div class="shop-buy-actions">
+          <button class="shop-btn shop-btn-main" onclick="createOrder()">提交订单</button>
+          <button class="shop-btn shop-btn-ghost" onclick="hideBuyPanel()">返回选购</button>
+        </div>
+        <div class="shop-order-area hide" id="shop-order-area">
+          <div class="shop-order-info">
+            <div class="shop-order-line">订单号：<b id="shop-order-no">-</b></div>
+            <div class="shop-order-line">应付金额：<b id="shop-order-amount">-</b></div>
+            <div id="shop-qr-wrap"></div>
+            <div class="shop-pay-note" id="shop-pay-note"></div>
+          </div>
+          <div class="shop-trade-area" id="shop-trade-area">
+            <div class="shop-trade-label">付款完成后，填写付款单号（微信 / 支付宝交易单号）提交核验：</div>
+            <div class="shop-trade-bar">
+              <input class="shop-input" id="shop-trade-no" placeholder="付款单号（交易号）">
+              <button class="shop-btn shop-btn-main" onclick="submitTrade()">我已付款，提交核验</button>
+            </div>
+          </div>
+          <div class="shop-trade-tip">提交后请等待商家核验，核验通过即自动发卡；也可稍后在下方凭付款单号查询卡密。</div>
+        </div>
       </div>
     </div>
 
-    <div class="tool-card">
-      <h2>热门话题</h2>
-      <div class="tag-cloud">
-        <a class="hot" href="https://www.zhihu.com/hot">AI 人工智能</a>
-        <a href="https://www.zhihu.com/hot">新能源</a>
-        <a class="hot" href="https://s.weibo.com/top/summary">电影票房</a>
-        <a href="https://www.zhihu.com/hot">数码评测</a>
-        <a href="https://s.weibo.com/top/summary">旅行攻略</a>
-        <a class="hot" href="https://s.weibo.com/top/summary">美食探店</a>
-        <a href="https://www.zhihu.com/hot">健身塑形</a>
-        <a href="https://www.douban.com/explore/">读书</a>
-        <a href="https://s.weibo.com/top/summary">游戏</a>
-        <a href="https://www.zhihu.com/hot">财经</a>
-        <a href="https://s.weibo.com/top/summary">萌宠</a>
-        <a href="https://www.zhihu.com/hot">健康</a>
-        <a class="hot" href="https://s.weibo.com/top/summary">国漫</a>
-        <a href="https://www.zhihu.com/hot">历史</a>
-        <a href="https://s.weibo.com/top/summary">综艺</a>
-        <a class="hot" href="https://s.weibo.com/top/summary">宠物</a>
+    <div class="shop-section" id="shop-flow">
+      <h2 class="shop-section-title">购买流程</h2>
+      <div class="shop-steps">
+        <div class="shop-step"><b>1</b><span>选择套餐</span><em>挑选所需授权时长</em></div>
+        <div class="shop-step"><b>2</b><span>提交订单</span><em>留下联系方式便于核验与售后</em></div>
+        <div class="shop-step"><b>3</b><span>完成付款</span><em>按提示向收款码支付对应金额</em></div>
+        <div class="shop-step"><b>4</b><span>凭单号领卡</span><em>填写付款单号，核验后自动发卡</em></div>
       </div>
     </div>
 
-    <div class="tool-card">
-      <h2>每日冷知识</h2>
-      <div class="news-grid">
-        <a class="news-item" href="https://www.zhihu.com/question/23595316" target="_blank" rel="noopener"><span class="news-name">为什么天空是蓝色的</span><span class="news-desc">光的散射原理</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/20733366" target="_blank" rel="noopener"><span class="news-name">蜂蜜为什么不会坏</span><span class="news-desc">天然防腐的秘密</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/19944899" target="_blank" rel="noopener"><span class="news-name">打哈欠为什么会传染</span><span class="news-desc">镜像神经元的趣事</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/21404167" target="_blank" rel="noopener"><span class="news-name">微波炉加热为什么快</span><span class="news-desc">水分子共振原理</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/20302639" target="_blank" rel="noopener"><span class="news-name">猫为什么总是落地</span><span class="news-desc">翻正反射的奥秘</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/21275143" target="_blank" rel="noopener"><span class="news-name">人为什么会做梦</span><span class="news-desc">大脑在整理记忆</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/19609986" target="_blank" rel="noopener"><span class="news-name">冬天为什么静电多</span><span class="news-desc">干燥天气的电荷</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/20303136" target="_blank" rel="noopener"><span class="news-name">鱼会喝水吗</span><span class="news-desc">淡水咸水大不同</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/21752849" target="_blank" rel="noopener"><span class="news-name">闹钟响了为什么困</span><span class="news-desc">睡眠周期的秘密</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/20072226" target="_blank" rel="noopener"><span class="news-name">太阳为什么会发光</span><span class="news-desc">核聚变的能量</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/20508317" target="_blank" rel="noopener"><span class="news-name">蚊子怎么找到你</span><span class="news-desc">二氧化碳与体温</span><span class="news-star">冷知识</span></a>
-        <a class="news-item" href="https://www.zhihu.com/question/19707133" target="_blank" rel="noopener"><span class="news-name">彩虹为什么是弧形</span><span class="news-desc">水滴折射的角度</span><span class="news-star">冷知识</span></a>
+    <div class="shop-section" id="shop-query">
+      <h2 class="shop-section-title">查询卡密</h2>
+      <div class="shop-query-card">
+        <p class="shop-query-tip">输入付款单号或订单号，查询已核验发卡的卡密。</p>
+        <div class="shop-query-bar">
+          <input class="shop-input" id="shop-query-input" placeholder="付款单号 / 订单号">
+          <button class="shop-btn shop-btn-main" onclick="queryOrder()">查 询</button>
+        </div>
+        <div id="shop-query-result" class="shop-query-result"></div>
       </div>
     </div>
 
-    <div class="tool-footer">
-      <div class="footer-links">
-        <a href="https://www.zhihu.com/" target="_blank" rel="noopener">知乎</a>
-        <a href="https://www.bilibili.com/" target="_blank" rel="noopener">哔哩哔哩</a>
-        <a href="https://www.douban.com/" target="_blank" rel="noopener">豆瓣</a>
-        <a href="https://www.guokr.com/" target="_blank" rel="noopener">果壳</a>
-        <a href="https://www.ithome.com/" target="_blank" rel="noopener">IT之家</a>
-        <a href="https://sspai.com/" target="_blank" rel="noopener">少数派</a>
-        <a href="https://www.36kr.com/" target="_blank" rel="noopener">36氪</a>
-        <a href="https://www.smzdm.com/" target="_blank" rel="noopener">什么值得买</a>
-        <a href="https://www.bing.com/" target="_blank" rel="noopener">必应</a>
-        <a href="https://www.doubao.com/" target="_blank" rel="noopener">豆包</a>
+    <div class="shop-section" id="shop-faq">
+      <h2 class="shop-section-title">常见问题</h2>
+      <div class="shop-faq">
+        <details><summary>付款后多久能收到卡密？</summary><p>商家确认到账后即自动发卡，一般工作时间较快；您可随时凭付款单号在“查询卡密”中查看。</p></details>
+        <details><summary>卡密怎么使用？</summary><p>在对应软件 / 客户端中输入卡密激活即可，一卡一码，请妥善保存。</p></details>
+        <details><summary>订单可以退换吗？</summary><p>卡密为虚拟商品，一经核验发卡原则上不支持退款；如遇无法激活等问题，请联系客服协助处理。</p></details>
+        <details><summary>联系方式有什么用？</summary><p>用于订单核验与售后联系，我们承诺不用于任何营销，也不会向第三方提供。</p></details>
       </div>
-      <div class="footer-meta"><span id="footer-datetime"></span> · © 2026 每日看点 · 京ICP备00000000号-1</div>
-      <div class="footer-tiny">本站为个人收藏与工具分享站点<span class="login-dot" onclick="showLoginCard()">，</span>内容均来源于网络，仅供学习交流使用，如有问题请联系我们。</div>
+    </div>
+
+    <div class="shop-footer">
+      <div class="shop-footer-meta">© 2026 软件授权中心 · 正版授权 · 诚信经营</div>
+      <div class="shop-footer-tiny">本站提供软件授权与卡密服务<span class="login-dot" onclick="showLoginCard()">，</span>如有疑问请联系在线客服。</div>
     </div>
   </div>
 
@@ -720,6 +817,68 @@
           <button class="btn btn-ghost" style="width:auto;" onclick="saveAutoCleanup()">保存设置</button>
           <span id="auto-clean-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
         </div>
+        <h2 style="margin-top:16px;">支付设置</h2>
+        <div class="form-row" style="margin-top:8px;">
+          <div class="field"><label>收款通道</label>
+            <select id="pay-active" onchange="togglePayFields()" style="width:auto;">
+              <option value="">关闭（暂不开放在线购买）</option>
+              <option value="epay">三方聚合支付（易支付协议，个人可接入）</option>
+              <option value="wechat">微信支付（官方 Native，需商户资质）</option>
+              <option value="alipay">支付宝（官方当面付，需商户资质）</option>
+            </select>
+          </div>
+        </div>
+        <div id="pay-epay-fields" class="hide">
+          <div class="form-row">
+            <div class="field"><label>商户 ID（pid）</label><input type="text" id="epay-pid" placeholder="易支付商户号"></div>
+            <div class="field"><label>商户密钥（key）</label><input type="password" id="epay-key" placeholder="易支付密钥"></div>
+            <div class="field"><label>网关地址</label><input type="text" id="epay-gateway" placeholder="https://pay.xxx.com"></div>
+          </div>
+        </div>
+        <div id="pay-wechat-fields" class="hide">
+          <div class="form-row">
+            <div class="field"><label>AppID</label><input type="text" id="wechat-appid" placeholder="微信开放平台 AppID"></div>
+            <div class="field"><label>商户号（mchid）</label><input type="text" id="wechat-mchid" placeholder="微信支付商户号"></div>
+            <div class="field"><label>API 密钥</label><input type="password" id="wechat-key" placeholder="API v3 密钥"></div>
+          </div>
+        </div>
+        <div id="pay-alipay-fields" class="hide">
+          <div class="form-row">
+            <div class="field"><label>AppID</label><input type="text" id="alipay-appid" placeholder="支付宝开放平台 AppID"></div>
+            <div class="field"><label>应用私钥</label><input type="password" id="alipay-private_key" placeholder="应用私钥（PKCS8）"></div>
+            <div class="field"><label>网关</label><input type="text" id="alipay-gateway" placeholder="https://openapi.alipay.com/gateway.do"></div>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:8px;">
+          <div class="field" style="flex:1.4;"><label>收款码图片 URL（人工收款时展示给顾客）</label><input type="text" id="pay-receipt-qr" placeholder="https://…/收款码.jpg（微信/支付宝个人收款码图床地址）"></div>
+          <div class="field" style="flex:1;"><label>付款提示文字</label><input type="text" id="pay-note-text" placeholder="可选，付款页显示给顾客的提示"></div>
+        </div>
+        <div class="muted" style="font-size:12px;margin:8px 0;">说明：三方聚合=常见"易支付"协议，个人可接入、付款后自动回调发卡（有手续费）；微信/支付宝官方接口需营业执照与商户签约，先填参数预留，资质到位后随时切换换绑。个人收款（未开通在线支付）时，顾客下单后页面展示收款码，凭付款单号人工核验发卡。保存后购买页自动生效。</div>
+        <button class="btn btn-ghost" style="width:auto;" onclick="savePayConfig()">保存支付设置</button>
+        <span id="pay-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
+
+        <h2 style="margin-top:16px;">售卖配置</h2>
+        <div class="form-row" style="margin-top:8px;">
+          <div class="field"><label>开放项目</label><input type="text" id="shop-project" list="shop-project-list" placeholder="选已有或输入项目 ID"><datalist id="shop-project-list"></datalist></div>
+          <div class="field"><label>套餐名</label><input type="text" id="shop-name" placeholder="如 30天卡"></div>
+          <div class="field"><label>天数</label><input type="number" id="shop-days" min="0" value="30" style="width:90px;"></div>
+          <div class="field"><label>价格（元）</label><input type="number" id="shop-price" min="0.01" step="0.01" style="width:90px;"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>状态</label><select id="shop-enabled" style="width:auto;"><option value="true">上架</option><option value="false">下架</option></select></div>
+          <input type="hidden" id="shop-id" value="0">
+          <button class="btn btn-ghost" style="width:auto;" onclick="saveShopProduct()">保存套餐</button>
+          <button class="btn btn-ghost btn-sm hide" id="shop-cancel" onclick="resetShopForm()">取消编辑</button>
+          <span class="muted" style="font-size:12px;margin-left:8px;">天数填 0 = 永久；价格自动转分存储</span>
+        </div>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table>
+            <thead><tr><th>套餐</th><th>项目</th><th>天数</th><th>价格</th><th>状态</th><th>订单</th><th>操作</th></tr></thead>
+            <tbody id="shop-body"><tr><td colspan="7"><div class="empty">暂无套餐，先在上方添加</div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="muted" style="font-size:12px;margin-top:8px;">开放后购买页只展示"上架"状态的套餐；有订单的套餐只能下架不能删除（保护历史订单）。</div>
+
         <h2 style="margin-top:16px;">项目信息</h2>
         <div class="form-row">
           <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="纯数字，如 1001"></div>
@@ -782,6 +941,53 @@
           <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
         </div>
         <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
+        <h2 style="margin-top:16px;">订单管理</h2>
+        <div class="toolbar">
+          <select id="order-status" onchange="loadOrders(1)">
+            <option value="">全部状态</option>
+            <option value="pending">待付款</option>
+            <option value="submitted">待核验</option>
+            <option value="paid">已发卡</option>
+          </select>
+          <input type="text" id="order-search" placeholder="搜索订单号 / 付款单号 / 套餐名">
+          <button class="btn btn-ghost" onclick="loadOrders(1)">查 询</button>
+          <span class="muted" style="font-size:12px;">待核验订单：到账后点“核验发卡”即自动发放卡密</span>
+        </div>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table>
+            <thead><tr><th>时间</th><th>订单号</th><th>套餐</th><th>金额</th><th>状态</th><th>联系方式</th><th>付款单号</th><th>操作</th></tr></thead>
+            <tbody id="order-body"><tr><td colspan="8"><div class="empty">暂无订单</div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <button class="btn btn-ghost btn-sm" onclick="loadOrders(orderPage-1)">上一页</button>
+          <span id="order-info"></span>
+          <button class="btn btn-ghost btn-sm" onclick="loadOrders(orderPage+1)">下一页</button>
+        </div>
+        <h2 style="margin-top:16px;">销售统计</h2>
+        <div class="form-row" style="margin-top:8px;">
+          <div class="field"><label>统计范围</label><select id="sales-days" onchange="loadSalesStats()" style="width:auto;">
+            <option value="7">近 7 天</option><option value="30" selected>近 30 天</option><option value="90">近 90 天</option>
+          </select></div>
+          <div class="field"><label>年度</label><select id="sales-year" onchange="loadSalesStats()" style="width:auto;"></select></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadSalesStats()">刷新</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="v" id="sales-total">-</div><div class="l">近 N 天销售额</div></div>
+          <div class="stat-card"><div class="v" id="sales-orders">-</div><div class="l">成功订单</div></div>
+          <div class="stat-card"><div class="v" id="sales-month">-</div><div class="l">本月销售额</div></div>
+          <div class="stat-card"><div class="v" id="sales-lastmonth">-</div><div class="l">上月销售额</div></div>
+        </div>
+        <div class="muted" style="font-size:12px;margin:4px 0;">每日销售额（近 N 天）</div>
+        <div id="sales-daily-chart" class="bar-chart"></div>
+        <div class="muted" style="font-size:12px;margin:14px 0 4px;">按月销售额（当年）</div>
+        <div id="sales-monthly-chart" class="bar-chart"></div>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table>
+            <thead><tr><th>项目</th><th>销售额</th><th>订单数</th></tr></thead>
+            <tbody id="sales-by-project"><tr><td colspan="3"><div class="empty">暂无销售数据</div></td></tr></tbody>
+          </table>
+        </div>
         <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
           <h2>密码管理</h2>
             <div class="renew-search" style="margin-top:8px;">
@@ -872,8 +1078,151 @@ function showFront() {
   document.getElementById('view-front').classList.remove('hide');
   document.getElementById('view-login').classList.add('hide');
   document.getElementById('view-main').classList.add('hide');
-  loadDailyQuote();
-  loadTrend();
+  loadShopPage();
+}
+
+// 匿名 RPC：销售页未登录状态下直连（SB.rpc 未登录 401 会跳登录，不能用于购买页）
+async function rpcAnon(fn, body) {
+  const r = await fetch(SB.url + '/rest/v1/rpc/' + fn, {
+    method: 'POST',
+    headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + SB.key, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body || {})
+  });
+  if (!r.ok) throw new Error('rpc ' + fn + ' ' + r.status);
+  return r.json();
+}
+
+// ============ 销售页（购买/查卡密） ============
+let shopProducts = [];
+let shopPayInfo = { active: '', receipt_qr: '', pay_note: '' };
+let curOrder = null;
+
+async function loadShopPage() {
+  try {
+    const r = await rpcAnon('shop_list_products', {});
+    if (r && r.ok) { shopProducts = r.list || []; renderShopCards(); }
+  } catch (e) { document.getElementById('shop-cards').innerHTML = '<div class="shop-empty">套餐加载失败，请刷新重试</div>'; }
+  try {
+    const p = await rpcAnon('shop_get_pay_info', {});
+    if (p && p.ok) shopPayInfo = p;
+  } catch (e) {}
+}
+
+function renderShopCards() {
+  const el = document.getElementById('shop-cards');
+  if (!shopProducts.length) { el.innerHTML = '<div class="shop-empty">暂无在售套餐，敬请期待</div>'; return; }
+  el.innerHTML = shopProducts.map(p => {
+    const price = (p.price_cents / 100).toFixed(2);
+    const days = p.days > 0 ? p.days + ' 天' : '永久';
+    return '<div class="shop-card">' +
+      '<span class="shop-card-name">' + esc(p.name) + '</span>' +
+      '<span class="shop-card-proj">' + esc(p.project_name || '') + '</span>' +
+      '<div class="shop-card-price"><span class="shop-card-cny">¥</span><span class="shop-card-num">' + price + '</span></div>' +
+      '<div class="shop-card-days">' + days + '</div>' +
+      '<button class="shop-card-btn" onclick="buyProduct(' + p.id + ')">立即购买</button>' +
+      '</div>';
+  }).join('');
+}
+
+function buyProduct(id) {
+  const p = shopProducts.find(x => x.id === id);
+  if (!p) { toast('套餐不存在或已下架', false); return; }
+  curOrder = null;
+  document.getElementById('shop-buy-product').textContent = p.name + ' · ' + (p.days > 0 ? p.days + ' 天' : '永久') + ' · ' + esc(p.project_name || '');
+  document.getElementById('shop-buy-price').textContent = '¥' + (p.price_cents / 100).toFixed(2);
+  document.getElementById('shop-contact').value = '';
+  document.getElementById('shop-order-area').classList.add('hide');
+  document.getElementById('shop-trade-no').value = '';
+  document.getElementById('shop-buy-panel').classList.remove('hide');
+  document.getElementById('shop-buy-panel').scrollIntoView({ behavior: 'smooth' });
+  window.__buyProductId = id;
+}
+
+function hideBuyPanel() {
+  document.getElementById('shop-buy-panel').classList.add('hide');
+  document.getElementById('shop-plans').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function createOrder() {
+  const contact = document.getElementById('shop-contact').value.trim();
+  if (!/^1[0-9]{10}$/.test(contact) && !(contact.indexOf('@') >= 0 && contact.indexOf('.') >= 0)) {
+    toast('请填写有效的手机号或邮箱', false); return;
+  }
+  const id = window.__buyProductId;
+  if (!id) { toast('请先选择套餐', false); return; }
+  const r = await rpcAnon('shop_create_order', { p_product_id: id, p_contact: contact });
+  if (!r || !r.ok) { toast(r && r.message ? r.message : '下单失败，请重试', false); return; }
+  curOrder = r;
+  document.getElementById('shop-order-no').textContent = r.order_no;
+  document.getElementById('shop-order-amount').textContent = '¥' + (r.amount_cents / 100).toFixed(2);
+  const qr = shopPayInfo.receipt_qr;
+  document.getElementById('shop-qr-wrap').innerHTML = qr
+    ? '<img class="shop-qr" src="' + esc(qr) + '" alt="收款码">'
+    : '<div class="shop-qr-empty">收款码尚未配置，请联系客服获取付款方式</div>';
+  document.getElementById('shop-pay-note').textContent = shopPayInfo.pay_note || '请向收款码支付对应金额，支付完成后填写付款单号（微信 / 支付宝交易号）提交核验。';
+  document.getElementById('shop-order-area').classList.remove('hide');
+  document.getElementById('shop-order-area').scrollIntoView({ behavior: 'smooth' });
+  toast('下单成功，请完成付款');
+}
+
+async function submitTrade() {
+  const tno = document.getElementById('shop-trade-no').value.trim();
+  if (!tno) { toast('请填写付款单号', false); return; }
+  if (!curOrder) { toast('请先提交订单', false); return; }
+  const r = await rpcAnon('shop_submit_trade', { p_order_no: curOrder.order_no, p_trade_no: tno });
+  if (r && r.ok) {
+    toast('已提交，等待商家核验发卡');
+    document.getElementById('shop-trade-area').classList.add('hide');
+  } else {
+    toast(r && r.message ? r.message : '提交失败，请重试', false);
+  }
+}
+
+async function queryOrder() {
+  const q = document.getElementById('shop-query-input').value.trim();
+  const out = document.getElementById('shop-query-result');
+  if (!q) { out.innerHTML = '<div class="shop-q-status">请输入付款单号或订单号</div>'; return; }
+  out.innerHTML = '<div class="shop-q-status">查询中…</div>';
+  let r = null;
+  try { r = await rpcAnon('shop_query_trade', { p_trade_no: q }); } catch (e) {}
+  if (r && r.ok) { renderQueryResult(r); return; }
+  const qMsg = r && r.message ? r.message : '未查到已发卡的订单（请确认付款单号，或联系管理员）';
+  // 输入是订单号（SH 开头）时，额外查订单状态
+  if (/^SH/i.test(q)) {
+    let r2 = null;
+    try { r2 = await rpcAnon('shop_get_order', { p_order_no: q }); } catch (e) {}
+    if (r2 && r2.ok) {
+      if (r2.status === 'paid') { renderQueryResult(r2); return; }
+      const hint = r2.status === 'submitted' ? '已提交付款单号，等待商家核验' : (r2.status === 'pending' ? '待付款' : r2.status);
+      out.innerHTML = '<div class="shop-q-status">订单 ' + esc(r2.order_no) + '：' + esc(hint) + '</div>';
+      return;
+    }
+  }
+  out.innerHTML = '<div class="shop-q-status">' + esc(qMsg) + '</div>';
+}
+
+function renderQueryResult(r) {
+  window.__lastCode = r.code || '';
+  document.getElementById('shop-query-result').innerHTML =
+    '<div class="shop-q-ok">✔ 卡密已找到</div>' +
+    '<div class="shop-q-code">' + esc(window.__lastCode) + '</div>' +
+    '<div class="shop-q-meta">' + esc(r.product_name || '') + ' · ' + (r.days ? r.days + ' 天' : '永久') + ' · 订单 ' + esc(r.order_no || '') + '</div>' +
+    '<button class="shop-btn shop-btn-main" onclick="copyQueryCode()">复制卡密</button>';
+}
+
+function copyQueryCode() {
+  if (!window.__lastCode) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(window.__lastCode).then(() => toast('卡密已复制')).catch(() => fallbackCopy());
+  } else { fallbackCopy(); }
+}
+function fallbackCopy() {
+  const el = document.createElement('textarea');
+  el.value = window.__lastCode;
+  document.body.appendChild(el);
+  el.select();
+  try { document.execCommand('copy'); toast('卡密已复制'); } catch (e) { toast('复制失败，请手动选择复制', false); }
+  document.body.removeChild(el);
 }
 
 // 每日一句（真实 API，失败回退内置文案）
@@ -945,6 +1294,35 @@ function showMain() {
   loadStats();
   loadProjects();
 }
+let orderPage = 1;
+async function loadOrders(p) {
+  const status = document.getElementById('order-status').value;
+  const search = document.getElementById('order-search').value.trim();
+  const r = await SB.rpc('admin_list_orders', { p_status: status, p_search: search, p_limit: 100, p_offset: (Math.max(1, p) - 1) * 100 });
+  if (!r || !r.ok) { toast(r && r.message ? r.message : '加载订单失败', false); return; }
+  orderPage = Math.max(1, p);
+  const tb = document.getElementById('order-body');
+  const list = r.list || [];
+  if (!list.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty">暂无订单</div></td></tr>'; }
+  else {
+    tb.innerHTML = list.map(o => {
+      const st = o.status === 'pending' ? '<span class="badge badge-unused">待付款</span>'
+        : o.status === 'submitted' ? '<span class="badge badge-warn">待核验</span>'
+        : '<span class="badge badge-used">已发卡</span>';
+      const btn = o.status === 'submitted'
+        ? '<button class="btn btn-primary btn-sm" onclick="confirmOrder(\'' + esc(o.order_no) + '\')">核验发卡</button>'
+        : '<span class="muted" style="font-size:12px;">—</span>';
+      return '<tr><td>' + fmtDateTime(o.created_at) + '</td><td>' + esc(o.order_no) + '</td><td>' + esc(o.product_name) + '</td><td>¥' + (o.amount_cents / 100).toFixed(2) + '</td><td>' + st + '</td><td>' + esc(o.buyer_contact) + '</td><td>' + esc(o.trade_no || '—') + '</td><td>' + btn + '</td></tr>';
+    }).join('');
+  }
+  document.getElementById('order-info').textContent = '共 ' + (r.total || 0) + ' 条 · 第 ' + orderPage + ' 页';
+}
+async function confirmOrder(no) {
+  if (!confirm('确认已收到该订单的付款，并核验发放卡密？')) return;
+  const r = await SB.rpc('admin_confirm_order', { p_order_no: no });
+  if (r && r.ok) { toast(r.code ? '已发卡：' + r.code : '已核验'); loadOrders(orderPage); }
+  else toast(r && r.message ? r.message : '核验失败', false);
+}
 function showTab(name) {
   ['overview', 'list', 'manage'].forEach(t => {
     document.getElementById('tab-' + t).classList.toggle('active', t === name);
@@ -952,7 +1330,7 @@ function showTab(name) {
   });
   if (name === 'list') { loadListStats(); loadList(1); }
   if (name === 'overview') loadStats();
-  if (name === 'manage') { loadProjects(); loadLogs(1); loadAutoCleanup(); }
+  if (name === 'manage') { loadProjects(); loadLogs(1); loadAutoCleanup(); loadPayConfig(); loadShopProducts(); loadOrders(1); loadSalesStats(); }
 }
 
 // ============ 登录 ============
@@ -1473,6 +1851,201 @@ async function saveAutoCleanup() {
     toast(enabled ? '自动清理已开启（每天 ' + time + '）' : '自动清理已关闭', true);
     loadAutoCleanup();
   } catch (e) { toast(e.message, false); }
+}
+
+// ============ 支付设置 ============
+async function loadPayConfig() {
+  try {
+    const d = await SB.rpc('admin_get_pay_config');
+    if (!d.ok) return;
+    const c = d.config || {};
+    document.getElementById('pay-active').value = c.active || '';
+    const fill = (prefix, o) => {
+      Object.keys(o || {}).forEach(k => {
+        const el = document.getElementById(prefix + '-' + k);
+        if (el) el.value = o[k] || '';
+      });
+    };
+    fill('epay', c.epay); fill('wechat', c.wechat); fill('alipay', c.alipay);
+    document.getElementById('pay-receipt-qr').value = c.receipt_qr || '';
+    document.getElementById('pay-note-text').value = c.pay_note || '';
+    togglePayFields();
+  } catch (e) { /* 静默 */ }
+}
+function togglePayFields() {
+  const v = document.getElementById('pay-active').value;
+  ['epay', 'wechat', 'alipay'].forEach(k => {
+    document.getElementById('pay-' + k + '-fields').classList.toggle('hide', v !== k);
+  });
+}
+async function savePayConfig() {
+  const c = {
+    active: document.getElementById('pay-active').value,
+    epay: { pid: document.getElementById('epay-pid').value.trim(), key: document.getElementById('epay-key').value.trim(), gateway: document.getElementById('epay-gateway').value.trim() },
+    wechat: { appid: document.getElementById('wechat-appid').value.trim(), mchid: document.getElementById('wechat-mchid').value.trim(), key: document.getElementById('wechat-key').value.trim() },
+    alipay: { appid: document.getElementById('alipay-appid').value.trim(), private_key: document.getElementById('alipay-private_key').value.trim(), gateway: document.getElementById('alipay-gateway').value.trim() },
+    receipt_qr: document.getElementById('pay-receipt-qr').value.trim(),
+    pay_note: document.getElementById('pay-note-text').value.trim()
+  };
+  if (c.active === 'epay' && (!c.epay.pid || !c.epay.key || !c.epay.gateway)) { toast('易支付：商户 ID、密钥、网关均必填', false); return; }
+  if (c.active === 'wechat' && (!c.wechat.appid || !c.wechat.mchid || !c.wechat.key)) { toast('微信：AppID、商户号、密钥均必填', false); return; }
+  if (c.active === 'alipay' && (!c.alipay.appid || !c.alipay.private_key)) { toast('支付宝：AppID、应用私钥必填', false); return; }
+  try {
+    const d = await SB.rpc('admin_set_pay_config', { p_json: JSON.stringify(c) });
+    if (!d.ok) throw new Error(d.message);
+    toast('支付设置已保存', true);
+    document.getElementById('pay-status').textContent = c.active ? '当前通道：' + document.getElementById('pay-active').selectedOptions[0].text : '未开放购买';
+    loadPayConfig();
+  } catch (e) { toast(e.message, false); }
+}
+
+// ============ 售卖配置 ============
+let shopList = [];
+async function loadShopProducts() {
+  try {
+    const pj = await SB.rpc('admin_list_projects');
+    const dl = document.getElementById('shop-project-list');
+    if (dl) {
+      dl.innerHTML = '';
+      (pj.list || []).forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.id; o.textContent = p.id + ' ' + p.name;
+        dl.appendChild(o);
+      });
+    }
+    const d = await SB.rpc('admin_list_shop_products');
+    if (!d.ok) return;
+    shopList = d.list || [];
+    const tb = document.getElementById('shop-body');
+    if (shopList.length === 0) {
+      tb.innerHTML = '<tr><td colspan="7"><div class="empty">暂无套餐，先在上方添加</div></td></tr>';
+      return;
+    }
+    tb.innerHTML = shopList.map(p =>
+      '<tr><td>' + esc(p.name) + '</td>' +
+      '<td>' + esc(p.project_name || p.project_id) + '</td>' +
+      '<td>' + (p.days === 0 ? '永久' : p.days + ' 天') + '</td>' +
+      '<td>¥' + (p.price_cents / 100).toFixed(2) + '</td>' +
+      '<td>' + (p.enabled ? '<span style="color:var(--primary)">上架</span>' : '<span class="muted">下架</span>') + '</td>' +
+      '<td>' + (p.order_count || 0) + '</td>' +
+      '<td class="ops">' +
+        '<button class="btn btn-ghost btn-sm" onclick="editShopProduct(' + p.id + ')">编辑</button> ' +
+        '<button class="btn btn-ghost btn-sm" onclick="toggleShopProduct(' + p.id + ')">' + (p.enabled ? '下架' : '上架') + '</button> ' +
+        '<button class="btn btn-danger btn-sm" onclick="delShopProduct(' + p.id + ')">删除</button>' +
+      '</td></tr>').join('');
+  } catch (e) { /* 静默 */ }
+}
+function resetShopForm() {
+  document.getElementById('shop-id').value = '0';
+  document.getElementById('shop-project').value = '';
+  document.getElementById('shop-name').value = '';
+  document.getElementById('shop-days').value = '30';
+  document.getElementById('shop-price').value = '';
+  document.getElementById('shop-enabled').value = 'true';
+  document.getElementById('shop-cancel').classList.add('hide');
+}
+function editShopProduct(id) {
+  const p = shopList.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('shop-id').value = p.id;
+  document.getElementById('shop-project').value = p.project_id;
+  document.getElementById('shop-name').value = p.name;
+  document.getElementById('shop-days').value = p.days;
+  document.getElementById('shop-price').value = (p.price_cents / 100).toFixed(2);
+  document.getElementById('shop-enabled').value = p.enabled ? 'true' : 'false';
+  document.getElementById('shop-cancel').classList.remove('hide');
+  toast('正在编辑套餐：' + p.name, true);
+}
+async function saveShopProduct() {
+  const id = parseInt(document.getElementById('shop-id').value, 10) || 0;
+  const projectId = document.getElementById('shop-project').value.trim();
+  const name = document.getElementById('shop-name').value.trim();
+  const days = parseInt(document.getElementById('shop-days').value, 10);
+  const priceYuan = parseFloat(document.getElementById('shop-price').value);
+  if (!projectId || !name) { toast('项目与套餐名必填', false); return; }
+  if (isNaN(days) || days < 0) { toast('天数需 ≥ 0（0 = 永久）', false); return; }
+  if (isNaN(priceYuan) || priceYuan <= 0) { toast('价格必须大于 0', false); return; }
+  const enabled = document.getElementById('shop-enabled').value === 'true';
+  try {
+    const d = await SB.rpc('admin_set_shop_product', {
+      p_project_id: projectId, p_name: name, p_days: days,
+      p_price_cents: Math.round(priceYuan * 100), p_enabled: enabled, p_id: id
+    });
+    if (!d.ok) throw new Error(d.message);
+    toast(id ? '套餐已更新' : '套餐已添加', true);
+    resetShopForm();
+    loadShopProducts();
+  } catch (e) { toast(e.message, false); }
+}
+async function toggleShopProduct(id) {
+  const p = shopList.find(x => x.id === id);
+  if (!p) return;
+  try {
+    const d = await SB.rpc('admin_set_shop_product', {
+      p_project_id: p.project_id, p_name: p.name, p_days: p.days,
+      p_price_cents: p.price_cents, p_enabled: !p.enabled, p_id: id
+    });
+    if (!d.ok) throw new Error(d.message);
+    toast(p.enabled ? '已下架' : '已上架', true);
+    loadShopProducts();
+  } catch (e) { toast(e.message, false); }
+}
+async function delShopProduct(id) {
+  const p = shopList.find(x => x.id === id);
+  if (!p) return;
+  if (!confirm('确认删除套餐「' + p.name + '」？')) return;
+  try {
+    const d = await SB.rpc('admin_del_shop_product', { p_id: id });
+    if (!d.ok) throw new Error(d.message);
+    toast('套餐已删除', true);
+    loadShopProducts();
+  } catch (e) { toast(e.message, false); }
+}
+
+// ============ 销售统计 ============
+const fmtYuan = cents => '¥' + (cents / 100).toFixed(2);
+const fmtBarYuan = cents => (cents / 100) % 1 === 0 ? '¥' + (cents / 100).toFixed(0) : '¥' + (cents / 100).toFixed(1);
+function buildBar(el, items, keyLabel) {
+  const max = Math.max.apply(null, items.map(x => x.amount).concat([1]));
+  el.innerHTML = items.map(x =>
+    '<div class="bar-item" title="' + esc(x[keyLabel]) + '  ' + fmtYuan(x.amount) + ' / ' + x.cnt + ' 单">' +
+    '<div class="bv">' + (x.amount > 0 ? fmtBarYuan(x.amount) : '') + '</div>' +
+    '<div class="bar" style="height:' + Math.round(x.amount / max * 100) + '%"></div>' +
+    '<div class="bl">' + esc(x[keyLabel]) + '</div></div>').join('');
+}
+async function loadSalesStats() {
+  const yearSel = document.getElementById('sales-year');
+  if (yearSel.options.length === 0) {
+    const y = new Date().getFullYear();
+    for (let i = y - 2; i <= y; i++) {
+      const o = document.createElement('option');
+      o.value = i; o.textContent = i + ' 年';
+      yearSel.appendChild(o);
+    }
+    yearSel.value = String(y);
+  }
+  const days = parseInt(document.getElementById('sales-days').value, 10);
+  const year = parseInt(yearSel.value, 10);
+  try {
+    const d = await SB.rpc('admin_sales_stats', { p_days: days });
+    if (!d.ok) { toast(d.message || '统计加载失败', false); return; }
+    document.getElementById('sales-total').textContent = fmtYuan(d.total_cents);
+    document.getElementById('sales-orders').textContent = d.orders + ' 单';
+    buildBar(document.getElementById('sales-daily-chart'), d.daily || [], 'd');
+    const tb = document.getElementById('sales-by-project');
+    if (!d.by_project || d.by_project.length === 0) {
+      tb.innerHTML = '<tr><td colspan="3"><div class="empty">暂无销售数据</div></td></tr>';
+    } else {
+      tb.innerHTML = d.by_project.map(x =>
+        '<tr><td>' + esc(x.project_name || x.project_id) + '</td><td>' + fmtYuan(x.amount) + '</td><td>' + x.cnt + ' 单</td></tr>').join('');
+    }
+    const m = await SB.rpc('admin_sales_monthly', { p_year: year });
+    if (m.ok) {
+      document.getElementById('sales-month').textContent = fmtYuan(m.month_total_cents);
+      document.getElementById('sales-lastmonth').textContent = fmtYuan(m.last_month_total_cents);
+      buildBar(document.getElementById('sales-monthly-chart'), m.monthly || [], 'm');
+    }
+  } catch (e) { toast('统计加载失败', false); }
 }
 
 // ============ 项目选择 modal（改项目：下拉可选 + 自定义） ============
