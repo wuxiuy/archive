@@ -901,20 +901,57 @@ function showTab(name) {
 }
 
 // ============ 登录 ============
+// 取公网 IP（失败返回空串；guard 对空 IP 只留痕不锁定，避免误伤）
+function getClientIp() {
+  return fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => (d && d.ip) || '').catch(() => '');
+}
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pwd = document.getElementById('login-pwd').value;
   const btn = document.getElementById('login-btn');
   if (!email || !pwd) { toast('请输入邮箱和密码', false); return; }
+  // 登录保护（2026-09-29）：前端节流 连续失败3次强制等待30秒；后端锁定 30分钟内5次失败锁30分钟
+  const now = Date.now();
+  const waitUntil = parseInt(localStorage.getItem('login_wait_until') || '0', 10);
+  if (waitUntil > now) { toast('尝试次数过多，请 ' + Math.ceil((waitUntil - now) / 1000) + ' 秒后再试', false); return; }
+  const lockUntil = parseInt(localStorage.getItem('login_lock_until') || '0', 10);
+  if (lockUntil > now) { toast('已触发登录保护，请 ' + Math.ceil((lockUntil - now) / 1000) + ' 秒后再试', false); return; }
   btn.disabled = true; btn.textContent = '登录中…';
   try {
     await SB.auth(email, pwd);
+    localStorage.removeItem('login_fail_count');
+    localStorage.removeItem('login_wait_until');
+    localStorage.removeItem('login_lock_until');
     document.getElementById('who-email').textContent = email;
     showMain();
     toast('登录成功', true);
     logLogin();
   } catch (e) {
-    toast(e.message, false);
+    // 登录失败时以 anon 身份直连 guard（SB.rpc 需登录 token，未登录时不可用）
+    const ip = await getClientIp();
+    try {
+      const rf = await fetch(SB.url + '/rest/v1/rpc/admin_login_guard', {
+        method: 'POST',
+        headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + SB.key, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_ip: ip, p_failed: true })
+      });
+      const g = rf.ok ? await rf.json() : null;
+      if (g && g.locked) {
+        localStorage.setItem('login_lock_until', String(Date.now() + (g.wait || 1800) * 1000));
+        toast('失败次数过多，登录已临时锁定，请 ' + (g.wait || 1800) + ' 秒后再试', false);
+      } else {
+        const fc = (parseInt(localStorage.getItem('login_fail_count') || '0', 10) || 0) + 1;
+        localStorage.setItem('login_fail_count', String(fc));
+        if (fc >= 3) {
+          localStorage.setItem('login_wait_until', String(Date.now() + 30000));
+          toast('连续失败 3 次，请 30 秒后再试', false);
+        } else {
+          toast((e && e.message) || '登录失败', false);
+        }
+      }
+    } catch (err) {
+      toast((e && e.message) || '登录失败', false);
+    }
   } finally {
     btn.disabled = false; btn.textContent = '登 录';
   }
