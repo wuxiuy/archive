@@ -273,6 +273,17 @@
   .btn-ghost:hover:not(:disabled) { background: var(--hover-bg); border-color: var(--primary); }
   .btn-danger { background: var(--red-weak); color: var(--red); }
   .btn-danger:hover:not(:disabled) { filter: brightness(1.05); }
+  /* 深色主题：danger 按钮改半透明红底 + 红边，避免深红棕底暗沉不协调（2026-09-29） */
+  html[data-theme="dark"] .btn-danger,
+  html[data-theme="slate"] .btn-danger,
+  html[data-theme="midnight"] .btn-danger {
+    background: color-mix(in srgb, var(--red) 14%, transparent);
+    color: var(--red);
+    border: 1px solid color-mix(in srgb, var(--red) 38%, transparent);
+  }
+  html[data-theme="dark"] .btn-danger:hover:not(:disabled),
+  html[data-theme="slate"] .btn-danger:hover:not(:disabled),
+  html[data-theme="midnight"] .btn-danger:hover:not(:disabled) { filter: brightness(1.15); }
   .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 9px; }
 
   /* ===== 顶栏 ===== */
@@ -403,6 +414,16 @@
     box-shadow: 0 8px 24px rgba(0,0,0,.18); max-width: 86vw;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* 项目选择 modal（2026-09-29） */
+  #project-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; }
+  #project-modal.hide { display: none; }
+  .modal-mask { position: absolute; inset: 0; background: rgba(15,23,42,.55); }
+  .modal-card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; width: 360px; max-width: 90vw; box-shadow: var(--shadow-md); }
+  .modal-card h3 { margin: 0 0 12px; font-size: 15px; }
+  .modal-card input { width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); font-size: 13px; }
+  .modal-card input:focus { outline: none; border-color: var(--primary); }
+  .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+  .modal-hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
   .toast.ok { background: linear-gradient(135deg, #16a34a, #12a150); }
   .toast.err { background: linear-gradient(135deg, #e02e2e, #d92c2c); }
 
@@ -679,6 +700,26 @@
           <button class="theme-swatch" data-theme="green" onclick="applyTheme('green')"><span class="sw green"></span>青竹绿</button>
           <button class="theme-swatch" data-theme="warm" onclick="applyTheme('warm')"><span class="sw warm"></span>暖阳橙</button>
         </div>
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <h2>自动清理</h2>
+          <div class="form-row" style="margin-top:8px;">
+            <div class="field"><label>启用</label>
+              <select id="auto-clean-enable" style="width:auto;">
+                <option value="false">关闭</option>
+                <option value="true">开启</option>
+              </select>
+            </div>
+            <div class="field"><label>保留天数</label>
+              <input type="number" id="auto-clean-days" min="0" value="30" style="width:100px;">
+            </div>
+            <div class="field"><label>每天时间</label>
+              <select id="auto-clean-time" style="width:auto;"></select>
+            </div>
+          </div>
+          <div class="muted" style="font-size:12px;margin:8px 0;">每天到达指定时间自动删除"过期超过 N 天未续费"的卡密（与手动"清理过期"同规则，精确到整点）；关闭后仅手动清理。激活/查询不再顺带清理。</div>
+          <button class="btn btn-ghost" style="width:auto;" onclick="saveAutoCleanup()">保存设置</button>
+          <span id="auto-clean-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
+        </div>
         <h2 style="margin-top:16px;">项目信息</h2>
         <div class="form-row">
           <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="纯数字，如 1001"></div>
@@ -757,6 +798,20 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<!-- 项目选择 modal（改项目：下拉可选 + 自定义新项目 ID） -->
+<div id="project-modal" class="hide">
+  <div class="modal-mask" onclick="closeProjectModal()"></div>
+  <div class="modal-card">
+    <h3 id="pm-title">设置项目</h3>
+    <input type="text" id="pm-input" list="pm-datalist" autocomplete="off">
+    <datalist id="pm-datalist"></datalist>
+    <div class="modal-hint">可下拉选择已有项目，或直接输入新项目 ID（不存在会自动创建）</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost btn-sm" onclick="closeProjectModal()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="submitProjectModal()">确定</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ============ Supabase 直连配置 ============
@@ -897,7 +952,7 @@ function showTab(name) {
   });
   if (name === 'list') { loadListStats(); loadList(1); }
   if (name === 'overview') loadStats();
-  if (name === 'manage') { loadProjects(); loadLogs(1); }
+  if (name === 'manage') { loadProjects(); loadLogs(1); loadAutoCleanup(); }
 }
 
 // ============ 登录 ============
@@ -1270,9 +1325,9 @@ async function batchEnable() {
 async function batchSetProject() {
   const codes = selectedCodes();
   if (!codes.length) return;
-  const pid = prompt('为选中的 ' + codes.length + ' 条设置项目 ID（项目不存在会自动创建）：');
-  if (pid === null) return;
-  const v = pid.trim();
+  const pid = await openProjectModal('为选中的 ' + codes.length + ' 条设置项目', '选择已有项目或输入新项目 ID（不存在自动创建）');
+  if (pid === null || pid === undefined) return;
+  const v = String(pid).trim();
   if (!v) { toast('项目 ID 不能为空', false); return; }
   try {
     const d = await SB.rpc('admin_batch_code_project', { p_codes: codes, p_project_id: v });
@@ -1385,6 +1440,69 @@ async function loadProjects() {
       '<tr><td colspan="5"><div class="empty">还没有项目，在上方创建</div></td></tr>';
   } catch (e) { /* 静默：项目加载失败不影响主功能 */ }
 }
+// ============ 自动清理配置 ============
+async function loadAutoCleanup() {
+  const sel = document.getElementById('auto-clean-time');
+  if (sel.options.length === 0) {
+    for (let h = 0; h < 24; h++) {
+      const o = document.createElement('option');
+      o.value = String(h).padStart(2, '0') + ':00';
+      o.textContent = h + ' 点';
+      sel.appendChild(o);
+    }
+  }
+  try {
+    const d = await SB.rpc('admin_get_auto_cleanup');
+    if (!d.ok) return;
+    document.getElementById('auto-clean-enable').value = d.enabled ? 'true' : 'false';
+    document.getElementById('auto-clean-days').value = d.days ?? 30;
+    const t = String(d.time || '03:00').split(':')[0].padStart(2, '0') + ':00';
+    if (sel.querySelector('option[value="' + t + '"]')) sel.value = t;
+    document.getElementById('auto-clean-status').textContent =
+      d.enabled ? '已开启：每天 ' + t + ' 自动清理' : '未开启（仅手动清理）';
+  } catch (e) { /* 静默 */ }
+}
+async function saveAutoCleanup() {
+  const enabled = document.getElementById('auto-clean-enable').value === 'true';
+  const days = parseInt(document.getElementById('auto-clean-days').value, 10);
+  if (isNaN(days) || days < 0) { toast('保留天数需 ≥ 0', false); return; }
+  const time = document.getElementById('auto-clean-time').value;
+  try {
+    const d = await SB.rpc('admin_set_auto_cleanup', { p_enabled: enabled, p_days: days, p_time: time });
+    if (!d.ok) throw new Error(d.message);
+    toast(enabled ? '自动清理已开启（每天 ' + time + '）' : '自动清理已关闭', true);
+    loadAutoCleanup();
+  } catch (e) { toast(e.message, false); }
+}
+
+// ============ 项目选择 modal（改项目：下拉可选 + 自定义） ============
+let pmResolve = null;
+async function openProjectModal(title, placeholder) {
+  document.getElementById('pm-title').textContent = title;
+  const inp = document.getElementById('pm-input');
+  inp.placeholder = placeholder || '选择已有项目或输入新项目 ID（不存在自动创建）';
+  inp.value = '';
+  try {
+    const d = await SB.rpc('admin_list_projects');
+    if (d.ok && Array.isArray(d.list)) {
+      document.getElementById('pm-datalist').innerHTML = d.list.map(p =>
+        '<option value="' + esc(p.id) + '">' + esc(p.name) + '</option>').join('');
+    }
+  } catch (e) { /* 静默：拉不到项目列表则仅可自定义输入 */ }
+  document.getElementById('project-modal').classList.remove('hide');
+  document.getElementById('pm-input').focus();
+  return new Promise(res => { pmResolve = res; });
+}
+function closeProjectModal() {
+  document.getElementById('project-modal').classList.add('hide');
+  if (pmResolve) { pmResolve(null); pmResolve = null; }
+}
+function submitProjectModal() {
+  const v = document.getElementById('pm-input').value;
+  document.getElementById('project-modal').classList.add('hide');
+  if (pmResolve) { pmResolve(v); pmResolve = null; }
+}
+
 async function createProject() {
   const id = document.getElementById('proj-id').value.trim();
   const name = document.getElementById('proj-name').value.trim();
@@ -1489,11 +1607,12 @@ async function setRemark(code, current) {
   } catch (e) { toast(e.message, false); }
 }
 async function setCodeProject(code) {
-  const input = prompt('修改「' + code + '」所属项目（项目不存在将自动创建）：');
-  if (input === null) return;
-  if (!input.trim()) { toast('项目不能为空', false); return; }
+  const v = await openProjectModal('修改「' + code + '」所属项目', '选择已有项目或输入新项目 ID（不存在自动创建）');
+  if (v === null || v === undefined) return;
+  const input = String(v).trim();
+  if (!input) { toast('项目 ID 不能为空', false); return; }
   try {
-    const d = await SB.rpc('admin_set_code_project', { p_code: code, p_project_id: input.trim() });
+    const d = await SB.rpc('admin_set_code_project', { p_code: code, p_project_id: input });
     if (!d.ok) throw new Error(d.message);
     toast('项目已更新', true);
     loadList(page); loadProjects();
