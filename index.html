@@ -704,6 +704,12 @@
     .stat span { font-size: 10px; }
     .card.compact { padding: 12px; }
     .form-row .field { min-width: 45%; }
+    /* 支付设置：4 种收款模式移动端全部单列，避免字段挤压错行 */
+    #mg-panel-pay .form-row { display: block; }
+    #mg-panel-pay .form-row .field { min-width: 100%; margin-bottom: 12px; }
+    /* 数据维护：开关/天数/时间移动端单列 */
+    #mg-panel-maint .form-row { display: block; }
+    #mg-panel-maint .form-row .field { min-width: 100%; margin-bottom: 12px; }
   }
 </style>
 </head>
@@ -715,10 +721,10 @@
     <div class="shop-nav">
       <div class="shop-nav-inner">
         <div class="shop-brand">
-          <div class="shop-logo">♪</div>
+          <div class="shop-logo" id="shop-logo-text">♪</div>
           <div>
-            <div class="shop-brand-name">授权商城</div>
-            <div class="shop-brand-sub">在线购买 · 凭单号查卡密</div>
+            <div class="shop-brand-name" id="shop-brand-name">软件授权商城</div>
+            <div class="shop-brand-sub" id="shop-brand-sub">在线购买 · 凭单号查卡密</div>
           </div>
         </div>
         <div class="shop-nav-links">
@@ -845,7 +851,7 @@
     </div>
 
     <div class="shop-footer">
-      <div class="shop-footer-meta">© 2026 授权商城 · 售后支持 · 诚信经营</div>
+      <div class="shop-footer-meta" id="shop-footer-meta">© 2026 软件授权商城 · 售后支持 · 诚信经营</div>
       <div class="shop-footer-tiny">本站提供软件授权与卡密服务<span class="login-dot" onclick="showLoginCard()">，</span>如有疑问请联系在线客服。</div>
     </div>
 
@@ -1006,10 +1012,26 @@
         <button class="mg-item" data-k="proj" onclick="showMgPanel('proj')">项目信息</button>
         <button class="mg-item" data-k="pay" onclick="showMgPanel('pay')">支付设置</button>
         <button class="mg-item" data-k="svc" onclick="showMgPanel('svc')">客服设置</button>
+        <button class="mg-item" data-k="brand" onclick="showMgPanel('brand')">首页设置</button>
         <button class="mg-item" data-k="theme" onclick="showMgPanel('theme')">界面主题</button>
         <button class="mg-item" data-k="pw" onclick="showMgPanel('pw')">密码管理</button>
       </div>
       <div class="mg-main">
+      <div class="card compact" id="mg-panel-brand">
+        <h2>首页设置</h2>
+        <div class="form-row" style="margin-top:8px;">
+          <div class="field"><label>首页标题</label><input type="text" id="brand-title" placeholder="如 软件授权商城"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>签名详情（副标语）</label><input type="text" id="brand-slogan" placeholder="如 在线购买 · 凭单号查卡密"></div>
+        </div>
+        <div class="form-row">
+          <div class="field" style="flex:1.4;"><label>LOGO 字符</label><input type="text" id="brand-logo" maxlength="8" placeholder="如 ♪ ★ ⚡，显示在标题左侧的圆形徽标里"></div>
+        </div>
+        <div class="muted" style="font-size:12px;margin:8px 0;">配置后前台首页顶部品牌区、浏览器标签标题、页脚版权文字统一生效；留空则使用默认值。</div>
+        <button class="btn btn-ghost" style="width:auto;" onclick="saveShopBrand()">保存首页设置</button>
+        <span id="brand-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
+      </div>
       <div class="card compact mg-full" id="mg-panel-theme">
         <h2>界面主题</h2>
         <div class="theme-row">
@@ -1034,27 +1056,7 @@
           <button class="theme-swatch" data-theme="jade" onclick="pickTheme('jade')"><span class="sw jade"></span>玉露清辉</button>
           <button class="theme-swatch" data-theme="cobalt" onclick="pickTheme('cobalt')"><span class="sw cobalt"></span>钴蓝电音</button>
         </div>
-        <p style="margin-top:10px;color:var(--muted);font-size:12px;">主题前后台统一，切换后全站即时生效（保存到服务器）。</p>
-        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
-          <h2>自动清理</h2>
-          <div class="form-row" style="margin-top:8px;">
-            <div class="field"><label>启用</label>
-              <select id="auto-clean-enable" style="width:auto;">
-                <option value="false">关闭</option>
-                <option value="true">开启</option>
-              </select>
-            </div>
-            <div class="field"><label>保留天数</label>
-              <input type="number" id="auto-clean-days" min="0" value="30" style="width:100px;">
-            </div>
-            <div class="field"><label>每天时间</label>
-              <select id="auto-clean-time" style="width:auto;"></select>
-            </div>
-          </div>
-          <div class="muted" style="font-size:12px;margin:8px 0;">每天到达指定时间自动删除"过期超过 N 天未续费"的卡密（与手动"清理过期"同规则，精确到整点）；关闭后仅手动清理。激活/查询不再顺带清理。</div>
-          <button class="btn btn-ghost" style="width:auto;" onclick="saveAutoCleanup()">保存设置</button>
-          <span id="auto-clean-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
-        </div>
+        <p style="margin-top:10px;color:var(--muted);font-size:12px;">主题前后台统一，切换后全站即时生效（保存到服务器）。过期自动清理请到「数据维护」配置。</p>
         </div>
         <div class="card compact" id="mg-panel-pay">
         <h2>支付设置</h2>
@@ -1200,17 +1202,46 @@
             </div>
         </div>
         </div>
-        <div class="card compact" id="mg-panel-maint"">
+        <div class="card compact" id="mg-panel-maint">
         <h2>数据维护</h2>
         <div class="maint-row">
           <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
           <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
-          <button class="btn btn-ghost btn-sm" onclick="purgeExpired()">清理过期</button>
           <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
         </div>
-        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
+        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。</div>
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <h2 style="font-size:15px;">过期清理 · 自动任务</h2>
+          <div class="form-row" style="margin-top:8px;">
+            <div class="field"><label>自动清理（开关）</label>
+              <select id="auto-clean-enable" style="width:auto;">
+                <option value="false">关闭</option>
+                <option value="true">开启</option>
+              </select>
+            </div>
+            <div class="field"><label>保留天数（可自定义）</label>
+              <input type="number" id="auto-clean-days" min="0" value="30" style="width:110px;">
+            </div>
+            <div class="field"><label>每天时间</label>
+              <select id="auto-clean-time" style="width:auto;"></select>
+            </div>
+          </div>
+          <div class="muted" style="font-size:12px;margin:8px 0;">开启后每天到达指定时间自动删除"到期超过 N 天未续费"的卡密（按上面保留天数）；关闭后仅手动清理。激活/查询不再顺带清理。</div>
+          <button class="btn btn-ghost" style="width:auto;" onclick="saveAutoCleanup()">保存自动清理设置</button>
+          <span id="auto-clean-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
         </div>
-        <div class="card compact" id="mg-panel-orders" mg-full">
+        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
+          <h2 style="font-size:15px;">过期清理 · 手动</h2>
+          <div class="form-row" style="margin-top:8px;">
+            <div class="field"><label>保留天数（可自定义，默认跟随自动清理天数）</label>
+              <input type="number" id="maint-clean-days" min="0" value="30" style="width:110px;">
+            </div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="purgeExpired()">立即清理过期</button>
+          <div class="muted" style="font-size:12px;margin:8px 0;">立即删除"到期超过 N 天未续费"的卡密记录（按上面保留天数，不可恢复）。</div>
+        </div>
+        </div>
+        <div class="card compact mg-full" id="mg-panel-orders">
         <h2>订单管理</h2>
         <div class="toolbar">
           <select id="order-status" onchange="loadOrders(1)">
@@ -1846,6 +1877,7 @@ async function genCodes() {
   const remark = document.getElementById('gen-remark').value.trim();
   const project = document.getElementById('gen-project').value.trim();
   if (!project) { toast('发卡必须关联项目，请填写项目 ID', false); return; }
+  if (!/^\d+$/.test(project)) { toast('项目 ID 需为纯数字，如 1001', false); return; }
   try {
     const d = await SB.rpc('admin_gen_codes', { p_count: count, p_days: days, p_remark: remark, p_project_id: project });
     if (!d.ok) throw new Error(d.message);
@@ -1987,9 +2019,8 @@ async function clearLogs() {
 }
 
 async function purgeExpired() {
-  const daysInput = prompt('清理到期超过多少天未续费的记录？（默认 30 天，0 = 只清理今天已到期的）', '30');
-  if (daysInput === null) return;
-  const days = parseInt(daysInput);
+  const daysEl = document.getElementById('maint-clean-days');
+  const days = daysEl ? parseInt(daysEl.value, 10) : 30;
   if (isNaN(days) || days < 0) { toast('请输入有效的天数（>= 0）', false); return; }
   if (!confirm('确定清理到期超过 ' + days + ' 天未续费的记录？此操作不可恢复。')) return;
   try {
@@ -2228,6 +2259,8 @@ async function loadAutoCleanup() {
     if (!d.ok) return;
     document.getElementById('auto-clean-enable').value = d.enabled ? 'true' : 'false';
     document.getElementById('auto-clean-days').value = d.days ?? 30;
+    const md = document.getElementById('maint-clean-days');
+    if (md) md.value = d.days ?? 30;
     const t = String(d.time || '03:00').split(':')[0].padStart(2, '0') + ':00';
     if (sel.querySelector('option[value="' + t + '"]')) sel.value = t;
     document.getElementById('auto-clean-status').textContent =
@@ -2266,6 +2299,7 @@ async function loadPayConfig() {
     togglePayFields();
   } catch (e) { /* 静默 */ }
   loadGlobalDownload();
+  loadShopBrand();
 }
 function togglePayFields() {
   const v = document.getElementById('pay-active').value;
@@ -2307,6 +2341,27 @@ async function saveGlobalDownload() {
     const d = await SB.rpc('admin_set_download_url', { p_url: url });
     if (!d.ok) throw new Error(d.message);
     toast('默认下载地址已保存', true);
+  } catch (e) { toast(e.message, false); }
+}
+
+// ============ 首页设置（标题 / 签名详情 / LOGO） ============
+async function loadShopBrand() {
+  try {
+    const d = await SB.rpc('admin_get_shop_brand');
+    if (!d.ok) return;
+    document.getElementById('brand-title').value = d.title || '';
+    document.getElementById('brand-slogan').value = d.slogan || '';
+    document.getElementById('brand-logo').value = d.logo || '';
+  } catch (e) { /* 静默 */ }
+}
+async function saveShopBrand() {
+  const t = document.getElementById('brand-title').value.trim();
+  const s = document.getElementById('brand-slogan').value.trim();
+  const l = document.getElementById('brand-logo').value.trim();
+  try {
+    const d = await SB.rpc('admin_set_shop_brand', { p_title: t, p_slogan: s, p_logo: l });
+    if (!d.ok) throw new Error(d.message);
+    toast('首页设置已保存', true);
   } catch (e) { toast(e.message, false); }
 }
 
@@ -2539,6 +2594,7 @@ async function createProject() {
   const remark = document.getElementById('proj-remark').value.trim();
   const download = document.getElementById('proj-download').value.trim();
   if (!id || !name) { toast('项目 ID 和名称不能为空', false); return; }
+  if (!/^\d+$/.test(id)) { toast('项目 ID 需为纯数字，如 1001', false); return; }
   try {
     const d = await SB.rpc('admin_create_project', { p_id: id, p_name: name, p_remark: remark, p_download_url: download });
     if (!d.ok) throw new Error(d.message);
@@ -2698,6 +2754,24 @@ tickClock();
 setInterval(tickClock, 30000);
 
 // ============ 初始化（前后台统一主题：拉取服务器主题应用） ============
+async function applyShopBrand() {
+  try {
+    const r = await rpcAnon('shop_get_brand', {});
+    if (!r || !r.ok) return;
+    const t = r.title || '软件授权商城';
+    const s = r.slogan || '在线购买 · 凭单号查卡密';
+    const l = r.logo || '♪';
+    const elName = document.getElementById('shop-brand-name');
+    if (elName) elName.textContent = t;
+    const elSub = document.getElementById('shop-brand-sub');
+    if (elSub) elSub.textContent = s;
+    const elLogo = document.getElementById('shop-logo-text');
+    if (elLogo) elLogo.textContent = l;
+    document.title = t;
+    const fm = document.getElementById('shop-footer-meta');
+    if (fm) fm.textContent = '© ' + new Date().getFullYear() + ' ' + t + ' · 售后支持 · 诚信经营';
+  } catch (e) { /* 静默，保持默认 */ }
+}
 (async function () {
   let t = 'aurora';
   try {
@@ -2705,6 +2779,7 @@ setInterval(tickClock, 30000);
     if (r && r.ok && THEMES[r.theme]) t = r.theme;
   } catch (e) {}
   applyTheme(t);
+  applyShopBrand();
   if (SB.token) { showMain(); return; }
   showFront();
 })();
