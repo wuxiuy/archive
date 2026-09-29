@@ -421,9 +421,16 @@
     font-weight: 700;
   }
 
-  #pane-manage { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; align-items: start; }
-  #pane-manage > .card { margin-bottom: 0; }
-  #pane-manage .mg-full { grid-column: 1 / -1; }
+  /* 系统管理：左侧菜单 + 右侧详情 */
+  .mg-layout { display: flex; gap: 16px; align-items: flex-start; }
+  .mg-menu { flex: 0 0 192px; position: sticky; top: 72px; display: flex; flex-direction: column; gap: 2px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 8px; }
+  .mg-item { display: block; width: 100%; text-align: left; background: none; border: none; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .15s; }
+  .mg-item:hover { background: var(--bg); }
+  .mg-item.active { background: var(--primary); color: #fff; }
+  .mg-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .mg-main > .card { display: none; margin: 0; }
+  .mg-main > .card.mg-on { display: block; }
+  .shop-group-row td { background: var(--bg); color: var(--primary); font-weight: 700; font-size: 12.5px; letter-spacing: .3px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px 20px; margin-bottom: 16px; }
   .card h2 { font-size: 14px; font-weight: 700; margin-bottom: 13px; display: flex; align-items: center; gap: 8px; letter-spacing: -.2px; }
   .card h2::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: linear-gradient(180deg, var(--primary-2), var(--primary)); }
@@ -824,7 +831,21 @@
 
     <!-- 系统管理（项目管理 + 数据维护） -->
     <div id="pane-manage" class="hide">
-      <div class="card compact mg-full">
+      <div class="mg-layout">
+      <div class="mg-menu">
+        <button class="mg-item" data-k="orders" onclick="showMgPanel('orders')">订单管理</button>
+        <button class="mg-item" data-k="shop" onclick="showMgPanel('shop')">售卖配置</button>
+        <button class="mg-item" data-k="sales" onclick="showMgPanel('sales')">销售统计</button>
+        <button class="mg-item" data-k="maint" onclick="showMgPanel('maint')">数据维护</button>
+        <button class="mg-item" data-k="logs" onclick="showMgPanel('logs')">操作日志</button>
+        <button class="mg-item" data-k="proj" onclick="showMgPanel('proj')">项目信息</button>
+        <button class="mg-item" data-k="pay" onclick="showMgPanel('pay')">支付设置</button>
+        <button class="mg-item" data-k="svc" onclick="showMgPanel('svc')">客服设置</button>
+        <button class="mg-item" data-k="theme" onclick="showMgPanel('theme')">界面主题</button>
+        <button class="mg-item" data-k="pw" onclick="showMgPanel('pw')">密码管理</button>
+      </div>
+      <div class="mg-main">
+      <div class="card compact mg-full" id="mg-panel-theme">
         <h2>界面主题</h2>
         <div class="theme-row">
           <button class="theme-swatch" data-theme="auto" onclick="applyTheme('auto')"><span class="sw auto"></span>自动（白天/晚上）</button>
@@ -856,7 +877,7 @@
           <span id="auto-clean-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
         </div>
         </div>
-        <div class="card compact">
+        <div class="card compact" id="mg-panel-pay"">
         <h2>支付设置</h2>
         <div class="form-row" style="margin-top:8px;">
           <div class="field"><label>收款通道</label>
@@ -898,7 +919,7 @@
         <span id="pay-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
 
         </div>
-        <div class="card compact">
+        <div class="card compact" id="mg-panel-shop"">
         <h2>售卖配置</h2>
         <div class="form-row" style="margin-top:8px;">
           <div class="field"><label>开放项目</label><input type="text" id="shop-project" list="shop-project-list" placeholder="选已有或输入项目 ID"><datalist id="shop-project-list"></datalist></div>
@@ -922,7 +943,7 @@
         <div class="muted" style="font-size:12px;margin-top:8px;">开放后购买页只展示"上架"状态的套餐；有订单的套餐只能下架不能删除（保护历史订单）。</div>
 
         </div>
-        <div class="card compact">
+        <div class="card compact" id="mg-panel-svc"">
         <h2>客服设置</h2>
         <div class="form-row" style="margin-top:8px;">
           <div class="field"><label>客服 QQ</label><input type="text" id="svc-qq" placeholder="QQ 号（5-12 位数字），留空则不在首页展示"></div>
@@ -935,7 +956,7 @@
         <button class="btn btn-ghost" style="width:auto;" onclick="saveServiceConfig()">保存客服设置</button>
         <span id="svc-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
         </div>
-        <div class="card compact">
+        <div class="card compact" id="mg-panel-proj"">
         <h2>项目信息</h2>
         <div class="form-row">
           <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="纯数字，如 1001"></div>
@@ -950,7 +971,7 @@
           </table>
         </div>
         </div>
-        <div class="card compact mg-full">
+        <div class="card compact" id="mg-panel-logs" mg-full">
         <div>
           <h2>操作日志</h2>
             <div class="renew-search" style="margin-top:8px;">
@@ -993,7 +1014,7 @@
             </div>
         </div>
         </div>
-        <div class="card compact">
+        <div class="card compact" id="mg-panel-maint"">
         <h2>数据维护</h2>
         <div class="maint-row">
           <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
@@ -1003,7 +1024,7 @@
         </div>
         <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。清理过期：删除到期超 30 天未续费的记录。</div>
         </div>
-        <div class="card compact mg-full">
+        <div class="card compact" id="mg-panel-orders" mg-full">
         <h2>订单管理</h2>
         <div class="toolbar">
           <select id="order-status" onchange="loadOrders(1)">
@@ -1028,7 +1049,7 @@
           <button class="btn btn-ghost btn-sm" onclick="loadOrders(orderPage+1)">下一页</button>
         </div>
         </div>
-        <div class="card compact mg-full">
+        <div class="card compact" id="mg-panel-sales" mg-full">
         <h2>销售统计</h2>
         <div class="form-row" style="margin-top:8px;">
           <div class="field"><label>统计范围</label><select id="sales-days" onchange="loadSalesStats()" style="width:auto;">
@@ -1054,7 +1075,7 @@
           </table>
         </div>
         </div>
-        <div class="card compact">
+        <div class="card compact" id="mg-panel-pw"">
         <div>
           <h2>密码管理</h2>
             <div class="renew-search" style="margin-top:8px;">
@@ -1064,6 +1085,8 @@
               <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
             </div>
             <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
+        </div>
+      </div>
         </div>
       </div>
     </div>
@@ -1471,6 +1494,7 @@ function showTab(name) {
   if (name === 'list') { loadListStats(); loadList(1); }
   if (name === 'overview') loadStats();
   if (name === 'manage') { loadProjects(); loadLogs(1); loadAutoCleanup(); loadPayConfig(); loadServiceConfig(); loadShopProducts(); loadOrders(1); loadSalesStats(); }
+  if (name === 'manage') { let k = 'orders'; try { k = localStorage.getItem('mg_panel') || 'orders'; } catch (e) {} showMgPanel(k); }
 }
 
 // ============ 登录 ============
@@ -2039,6 +2063,13 @@ async function savePayConfig() {
   } catch (e) { toast(e.message, false); }
 }
 
+// ============ 系统管理：左菜单切换 ============
+function showMgPanel(k) {
+  document.querySelectorAll('#pane-manage .mg-main > .card').forEach(c => c.classList.toggle('mg-on', c.id === 'mg-panel-' + k));
+  document.querySelectorAll('#pane-manage .mg-item').forEach(b => b.classList.toggle('active', b.getAttribute('data-k') === k));
+  try { localStorage.setItem('mg_panel', k); } catch (e) {}
+}
+
 // ============ 客服设置（QQ/微信接入 + 首页悬浮球） ============
 async function loadServiceConfig() {
   try {
@@ -2086,18 +2117,32 @@ async function loadShopProducts() {
       tb.innerHTML = '<tr><td colspan="7"><div class="empty">暂无套餐，先在上方添加</div></td></tr>';
       return;
     }
-    tb.innerHTML = shopList.map(p =>
-      '<tr><td>' + esc(p.name) + '</td>' +
-      '<td>' + esc(p.project_name || p.project_id) + '</td>' +
-      '<td>' + (p.days === 0 ? '永久' : p.days + ' 天') + '</td>' +
-      '<td>¥' + (p.price_cents / 100).toFixed(2) + '</td>' +
-      '<td>' + (p.enabled ? '<span style="color:var(--primary)">上架</span>' : '<span class="muted">下架</span>') + '</td>' +
-      '<td>' + (p.order_count || 0) + '</td>' +
-      '<td class="ops">' +
-        '<button class="btn btn-ghost btn-sm" onclick="editShopProduct(' + p.id + ')">编辑</button> ' +
-        '<button class="btn btn-ghost btn-sm" onclick="toggleShopProduct(' + p.id + ')">' + (p.enabled ? '下架' : '上架') + '</button> ' +
-        '<button class="btn btn-danger btn-sm" onclick="delShopProduct(' + p.id + ')">删除</button>' +
-      '</td></tr>').join('');
+    // 按项目分组展示（一个项目可挂多个规格）
+    const groups = {};
+    shopList.forEach(p => {
+      const k = p.project_id;
+      (groups[k] = groups[k] || []).push(p);
+    });
+    let html = '';
+    Object.keys(groups).forEach(k => {
+      const items = groups[k];
+      const pname = items[0].project_name || k;
+      const onCnt = items.filter(x => x.enabled).length;
+      html += '<tr class="shop-group-row"><td colspan="7">项目：' + esc(pname) + '（ID ' + esc(k) + '）· ' + items.length + ' 个规格 · ' + onCnt + ' 个上架</td></tr>';
+      html += items.map(p =>
+        '<tr><td>' + esc(p.name) + '</td>' +
+        '<td>' + esc(p.project_name || p.project_id) + '</td>' +
+        '<td>' + (p.days === 0 ? '永久' : p.days + ' 天') + '</td>' +
+        '<td>¥' + (p.price_cents / 100).toFixed(2) + '</td>' +
+        '<td>' + (p.enabled ? '<span style="color:var(--primary)">上架</span>' : '<span class="muted">下架</span>') + '</td>' +
+        '<td>' + (p.order_count || 0) + '</td>' +
+        '<td class="ops">' +
+          '<button class="btn btn-ghost btn-sm" onclick="editShopProduct(' + p.id + ')">编辑</button> ' +
+          '<button class="btn btn-ghost btn-sm" onclick="toggleShopProduct(' + p.id + ')">' + (p.enabled ? '下架' : '上架') + '</button> ' +
+          '<button class="btn btn-danger btn-sm" onclick="delShopProduct(' + p.id + ')">删除</button>' +
+        '</td></tr>').join('');
+    });
+    tb.innerHTML = html;
   } catch (e) { /* 静默 */ }
 }
 function resetShopForm() {
