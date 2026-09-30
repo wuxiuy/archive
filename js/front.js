@@ -35,7 +35,6 @@ function renderShopCards() {
     const price = (p.price_cents / 100).toFixed(2);
     const old = p.old_price_cents > p.price_cents ? '<span class="shop-card-old">¥' + (p.old_price_cents / 100).toFixed(2) + '</span>' : '';
     const days = p.days > 0 ? p.days + ' 天' : '永久';
-    const sold = (p.sold || 0) > 0 ? '已售 ' + p.sold : '新上架';
     const letter = esc((p.name || '商').trim().slice(0, 1));
     return '<div class="shop-card" onclick="openProductDetail(' + p.id + ')">' +
       '<div class="shop-card-img"><span>' + letter + '</span><span class="shop-card-badge">官方授权</span></div>' +
@@ -43,7 +42,7 @@ function renderShopCards() {
         '<span class="shop-card-name">' + esc(p.name) + '</span>' +
         '<span class="shop-card-proj">' + esc(p.project_name || '') + '</span>' +
         '<div class="shop-card-price-row"><span class="shop-card-cny">¥</span><span class="shop-card-num">' + price + '</span>' + old + '</div>' +
-        '<div class="shop-card-meta"><span>' + days + '</span><span>' + sold + '</span></div>' +
+        '<div class="shop-card-meta"><span>' + days + '</span></div>' +
         '<button class="shop-card-btn" onclick="event.stopPropagation();openProductDetail(' + p.id + ')">立即购买</button>' +
       '</div>' +
     '</div>';
@@ -62,12 +61,10 @@ function openProductDetail(id) {
   document.getElementById('shop-detail-tag').textContent = p.days > 0 ? p.days + ' 天' : '永久';
   document.getElementById('shop-detail-name').textContent = p.name;
   document.getElementById('shop-detail-proj').textContent = p.project_name || p.project_id;
-  const sold = (p.sold || 0) > 0 ? '已售 ' + p.sold + ' 份' : '新上架';
   document.getElementById('shop-detail-desc').textContent =
     '所属项目：' + (p.project_name || p.project_id) + '\n' +
     '套餐规格：' + p.name + '\n' +
     '有效期：' + (p.days > 0 ? p.days + ' 天' : '永久') + '\n' +
-    '销量：' + sold + '\n' +
     '发货方式：支付核验通过后自动发卡（卡密发到您填写的联系方式/订单查询）';
   window.__detailProductId = id;
   document.getElementById('shop-buy-panel').classList.add('hide');
@@ -85,28 +82,7 @@ function buyFromDetail() {
   document.getElementById('shop-detail-panel').classList.add('hide');
   buyProduct(id);
 }
-// 实时成交滚动条（交易猫主题显示）：仅当主题为 jym 时更新文本
-(function startDealTicker() {
-  const el = document.getElementById('shop-deal-text');
-  if (!el) return;
-  const cities = ['北京','上海','广州','深圳','杭州','成都','武汉','南京','苏州','重庆','西安','长沙','郑州','济南','合肥','天津','青岛','厦门','昆明','沈阳'];
-  const names = ['匿*名','游***客','玩**家','老**板','小***喵','梦*幻','星**辰','夜*风','青**禾','阿*狸','柠*檬','云**端'];
-  let i = 0;
-  function tick() {
-    if (document.hidden) return;
-    const vf = document.getElementById('view-front');
-    if (vf && vf.dataset.shopTheme !== 'jym') return;
-    if (!shopProducts.length) return;
-    const p = shopProducts[i % shopProducts.length];
-    const city = cities[Math.floor(Math.random() * cities.length)];
-    const nm = names[Math.floor(Math.random() * names.length)];
-    const mins = 1 + Math.floor(Math.random() * 58);
-    el.textContent = '来自' + city + '市的' + nm + ' ' + mins + '分钟前 购买了 ' + p.name;
-    i++;
-  }
-  tick();
-  setInterval(tick, 5000);
-})();
+// 实时成交滚动条已按用户要求移除（2026-09-30：前台销量不展示给顾客）
 
 function showShopStep(n) {
   [1, 2, 3].forEach(i => {
