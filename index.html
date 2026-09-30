@@ -1540,21 +1540,19 @@ let shopPayInfo = { active: '', receipt_qr: '', pay_note: '', qq: '', wechat_id:
 let curOrder = null;
 
 async function loadShopPage() {
-  try {
-    const r = await rpcAnon('shop_list_products', {});
-    if (r && r.ok) { shopProducts = r.list || []; renderShopCards(); renderProjectPage(); }
-  } catch (e) { document.getElementById('shop-cards').innerHTML = '<div class="shop-empty">套餐加载失败，请刷新重试</div>'; }
-  try {
-    const p = await rpcAnon('shop_get_pay_info', {});
-    if (p && p.ok) shopPayInfo = p;
-  } catch (e) {}
-  try {
-    const pr = await rpcAnon('shop_list_projects', {});
-    if (pr && pr.ok) { shopProjectInfo = pr.list || []; renderProjectPage(); }
-  } catch (e) {}
+  // 三个匿名 RPC 并行拉取，互不依赖（原串行 3×RTT → 并行 1×RTT）
+  const [r, p, pr] = await Promise.allSettled([
+    rpcAnon('shop_list_products', {}),
+    rpcAnon('shop_get_pay_info', {}),
+    rpcAnon('shop_list_projects', {})
+  ]);
+  if (r.status === 'fulfilled' && r.value && r.value.ok) { shopProducts = r.value.list || []; renderShopCards(); }
+  else { document.getElementById('shop-cards').innerHTML = '<div class="shop-empty">套餐加载失败，请刷新重试</div>'; }
+  if (p.status === 'fulfilled' && p.value && p.value.ok) shopPayInfo = p.value;
+  if (pr.status === 'fulfilled' && pr.value && pr.value.ok) shopProjectInfo = pr.value.list || [];
+  renderProjectPage();
   renderServiceFab();
   renderAboutSvc();
-  showShopPage(getShopPageFromHash());
 }
 
 function renderShopCards() {
@@ -1622,6 +1620,7 @@ function buyFromDetail() {
   const names = ['匿*名','游***客','玩**家','老**板','小***喵','梦*幻','星**辰','夜*风','青**禾','阿*狸','柠*檬','云**端'];
   let i = 0;
   function tick() {
+    if (document.hidden) return;
     const vf = document.getElementById('view-front');
     if (vf && vf.dataset.shopTheme !== 'jym') return;
     if (!shopProducts.length) return;
@@ -2178,6 +2177,8 @@ async function saveShopTheme(t) {
 }
 // 顶部时钟：日期 + 星期 + 时间（秒级，改名避免与伪装页页脚 tickClock 冲突）
 function tickTopClock() {
+  const mainEl = document.getElementById('view-main');
+  if (mainEl && mainEl.classList.contains('hide')) return; // 前台销售页无需更新后台时钟
   const d = new Date();
   const w = ['日','一','二','三','四','五','六'][d.getDay()];
   const p = n => String(n).padStart(2, '0');
@@ -2974,15 +2975,16 @@ async function applyShopBrand() {
   } catch (e) { /* 静默，保持默认 */ }
 }
 (async function () {
+  // 首屏不阻塞：先按本地记忆主题立即渲染视图，服务器主题异步到达后无感切换
   let t = 'aurora';
+  try { t = localStorage.getItem('admin_theme') || 'aurora'; } catch (e) {}
+  applyTheme(THEMES[t] ? t : 'aurora');
+  applyShopBrand();
+  if (SB.token) { showMain(); } else { showFront(); }
   try {
     const r = await rpcAnon('shop_get_theme', {});
-    if (r && r.ok && THEMES[r.theme]) t = r.theme;
+    if (r && r.ok && THEMES[r.theme] && r.theme !== t) applyTheme(r.theme);
   } catch (e) {}
-  applyTheme(t);
-  applyShopBrand();
-  if (SB.token) { showMain(); return; }
-  showFront();
 })();
 </script>
 </body>
