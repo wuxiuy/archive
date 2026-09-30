@@ -3,471 +3,213 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卡密管理系统</title>
+<title>软件授权商城</title>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/themes.css">
-<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/front.css">
 </head>
 <body>
 <div class="wrap">
 
-  <!-- 主界面 -->
-  <div id="view-main" class="hide">
-    <div class="topbar">
-      <div class="brand">卡密管理系统</div>
-      <div class="clock" id="top-clock"></div>
-      <div class="who"><span id="who-email"></span><button class="btn btn-ghost btn-sm" onclick="logout()">退出</button></div>
-    </div>
-
-    <div class="tabs">
-      <button id="tab-overview" class="active" onclick="showTab('overview')">快速操作</button>
-      <button id="tab-list" onclick="showTab('list')">卡密列表</button>
-      <button id="tab-manage" onclick="showTab('manage')">系统管理</button>
-    </div>
-
-    <!-- 快速操作（一屏可操作） -->
-    <div id="pane-overview">
-      <div class="card compact">
-        <h2>数据统计</h2>
-        <div class="stats" id="stats-body"><div class="loading">加载中…</div></div>
-      </div>
-      <div class="card compact">
-        <h2>续费</h2>
-        <div class="renew-search">
-          <input type="text" id="renew-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期（如 2026-09）">
-          <button class="btn btn-ghost" onclick="searchRenew(1)">查 询</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>编号</th><th>状态</th><th>类型</th><th>备注</th><th>有效期</th><th>设备</th><th>操作</th></tr></thead>
-            <tbody id="renew-body"><tr><td colspan="7"><div class="empty">输入条件查询后显示匹配结果</div></td></tr></tbody>
-          </table>
-        </div>
-        <div class="pager">
-          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage-1)">上一页</button>
-          <span id="renew-info"></span>
-          <button class="btn btn-ghost btn-sm" onclick="searchRenew(renewPage+1)">下一页</button>
-        </div>
-      </div>
-      <div class="card compact">
-        <h2>发卡</h2>
-        <div class="form-row">
-          <div class="field"><label>数量</label><input type="number" id="gen-count" value="1" min="1" max="500"></div>
-          <div class="field"><label>卡类型</label>
-            <select id="gen-type" onchange="onTypeChange('gen')">
-              <option value="1">天卡（1 天）</option>
-              <option value="7">周卡（7 天）</option>
-              <option value="30" selected>月卡（30 天）</option>
-              <option value="90">季卡（90 天）</option>
-              <option value="365">年卡（365 天）</option>
-              <option value="3650">永久（十年）</option>
-              <option value="-1">自定义天数</option>
-            </select>
+  <!-- 前台：销售页（未登录首页，登录入口隐藏） -->
+  <div id="view-front">
+    <div class="shop-nav">
+      <div class="shop-nav-inner">
+        <div class="shop-brand">
+          <div class="shop-logo" id="shop-logo-text">♪</div>
+          <div>
+            <div class="shop-brand-name" id="shop-brand-name">软件授权商城</div>
+            <div class="shop-brand-sub" id="shop-brand-sub">在线购买 · 凭单号查卡密</div>
           </div>
-          <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="1"></div>
-          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填项目 ID，可下拉选择"><datalist id="project-list"></datalist></div>
-          <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客信息或联系方式"></div>
         </div>
-        <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="genCodes()">创 建</button>
-        <div class="field" style="margin-top:12px;"><label>输出（点击复制）</label><textarea class="codes" id="gen-result" readonly placeholder="生成的卡密显示在这里，一行一个"></textarea></div>
-      </div>
-    </div>
-
-    <!-- 卡密列表 -->
-    <div id="pane-list" class="hide">
-      <div class="card compact">
-        <h2>数据统计（点击直达筛选）</h2>
-        <div class="stats" id="list-stats"><div class="loading">加载中…</div></div>
-      </div>
-      <div class="card">
-        <h2>卡密列表</h2>
-        <div class="toolbar">
-          <input type="text" id="list-search" placeholder="搜索编号 / 顾客备注 / 设备号 / 日期…">
-          <select id="list-status">
-            <option value="">全部</option>
-            <option value="unused">未启用</option>
-            <option value="used">使用中</option>
-            <option value="disabled">已停用</option>
-            <option value="online">在线</option>
-          </select>
-          <select id="list-project">
-            <option value="">全部项目</option>
-          </select>
-          <span class="pg-label">每页</span>
-          <select id="list-page-size" onchange="changePageSize(this.value)">
-            <option value="100" selected>100</option>
-            <option value="200">200</option>
-            <option value="300">300</option>
-            <option value="500">500</option>
-          </select>
-          <button class="btn btn-ghost" onclick="loadList(1)">查询</button>
-        </div>
-        <div class="batch-bar hide" id="batch-bar">
-          <span>已选 <b id="batch-count">0</b> 条</span>
-          <button class="btn btn-ghost btn-sm" onclick="batchActivate()">批量激活</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchEnable()">启用</button>
-          <button class="btn btn-danger btn-sm" onclick="batchBan()">停用</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchExpire()">设置到期</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchRemark()">批量备注</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchRemarkSeq()">编号备注</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchSetProject()">改项目</button>
-          <button class="btn btn-ghost btn-sm" onclick="batchReset()">重置</button>
-          <button class="btn btn-ghost btn-sm" onclick="clearSelection()">取消选择</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr>
-              <th class="chk"><input type="checkbox" id="check-all" onclick="toggleAll(this.checked)" title="全选本页"></th>
-              <th>卡密</th><th>状态</th><th>类型</th><th>项目</th><th>备注</th><th>创建日期</th><th>有效期</th><th>设备</th><th>操作</th>
-            </tr></thead>
-            <tbody id="list-body"><tr><td colspan="10"><div class="loading">加载中…</div></td></tr></tbody>
-          </table>
-        </div>
-        <div class="pager">
-          <button class="btn btn-ghost btn-sm" onclick="loadList(page-1)">上一页</button>
-          <span id="list-info"></span>
-          <button class="btn btn-ghost btn-sm" onclick="loadList(page+1)">下一页</button>
+        <div class="shop-nav-links">
+          <a class="shop-nav-link active" data-k="home" href="javascript:void(0)" onclick="showShopPage('home')">首页</a>
+          <a class="shop-nav-link" data-k="projects" href="javascript:void(0)" onclick="showShopPage('projects')">项目</a>
+          <a class="shop-nav-link" data-k="about" href="javascript:void(0)" onclick="showShopPage('about')">关于</a>
+          <a class="shop-nav-svc" href="javascript:void(0)" onclick="toggleServiceCard()">联系客服</a>
         </div>
       </div>
     </div>
 
-    <!-- 系统管理（项目管理 + 数据维护） -->
-    <div id="pane-manage" class="hide">
-      <div class="mg-layout">
-      <div class="mg-menu">
-        <button class="mg-item" data-k="orders" onclick="showMgPanel('orders')">订单管理</button>
-        <button class="mg-item" data-k="shop" onclick="showMgPanel('shop')">售卖配置</button>
-        <button class="mg-item" data-k="sales" onclick="showMgPanel('sales')">销售统计</button>
-        <button class="mg-item" data-k="maint" onclick="showMgPanel('maint')">数据维护</button>
-        <button class="mg-item" data-k="logs" onclick="showMgPanel('logs')">操作日志</button>
-        <button class="mg-item" data-k="proj" onclick="showMgPanel('proj')">项目信息</button>
-        <button class="mg-item" data-k="pay" onclick="showMgPanel('pay')">支付设置</button>
-        <button class="mg-item" data-k="svc" onclick="showMgPanel('svc')">客服设置</button>
-        <button class="mg-item" data-k="brand" onclick="showMgPanel('brand')">首页设置</button>
-        <button class="mg-item" data-k="theme" onclick="showMgPanel('theme')">界面主题</button>
-        <button class="mg-item" data-k="pw" onclick="showMgPanel('pw')">密码管理</button>
-      </div>
-      <div class="mg-main">
-      <div class="card compact" id="mg-panel-brand">
-        <h2>首页设置</h2>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field"><label>首页标题</label><input type="text" id="brand-title" placeholder="如 软件授权商城"></div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label>签名详情（副标语）</label><input type="text" id="brand-slogan" placeholder="如 在线购买 · 凭单号查卡密"></div>
-        </div>
-        <div class="form-row">
-          <div class="field" style="flex:1.4;"><label>LOGO 字符</label><input type="text" id="brand-logo" maxlength="8" placeholder="如 ♪ ★ ⚡，显示在标题左侧的圆形徽标里"></div>
-        </div>
-        <div class="muted" style="font-size:12px;margin:8px 0;">配置后前台首页顶部品牌区、浏览器标签标题、页脚版权文字统一生效；留空则使用默认值。</div>
-        <button class="btn btn-ghost" style="width:auto;" onclick="saveShopBrand()">保存首页设置</button>
-        <span id="brand-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
-      </div>
-      <div class="card compact mg-full" id="mg-panel-theme">
-        <h2>界面主题</h2>
-        <div class="theme-row">
-          <button class="theme-swatch" data-theme="aurora" onclick="pickTheme('aurora')"><span class="sw aurora"></span>幻夜星梦</button>
-          <button class="theme-swatch" data-theme="starfall" onclick="pickTheme('starfall')"><span class="sw starfall"></span>星陨之夜</button>
-          <button class="theme-swatch" data-theme="gold" onclick="pickTheme('gold')"><span class="sw gold"></span>鎏金霓虹</button>
-          <button class="theme-swatch" data-theme="mint" onclick="pickTheme('mint')"><span class="sw mint"></span>薄荷清欢</button>
-          <button class="theme-swatch" data-theme="pink" onclick="pickTheme('pink')"><span class="sw pink"></span>粉黛甜心</button>
-          <button class="theme-swatch" data-theme="galaxy" onclick="pickTheme('galaxy')"><span class="sw galaxy"></span>银河漫游</button>
-          <button class="theme-swatch" data-theme="peach" onclick="pickTheme('peach')"><span class="sw peach"></span>蜜桃甜橙</button>
-          <button class="theme-swatch" data-theme="sakura" onclick="pickTheme('sakura')"><span class="sw sakura"></span>樱雪国风</button>
-          <button class="theme-swatch" data-theme="noir" onclick="pickTheme('noir')"><span class="sw noir"></span>暗夜霓虹</button>
-          <button class="theme-swatch" data-theme="snow" onclick="pickTheme('snow')"><span class="sw snow"></span>银白初雪</button>
-          <button class="theme-swatch" data-theme="ocean" onclick="pickTheme('ocean')"><span class="sw ocean"></span>碧海潮生</button>
-          <button class="theme-swatch" data-theme="nebula" onclick="pickTheme('nebula')"><span class="sw nebula"></span>星云紫夜</button>
-          <button class="theme-swatch" data-theme="citrus" onclick="pickTheme('citrus')"><span class="sw citrus"></span>青柠苏打</button>
-          <button class="theme-swatch" data-theme="ruby" onclick="pickTheme('ruby')"><span class="sw ruby"></span>红宝石夜</button>
-          <button class="theme-swatch" data-theme="sky" onclick="pickTheme('sky')"><span class="sw sky"></span>晴空蔚蓝</button>
-          <button class="theme-swatch" data-theme="ember" onclick="pickTheme('ember')"><span class="sw ember"></span>余烬暖光</button>
-          <button class="theme-swatch" data-theme="candy" onclick="pickTheme('candy')"><span class="sw candy"></span>糖果派对</button>
-          <button class="theme-swatch" data-theme="graphite" onclick="pickTheme('graphite')"><span class="sw graphite"></span>石墨幽影</button>
-          <button class="theme-swatch" data-theme="jade" onclick="pickTheme('jade')"><span class="sw jade"></span>玉露清辉</button>
-          <button class="theme-swatch" data-theme="cobalt" onclick="pickTheme('cobalt')"><span class="sw cobalt"></span>钴蓝电音</button>
-          <button class="theme-swatch" data-theme="taobao" onclick="pickTheme('taobao')"><span class="sw taobao"></span>淘宝橙购</button>
-          <button class="theme-swatch" data-theme="pdd" onclick="pickTheme('pdd')"><span class="sw pdd"></span>拼多多红</button>
-          <button class="theme-swatch" data-theme="jd" onclick="pickTheme('jd')"><span class="sw jd"></span>京东红购</button>
-          <button class="theme-swatch" data-theme="xianyu" onclick="pickTheme('xianyu')"><span class="sw xianyu"></span>闲鱼黄趣</button>
-          <button class="theme-swatch" data-theme="meituan" onclick="pickTheme('meituan')"><span class="sw meituan"></span>美团黄go</button>
-          <button class="theme-swatch" data-theme="jym" onclick="pickTheme('jym')"><span class="sw jym"></span>交易猫</button>
-        </div>
-        <p style="margin-top:10px;color:var(--muted);font-size:12px;">主题前后台统一，切换后全站即时生效（保存到服务器）。过期自动清理请到「数据维护」配置。</p>
-        </div>
-        <div class="card compact" id="mg-panel-pay">
-        <h2>支付设置</h2>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field"><label>收款通道</label>
-            <select id="pay-active" onchange="togglePayFields()" style="width:auto;">
-              <option value="">关闭（暂不开放在线购买）</option>
-              <option value="epay">三方聚合支付（易支付协议，个人可接入）</option>
-              <option value="wechat">微信支付（官方 Native，需商户资质）</option>
-              <option value="alipay">支付宝（官方当面付，需商户资质）</option>
-            </select>
-          </div>
-        </div>
-        <div id="pay-epay-fields" class="hide">
-          <div class="form-row">
-            <div class="field"><label>商户 ID（pid）</label><input type="text" id="epay-pid" placeholder="易支付商户号"></div>
-            <div class="field"><label>商户密钥（key）</label><input type="password" id="epay-key" placeholder="易支付密钥"></div>
-            <div class="field"><label>网关地址</label><input type="text" id="epay-gateway" placeholder="https://pay.xxx.com"></div>
-          </div>
-        </div>
-        <div id="pay-wechat-fields" class="hide">
-          <div class="form-row">
-            <div class="field"><label>AppID</label><input type="text" id="wechat-appid" placeholder="微信开放平台 AppID"></div>
-            <div class="field"><label>商户号（mchid）</label><input type="text" id="wechat-mchid" placeholder="微信支付商户号"></div>
-            <div class="field"><label>API 密钥</label><input type="password" id="wechat-key" placeholder="API v3 密钥"></div>
-          </div>
-        </div>
-        <div id="pay-alipay-fields" class="hide">
-          <div class="form-row">
-            <div class="field"><label>AppID</label><input type="text" id="alipay-appid" placeholder="支付宝开放平台 AppID"></div>
-            <div class="field"><label>应用私钥</label><input type="password" id="alipay-private_key" placeholder="应用私钥（PKCS8）"></div>
-            <div class="field"><label>网关</label><input type="text" id="alipay-gateway" placeholder="https://openapi.alipay.com/gateway.do"></div>
-          </div>
-        </div>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field" style="flex:1.4;"><label>收款码图片 URL（人工收款时展示给顾客）</label><input type="text" id="pay-receipt-qr" placeholder="https://…/收款码.jpg（微信/支付宝个人收款码图床地址）"></div>
-          <div class="field" style="flex:1;"><label>付款提示文字</label><input type="text" id="pay-note-text" placeholder="可选，付款页显示给顾客的提示"></div>
-        </div>
-        <div class="muted" style="font-size:12px;margin:8px 0;">说明：三方聚合=常见"易支付"协议，个人可接入、付款后自动回调发卡（有手续费）；微信/支付宝官方接口需营业执照与商户签约，先填参数预留，资质到位后随时切换换绑。个人收款（未开通在线支付）时，顾客下单后页面展示收款码，凭付款单号人工核验发卡。保存后购买页自动生效。</div>
-        <button class="btn btn-ghost" style="width:auto;" onclick="savePayConfig()">保存支付设置</button>
-        <span id="pay-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
+    <div id="pg-home">
+    <div class="shop-section" id="shop-plans">
+      <h2 class="shop-section-title">在售套餐</h2>
+      <p class="shop-section-sub">点击“立即购买”下单，付款后凭付款单号查询卡密</p>
+      <div class="shop-deal-ticker" id="shop-deal-ticker"><span class="shop-deal-dot"></span><span class="shop-deal-text" id="shop-deal-text">实时成交 · 刚刚有玩家购买了套餐</span></div>
+      <div class="shop-cards" id="shop-cards"><div class="shop-empty">加载中…</div></div>
+    </div>
 
-        </div>
-        <div class="card compact" id="mg-panel-shop">
-        <h2>售卖配置</h2>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field" style="flex:2;"><label>默认下载地址（全局兜底：项目未单独设置时，购买成功后展示）</label><input type="text" id="shop-dl-global" placeholder="https://…（软件下载页或网盘）"></div>
-          <button class="btn btn-ghost" style="width:auto;align-self:flex-end;" onclick="saveGlobalDownload()">保存默认下载</button>
-        </div>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field"><label>开放项目</label><input type="text" id="shop-project" list="shop-project-list" placeholder="选已有或输入项目 ID"><datalist id="shop-project-list"></datalist></div>
-          <div class="field"><label>套餐名</label><input type="text" id="shop-name" placeholder="如 30天卡"></div>
-          <div class="field"><label>天数</label><input type="number" id="shop-days" min="0" value="30" style="width:90px;"></div>
-          <div class="field"><label>价格（元）</label><input type="number" id="shop-price" min="0.01" step="0.01" style="width:90px;"></div>
-          <div class="field"><label>划线原价（元）</label><input type="number" id="shop-old-price" min="0" step="0.01" style="width:90px;" placeholder="选填"></div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label>状态</label><select id="shop-enabled" style="width:auto;"><option value="true">上架</option><option value="false">下架</option></select></div>
-          <input type="hidden" id="shop-id" value="0">
-          <button class="btn btn-ghost" style="width:auto;" onclick="saveShopProduct()">保存套餐</button>
-          <button class="btn btn-ghost btn-sm hide" id="shop-cancel" onclick="resetShopForm()">取消编辑</button>
-          <span class="muted" style="font-size:12px;margin-left:8px;">天数填 0 = 永久；价格自动转分存储</span>
-        </div>
-        <div class="table-wrap" style="margin-top:12px;">
-          <table>
-            <thead><tr><th>套餐</th><th>项目</th><th>天数</th><th>价格</th><th>原价</th><th>状态</th><th>订单</th><th>操作</th></tr></thead>
-            <tbody id="shop-body"><tr><td colspan="8"><div class="empty">暂无套餐，先在上方添加</div></td></tr></tbody>
-          </table>
-        </div>
-        <div class="muted" style="font-size:12px;margin-top:8px;">开放后购买页只展示"上架"状态的套餐；有订单的套餐只能下架不能删除（保护历史订单）。</div>
-
-        </div>
-        <div class="card compact" id="mg-panel-svc">
-        <h2>客服设置</h2>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field"><label>客服 QQ</label><input type="text" id="svc-qq" placeholder="QQ 号（5-12 位数字），留空则不在首页展示"></div>
-          <div class="field"><label>微信号</label><input type="text" id="svc-wechat" placeholder="微信号，留空则不在首页展示"></div>
-        </div>
-        <div class="form-row">
-          <div class="field" style="flex:1.4;"><label>微信二维码图片 URL</label><input type="text" id="svc-wechat-qr" placeholder="https://…/wechat-qr.jpg（可选，填了首页可扫码）"></div>
-        </div>
-        <div class="muted" style="font-size:12px;margin:8px 0;">配置后首页右下角显示“联系客服”悬浮球（导航栏也有入口），顾客可复制 QQ / 微信号或扫码联系。至少填一项才展示。</div>
-        <button class="btn btn-ghost" style="width:auto;" onclick="saveServiceConfig()">保存客服设置</button>
-        <span id="svc-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
-        </div>
-        <div class="card compact" id="mg-panel-proj">
-        <h2>项目信息</h2>
-        <div class="form-row">
-          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="可自定义，如 1001 或 shop-test"></div>
-          <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 主客户端"></div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label>备注</label><input type="text" id="proj-remark" placeholder="可选"></div>
-          <div class="field"><label>下载地址（软件下载页或网盘）</label><input type="text" id="proj-download" placeholder="https://…，留空则购买后展示默认下载地址"></div>
-        </div>
-        <button class="btn btn-ghost" style="width:auto;" onclick="createProject()">创建项目</button>
-        <div class="table-wrap" style="margin-top:12px;">
-          <table>
-            <thead><tr><th>项目 ID</th><th>名称</th><th>发卡数</th><th>备注</th><th>下载地址</th><th>操作</th></tr></thead>
-            <tbody id="project-manage"><tr><td colspan="6"><div class="empty">暂无项目</div></td></tr></tbody>
-          </table>
-        </div>
-        </div>
-        <div class="card compact" id="mg-panel-logs" mg-full">
-        <div>
-          <h2>操作日志</h2>
-            <div class="renew-search" style="margin-top:8px;">
-              <select id="log-type">
-                <option value="login">登录</option>
-                <option value="">全部类型</option>
-                <option value="gen">发卡</option>
-                <option value="renew">续费</option>
-                <option value="ban">停用</option>
-                <option value="unban">启用</option>
-                <option value="reset">重置</option>
-                <option value="remark">备注</option>
-                <option value="proj">改项目</option>
-                <option value="batch_remark">批量备注</option>
-                <option value="batch_expire">批量到期</option>
-                <option value="batch_ban">批量封禁</option>
-                <option value="batch_unban">批量启用</option>
-                <option value="batch_reset">批量重置</option>
-                <option value="export">导出</option>
-                <option value="import">导入</option>
-                <option value="purge">清理过期</option>
-                <option value="proj_create">创建项目</option>
-                <option value="proj_edit">编辑项目</option>
-                <option value="proj_del">删除项目</option>
-              </select>
-              <input type="text" id="log-search" placeholder="搜索卡密 / 顾客备注 / 详情…">
-              <button class="btn btn-ghost" onclick="loadLogs(1)">查 询</button>
-              <button class="btn btn-danger btn-sm" onclick="clearLogs()">清空</button>
-            </div>
-            <div class="table-wrap" style="margin-top:10px;">
-              <table>
-                <thead><tr><th>时间</th><th>类型</th><th>卡密</th><th>备注</th><th>详情</th></tr></thead>
-                <tbody id="log-body"><tr><td colspan="5"><div class="empty">暂无日志</div></td></tr></tbody>
-              </table>
-            </div>
-            <div class="pager">
-              <button class="btn btn-ghost btn-sm" onclick="loadLogs(logPage-1)">上一页</button>
-              <span id="log-info"></span>
-              <button class="btn btn-ghost btn-sm" onclick="loadLogs(logPage+1)">下一页</button>
-            </div>
-        </div>
-        </div>
-        <div class="card compact" id="mg-panel-maint">
-        <h2>数据维护</h2>
-        <div class="maint-row">
-          <button class="btn btn-ghost btn-sm" onclick="exportData()">导出数据</button>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">导入数据</button>
-          <input type="file" id="import-file" accept=".json,application/json" class="hide" onchange="importData(this)">
-        </div>
-        <div class="maint-hint">导出：下载全部数据备份。导入：恢复备份（已存在记录会更新）。</div>
-        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
-          <h2 style="font-size:15px;">过期清理 · 自动任务</h2>
-          <div class="form-row" style="margin-top:8px;">
-            <div class="field"><label>自动清理（开关）</label>
-              <select id="auto-clean-enable" style="width:auto;">
-                <option value="false">关闭</option>
-                <option value="true">开启</option>
-              </select>
-            </div>
-            <div class="field"><label>保留天数（可自定义）</label>
-              <input type="number" id="auto-clean-days" min="0" value="30" style="width:110px;">
-            </div>
-            <div class="field"><label>每天时间</label>
-              <select id="auto-clean-time" style="width:auto;"></select>
-            </div>
+    <div class="shop-section hide" id="shop-detail-panel">
+      <div class="shop-detail-card">
+        <button class="shop-detail-close" onclick="closeProductDetail()">×</button>
+        <div class="shop-detail-img"><span id="shop-detail-letter">商</span><span class="shop-detail-badge">官方授权</span></div>
+        <div class="shop-detail-body">
+          <div class="shop-detail-price-row">
+            <span class="shop-detail-cny">¥</span><span class="shop-detail-num" id="shop-detail-price">-</span>
+            <span class="shop-detail-old" id="shop-detail-old"></span>
+            <span class="shop-detail-tag" id="shop-detail-tag">-</span>
           </div>
-          <div class="muted" style="font-size:12px;margin:8px 0;">开启后每天到达指定时间自动删除"到期超过 N 天未续费"的卡密（按上面保留天数）；关闭后仅手动清理。激活/查询不再顺带清理。</div>
-          <button class="btn btn-ghost" style="width:auto;" onclick="saveAutoCleanup()">保存自动清理设置</button>
-          <span id="auto-clean-status" class="muted" style="margin-left:10px;font-size:12px;"></span>
-        </div>
-        <div style="margin-top:16px;border-top:1px dashed #eef0f3;padding-top:14px;">
-          <h2 style="font-size:15px;">过期清理 · 手动</h2>
-          <div class="form-row" style="margin-top:8px;">
-            <div class="field"><label>保留天数（可自定义，默认跟随自动清理天数）</label>
-              <input type="number" id="maint-clean-days" min="0" value="30" style="width:110px;">
-            </div>
+          <h3 class="shop-detail-name" id="shop-detail-name">-</h3>
+          <div class="shop-detail-proj" id="shop-detail-proj">-</div>
+          <div class="shop-detail-svc">
+            <div class="shop-detail-svc-item"><b>⚡</b><span>自动发卡</span></div>
+            <div class="shop-detail-svc-item"><b>🛡️</b><span>售后保障</span></div>
+            <div class="shop-detail-svc-item"><b>✔️</b><span>正版授权</span></div>
+            <div class="shop-detail-svc-item"><b>🔒</b><span>安全交易</span></div>
           </div>
-          <button class="btn btn-danger btn-sm" onclick="purgeExpired()">立即清理过期</button>
-          <div class="muted" style="font-size:12px;margin:8px 0;">立即删除"到期超过 N 天未续费"的卡密记录（按上面保留天数，不可恢复）。</div>
+          <div class="shop-detail-desc" id="shop-detail-desc"></div>
         </div>
-        </div>
-        <div class="card compact mg-full" id="mg-panel-orders">
-        <h2>订单管理</h2>
-        <div class="toolbar">
-          <select id="order-status" onchange="loadOrders(1)">
-            <option value="">全部状态</option>
-            <option value="pending">待付款</option>
-            <option value="submitted">待核验</option>
-            <option value="paid">已发卡</option>
-          </select>
-          <input type="text" id="order-search" placeholder="搜索订单号 / 付款单号 / 套餐名">
-          <button class="btn btn-ghost" onclick="loadOrders(1)">查 询</button>
-          <span class="muted" style="font-size:12px;">待核验订单：到账后点“核验发卡”即自动发放卡密</span>
-        </div>
-        <div class="table-wrap" style="margin-top:10px;">
-          <table>
-            <thead><tr><th>时间</th><th>订单号</th><th>套餐</th><th>金额</th><th>状态</th><th>联系方式</th><th>付款单号</th><th>操作</th></tr></thead>
-            <tbody id="order-body"><tr><td colspan="8"><div class="empty">暂无订单</div></td></tr></tbody>
-          </table>
-        </div>
-        <div class="pager">
-          <button class="btn btn-ghost btn-sm" onclick="loadOrders(orderPage-1)">上一页</button>
-          <span id="order-info"></span>
-          <button class="btn btn-ghost btn-sm" onclick="loadOrders(orderPage+1)">下一页</button>
-        </div>
-        </div>
-        <div class="card compact" id="mg-panel-sales" mg-full">
-        <h2>销售统计</h2>
-        <div class="form-row" style="margin-top:8px;">
-          <div class="field"><label>统计范围</label><select id="sales-days" onchange="loadSalesStats()" style="width:auto;">
-            <option value="7">近 7 天</option><option value="30" selected>近 30 天</option><option value="90">近 90 天</option>
-          </select></div>
-          <div class="field"><label>年度</label><select id="sales-year" onchange="loadSalesStats()" style="width:auto;"></select></div>
-          <button class="btn btn-ghost btn-sm" onclick="loadSalesStats()">刷新</button>
-        </div>
-        <div class="stat-grid">
-          <div class="stat-card"><div class="v" id="sales-total">-</div><div class="l">近 N 天销售额</div></div>
-          <div class="stat-card"><div class="v" id="sales-orders">-</div><div class="l">成功订单</div></div>
-          <div class="stat-card"><div class="v" id="sales-month">-</div><div class="l">本月销售额</div></div>
-          <div class="stat-card"><div class="v" id="sales-lastmonth">-</div><div class="l">上月销售额</div></div>
-        </div>
-        <div class="muted" style="font-size:12px;margin:4px 0;">每日销售额（近 N 天）</div>
-        <div id="sales-daily-chart" class="bar-chart"></div>
-        <div class="muted" style="font-size:12px;margin:14px 0 4px;">按月销售额（当年）</div>
-        <div id="sales-monthly-chart" class="bar-chart"></div>
-        <div class="table-wrap" style="margin-top:12px;">
-          <table>
-            <thead><tr><th>项目</th><th>销售额</th><th>订单数</th></tr></thead>
-            <tbody id="sales-by-project"><tr><td colspan="3"><div class="empty">暂无销售数据</div></td></tr></tbody>
-          </table>
-        </div>
-        </div>
-        <div class="card compact" id="mg-panel-pw">
-        <div>
-          <h2>密码管理</h2>
-            <div class="renew-search" style="margin-top:8px;">
-              <input type="text" id="pw-new" placeholder="输入新密码，或点随机生成" autocomplete="off">
-              <input type="password" id="pw-confirm" placeholder="再次输入确认" autocomplete="off">
-              <button class="btn btn-ghost" onclick="genPassword()">随机生成</button>
-              <button class="btn btn-primary" onclick="changePassword()">修改密码</button>
-            </div>
-            <div class="maint-hint" id="pw-out" style="margin-top:8px;"></div>
+        <div class="shop-detail-bar">
+          <div class="shop-detail-bar-price"><span class="shop-detail-cny">¥</span><span id="shop-detail-bar-num">-</span></div>
+          <button class="shop-detail-buy" onclick="buyFromDetail()">立即购买</button>
         </div>
       </div>
+    </div>
+
+    <div class="shop-section hide" id="shop-buy-panel">
+      <h2 class="shop-section-title">购买</h2>
+      <div class="shop-buy-card">
+        <div class="shop-steps-bar">
+          <div class="shop-step-item active" id="sp-it-1"><b>1</b><span>下单</span></div>
+          <div class="shop-step-line"></div>
+          <div class="shop-step-item" id="sp-it-2"><b>2</b><span>付款</span></div>
+          <div class="shop-step-line"></div>
+          <div class="shop-step-item" id="sp-it-3"><b>3</b><span>查卡密</span></div>
         </div>
+        <div class="shop-pay-warn hide" id="shop-pay-warn"></div>
+        <div id="shop-step-1">
+          <div class="shop-buy-row"><span>套餐</span><b id="shop-buy-product">-</b></div>
+          <div class="shop-buy-row"><span>应付金额</span><b class="shop-buy-price" id="shop-buy-price">-</b></div>
+          <div class="shop-buy-row"><span>联系方式</span>
+            <input class="shop-input" id="shop-contact" placeholder="手机号或邮箱（用于核验与售后联系）">
+          </div>
+          <div class="shop-buy-actions">
+            <button class="shop-btn shop-btn-main" onclick="createOrder()">提交订单</button>
+            <button class="shop-btn shop-btn-ghost" onclick="hideBuyPanel()">返回选购</button>
+          </div>
+        </div>
+        <div id="shop-step-2" class="hide">
+          <div class="shop-order-info">
+            <div class="shop-order-line">订单号：<b id="shop-order-no">-</b></div>
+            <div class="shop-order-line">应付金额：<b id="shop-order-amount">-</b></div>
+            <div id="shop-dl-wrap" class="hide" style="margin-top:14px;text-align:center;">
+              <button class="shop-btn shop-btn-main shop-dl-btn" onclick="openDownload()">点击下载软件</button>
+              <div class="shop-dl-tip">下单成功即可下载软件</div>
+            </div>
+            <div id="shop-qr-wrap"></div>
+            <div class="shop-pay-note" id="shop-pay-note"></div>
+          </div>
+          <div class="shop-trade-area" id="shop-trade-area">
+            <div class="shop-trade-label">付款完成后，填写付款单号（微信 / 支付宝交易单号）：</div>
+            <div class="shop-trade-bar">
+              <input class="shop-input" id="shop-trade-no" placeholder="付款单号（交易号）">
+              <button class="shop-btn shop-btn-main" onclick="submitTrade()">我已付款，提交核验</button>
+            </div>
+          </div>
+        </div>
+        <div id="shop-step-3" class="hide">
+          <div class="shop-step3-ok" id="shop-step3-msg">已提交核验，等待商家确认到账后自动发卡。</div>
+          <div class="shop-trade-bar" style="margin-top:10px;">
+            <input class="shop-input" id="shop-query-inline" placeholder="付款单号 / 订单号">
+            <button class="shop-btn shop-btn-main" onclick="queryOrderInline()">查卡密</button>
+          </div>
+          <div id="shop-step3-result" class="shop-query-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-section" id="shop-query">
+      <h2 class="shop-section-title">查询卡密</h2>
+      <div class="shop-query-card">
+        <p class="shop-query-tip">输入付款单号或订单号，查询已核验发卡的卡密。</p>
+        <div class="shop-query-bar">
+          <input class="shop-input" id="shop-query-input" placeholder="付款单号 / 订单号">
+          <button class="shop-btn shop-btn-main" onclick="queryOrder()">查 询</button>
+        </div>
+        <div id="shop-query-result" class="shop-query-result"></div>
+      </div>
+    </div>
+    </div>
+
+    <div id="pg-projects" class="hide">
+      <div class="shop-section">
+        <h2 class="shop-section-title">项目</h2>
+        <p class="shop-section-sub">选择项目，每个项目可选购不同授权时长</p>
+        <div class="shop-proj-cards" id="shop-projects"><div class="shop-empty">加载中…</div></div>
+      </div>
+    </div>
+
+    <div id="pg-about" class="hide">
+      <div class="shop-section">
+        <h2 class="shop-section-title">关于我们</h2>
+        <div class="shop-about-card">
+          <h3>服务介绍</h3>
+          <p>我们提供软件授权与卡密服务：在线选购授权时长，付款后凭付款单号即可查询卡密；订单记录保留可查，全程售后支持。</p>
+          <h3>购买流程</h3>
+          <div class="shop-steps">
+            <div class="shop-step"><b>1</b><span>选择套餐</span><em>挑选所需授权时长</em></div>
+            <div class="shop-step"><b>2</b><span>提交订单</span><em>留下联系方式便于核验与售后</em></div>
+            <div class="shop-step"><b>3</b><span>完成付款</span><em>按提示向收款码支付对应金额</em></div>
+            <div class="shop-step"><b>4</b><span>凭单号领卡</span><em>填写付款单号，核验后自动发卡</em></div>
+          </div>
+          <h3>常见问题</h3>
+          <div class="shop-faq">
+            <details><summary>付款后多久能收到卡密？</summary><p>商家确认到账后即自动发卡，一般工作时间较快；您可随时凭付款单号在“查询卡密”中查看。</p></details>
+            <details><summary>卡密怎么使用？</summary><p>在对应软件 / 客户端中输入卡密激活即可，一卡一码，请妥善保存。</p></details>
+            <details><summary>订单可以退换吗？</summary><p>卡密为虚拟商品，一经核验发卡原则上不支持退款；如遇无法激活等问题，请联系客服协助处理。</p></details>
+            <details><summary>联系方式有什么用？</summary><p>用于订单核验与售后联系，我们承诺不用于任何营销，也不会向第三方提供。</p></details>
+          </div>
+          <h3>联系客服</h3>
+          <div class="shop-about-svc" id="shop-about-svc"><div class="shop-service-empty">客服信息加载中…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-service-card hide" id="shop-service-card">
+      <div class="shop-service-head">联系客服</div>
+      <div id="shop-service-body"></div>
+    </div>
+    <div class="shop-fab hide" id="shop-fab" onclick="toggleServiceCard()" title="联系客服">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </div>
+
+    <div class="shop-footer">
+      <div class="shop-footer-meta" id="shop-footer-meta">© 2026 软件授权商城 · 售后支持 · 诚信经营</div>
+      <div class="shop-footer-tiny">本站提供软件授权与卡密服务<span class="login-dot" onclick="showLoginCard()">，</span>如有疑问请联系在线客服。</div>
+    </div>
+
+    <div class="shop-tabbar">
+      <button class="shop-tab-item active" data-k="home" onclick="showShopPage('home')">首页</button>
+      <button class="shop-tab-item" data-k="projects" onclick="showShopPage('projects')">项目</button>
+      <button class="shop-tab-item" data-k="about" onclick="showShopPage('about')">关于</button>
+    </div>
+  </div>
+
+  <!-- 登录 -->
+  <div id="view-login" class="hide">
+    <div class="login-stage">
+      <div class="login-card">
+        <h1>登录</h1>
+        <div class="field">
+          <label>邮箱</label>
+          <input type="email" id="login-email" autocomplete="username" placeholder="邮箱地址">
+        </div>
+        <div class="field">
+          <label>密码</label>
+          <input type="password" id="login-pwd" autocomplete="current-password" placeholder="密码">
+        </div>
+        <button class="btn btn-primary" id="login-btn" onclick="doLogin()">登 录</button>
       </div>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-<!-- 项目选择 modal（改项目：下拉可选 + 自定义新项目 ID） -->
-<div id="project-modal" class="hide">
-  <div class="modal-mask" onclick="closeProjectModal()"></div>
-  <div class="modal-card">
-    <h3 id="pm-title">设置项目</h3>
-    <input type="text" id="pm-input" list="pm-datalist" autocomplete="off">
-    <datalist id="pm-datalist"></datalist>
-    <div class="modal-hint">可下拉选择已有项目，或直接输入新项目 ID（不存在会自动创建）</div>
-    <div class="modal-btns">
-      <button class="btn btn-ghost btn-sm" onclick="closeProjectModal()">取消</button>
-      <button class="btn btn-primary btn-sm" onclick="submitProjectModal()">确定</button>
-    </div>
-  </div>
-</div>
 
 
 <script src="js/config.js"></script>
 <script src="js/common.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/front.js"></script>
 
 </body>
 </html>
