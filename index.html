@@ -65,7 +65,7 @@
             </select>
           </div>
           <div class="field"><label>天数</label><input type="number" id="gen-days" value="30" min="1"></div>
-          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填，纯数字项目 ID"><datalist id="project-list"></datalist></div>
+          <div class="field"><label>项目 ID</label><input type="text" id="gen-project" list="project-list" placeholder="必填项目 ID，可下拉选择"><datalist id="project-list"></datalist></div>
           <div class="field"><label>备注</label><input type="text" id="gen-remark" placeholder="顾客信息或联系方式"></div>
         </div>
         <button class="btn btn-primary" style="width:auto;padding:9px 22px;" onclick="genCodes()">创 建</button>
@@ -118,9 +118,9 @@
           <table>
             <thead><tr>
               <th class="chk"><input type="checkbox" id="check-all" onclick="toggleAll(this.checked)" title="全选本页"></th>
-              <th>编号</th><th>状态</th><th>类型</th><th>项目</th><th>备注</th><th>创建日期</th><th>有效期</th><th>设备</th><th>操作</th>
+              <th>卡密</th><th>状态</th><th>类型</th><th>项目</th><th>备注</th><th>创建日期</th><th>有效期</th><th>设备</th><th>操作</th>
             </tr></thead>
-            <tbody id="list-body"><tr><td colspan="9"><div class="loading">加载中…</div></td></tr></tbody>
+            <tbody id="list-body"><tr><td colspan="10"><div class="loading">加载中…</div></td></tr></tbody>
           </table>
         </div>
         <div class="pager">
@@ -282,7 +282,7 @@
         <div class="card compact" id="mg-panel-proj">
         <h2>项目信息</h2>
         <div class="form-row">
-          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="纯数字，如 1001"></div>
+          <div class="field"><label>项目 ID</label><input type="text" id="proj-id" placeholder="可自定义，如 1001 或 shop-test"></div>
           <div class="field"><label>名称</label><input type="text" id="proj-name" placeholder="如 主客户端"></div>
         </div>
         <div class="form-row">
