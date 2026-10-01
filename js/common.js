@@ -56,7 +56,7 @@ const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('zh-CN', { month: 
 const TYPE_LABELS = { 3650: '永久', 365: '年卡', 90: '季卡', 30: '月卡', 7: '周卡', 1: '天卡' };
 const typeLabel = days => TYPE_LABELS[days] || (days ? days + ' 天' : '—');
 const fmtExpiry = (iso, st) => (st === 'unused' || st === 'new') ? '未激活' : (!iso ? '—' : fmtDate(iso));
-const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 120 * 60 * 1000); // 在线判定 120 分钟，与服务端一致（心跳 30-60 分钟随机）
+const isOnline = iso => iso && (Date.now() - new Date(iso).getTime() < 180 * 60 * 1000); // 在线判定 180 分钟，与服务端 admin_stats 一致（心跳 30-60 分钟随机）
 const isExpired = iso => iso && new Date(iso).getTime() < Date.now();
 const badges = { unused: ['未启用', 'badge-unused'], used: ['使用中', 'badge-used'], disabled: ['已停用', 'badge-disabled'] };
 async function rpcAnon(fn, body) {

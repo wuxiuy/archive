@@ -15,7 +15,7 @@ async function loadOrders(p) {
   orderPage = Math.max(1, p);
   const tb = document.getElementById('order-body');
   const list = r.list || [];
-  if (!list.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty">暂无订单</div></td></tr>'; }
+  if (!list.length) { tb.innerHTML = '<tr><td colspan="9"><div class="empty">暂无订单</div></td></tr>'; }
   else {
     tb.innerHTML = list.map(o => {
       const st = o.status === 'pending' ? '<span class="badge badge-unused">待付款</span>'
@@ -24,7 +24,9 @@ async function loadOrders(p) {
       const btn = o.status === 'submitted'
         ? '<button class="btn btn-primary btn-sm" onclick="confirmOrder(\'' + esc(o.order_no) + '\')">核验发卡</button>'
         : '<span class="muted" style="font-size:12px;">—</span>';
-      return '<tr><td>' + fmtDateTime(o.created_at) + '</td><td>' + esc(o.order_no) + '</td><td>' + esc(o.product_name) + '</td><td>¥' + (o.amount_cents / 100).toFixed(2) + '</td><td>' + st + '</td><td>' + esc(o.buyer_contact) + '</td><td>' + esc(o.trade_no || '—') + '</td><td>' + btn + '</td></tr>';
+      return '<tr><td>' + fmtDateTime(o.created_at) + '</td><td>' + esc(o.order_no) + '</td><td>' + esc(o.product_name) + '</td><td>¥' + (o.amount_cents / 100).toFixed(2) + '</td><td>' + st + '</td><td>' + esc(o.buyer_contact) + '</td><td>' + esc(o.trade_no || '—') + '</td><td>' +
+        (o.code ? '<span class="code-cell">' + esc(o.code) + ' <button class="btn btn-ghost btn-sm" onclick="copyCode(\'' + esc(o.code) + '\')">复制</button></span>' : '<span class="muted" style="font-size:12px;">—</span>') +
+        '</td><td>' + btn + '</td></tr>';
     }).join('');
   }
   document.getElementById('order-info').textContent = '共 ' + (r.total || 0) + ' 条 · 第 ' + orderPage + ' 页';
@@ -34,6 +36,15 @@ async function confirmOrder(no) {
   const r = await SB.rpc('admin_confirm_order', { p_order_no: no });
   if (r && r.ok) { toast(r.code ? '已发卡：' + r.code : '已核验'); loadOrders(orderPage); }
   else toast(r && r.message ? r.message : '核验失败', false);
+}
+// 复制激活码到剪贴板（方便直接发给顾客）
+async function copyCode(code) {
+  try {
+    await navigator.clipboard.writeText(code);
+    toast('已复制激活码：' + code);
+  } catch (e) {
+    toast('复制失败，请手动复制：' + code, false);
+  }
 }
 function showTab(name) {
   ['overview', 'list', 'manage'].forEach(t => {
@@ -930,17 +941,14 @@ async function extend(code) {
   } catch (e) { toast(e.message, false); }
 }
 
-// 回车触发登录
+// 回车触发登录（后台页无登录视图时跳过，避免 null 报错）
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
-  if (!document.getElementById('view-login').classList.contains('hide')) doLogin();
+  const lv = document.getElementById('view-login');
+  if (lv && !lv.classList.contains('hide')) doLogin();
 });
 
 // 初始化每页下拉的保存值
-(function () {
-  const sel = document.getElementById('list-page-size');
-  if (sel) sel.value = pageSize;
-})();
 (function () {
   const sel = document.getElementById('list-page-size');
   if (sel) sel.value = pageSize;
